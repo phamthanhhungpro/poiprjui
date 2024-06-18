@@ -1,0 +1,60 @@
+<div class="flex flex-col flex-auto h-full overflow-hidden bg-card dark:bg-default">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-18 -mb-px px-6 bg-gray-50 dark:bg-transparent">
+
+        <div class="ml-2 text-2xl font-semibold">Thêm mới Trạng thái chấm công</div>
+
+        <div class="flex items-center">
+            <!-- More menu -->
+            <button mat-flat-button [color]="'primary'" (click)="save()">
+                Lưu
+            </button>
+            <button class="px-6 ml-3" mat-button (click)="cancelAdd()">
+                Hủy
+            </button>
+        </div>
+
+    </div>
+    <mat-divider class="mb-4"></mat-divider>
+    <div class="flex flex-col gt-xs:flex-row gt-xs:items-start p-6">
+        <form [formGroup]="editDataForm" class="space-y-4">
+            <div class="flex-auto min-w-64 space-y-4">
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Tên trạng thái</mat-label>
+                        <input matInput placeholder="Tên trạng thái" formControlName="tenTrangThai">
+                    </mat-form-field>
+                </div>
+
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Mã trạng thái</mat-label>
+                        <input matInput placeholder="Mã trạng thái" formControlName="maTrangThai">
+                    </mat-form-field>
+                </div>
+
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Màu sắc</mat-label>
+                        <input matInput type="color" formControlName="mauSac">
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-slide-toggle
+                     class="flex-auto mb-4 mt-1"
+                     [color]="'primary'"
+                     labelPosition="before"
+                     [formControlName]="'yeuCauGiaiTrinh'"><span class="font-medium">Yêu cầu giải trình</span></mat-slide-toggle>
+                </div>
+                <div class="flex">
+                    <mat-slide-toggle
+                     class="flex-auto mb-4 mt-1"
+                     [color]="'primary'"
+                     labelPosition="before"
+                     [formControlName]="'trangThai'"><span class="font-medium">Kích hoạt</span></mat-slide-toggle>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+    <!-- Header -->
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 pb-22 sm:pt-6 sm:pb-20 sm:px-10 bg-default dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Title -->
+            <div class="mt-2">
+                <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    Danh sách Giải trình chấm công
+                </h2>
+            </div>
+            <!-- Breadcrumbs -->
+            <div>
+                <div class="hidden sm:flex flex-wrap items-center font-medium">
+                    <div>
+                        <a class="whitespace-nowrap text-primary-500">HRM</a>
+                    </div>
+                    <div class="flex items-center ml-1 whitespace-nowrap">
+                        <mat-icon class="icon-size-5 text-secondary"
+                            [svgIcon]="'heroicons_mini:chevron-right'"></mat-icon>
+                        <span class="ml-1 text-secondary">Giải trình chấm công</span>
+                    </div>
+                </div>
+                <div class="flex sm:hidden">
+                    <a class="inline-flex items-center -ml-1.5 text-secondary font-medium" [routerLink]="'./..'">
+                        <mat-icon class="icon-size-5 text-secondary"
+                            [svgIcon]="'heroicons_solid:chevron-left'"></mat-icon>
+                        <span class="ml-1">Back</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Actions -->
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+            <button mat-flat-button [color]="'warn'" (click)="addData()">
+                <mat-icon class="icon-size-4" [svgIcon]="'mat_outline:playlist_add_check'"></mat-icon>
+                <span class="ml-2">Phê duyệt toàn bộ</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex flex-auto -mt-16 p-6 sm:p-10 overflow-hidden bg-card">
+
+        <!-- CONTENT GOES HERE -->
+        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+            <ng-container *ngIf="(data$ | async) as data">
+                <ng-container *ngIf="data.items.length; else nodata">
+                    <ng-container *ngFor="let item of data.items; let i = index; trackBy: trackByFn">
+                        <a
+                            class="z-10 flex items-center px-6 py-4 md:px-8 cursor-pointer border-b hover:bg-gray-100 dark:hover:bg-hover">
+
+                            <div class="min-w-5 max-w-5 ml-2">
+                                <div class="font-medium leading-5 truncate">{{item.stt}}</div>
+                            </div>
+                            <div class="min-w-50 max-w-50 ml-4">
+                                <div class="font-medium leading-5 truncate">{{item.hrmChamCongDiemDanh.user.fullName}}</div>
+                                <div class="leading-5 truncate text-secondary">{{item.hrmCongKhaiBao.tenCongKhaiBao}}</div>
+                            </div>
+                            <div class="min-w-40 max-w-40 ml-4 hidden lg:block">
+                                <div class="leading-5 text-secondary text-red-500">{{item.hrmChamCongDiemDanh.hrmTrangThaiChamCong.tenTrangThai}}</div>
+                            </div>
+                            <div class="min-w-30 max-w-30 ml-4 hidden lg:block">
+                                <div class="leading-5 text-secondary">{{convertDate(item.hrmChamCongDiemDanh.thoiGian)}}</div>
+                            </div>
+                            <div class="min-w-50 max-w-50 ml-4 hidden lg:block">
+                                <div class="leading-5 text-secondary">{{item.lyDo}}</div>
+                            </div>
+
+                            <div class="flex-grow"></div>
+                            <div class="min-w-0 max-w-80 ml-4">
+                                <button mat-icon-button (click)="approve(item)" >
+                                    <mat-icon class="icon-size-4 text-green-500" [svgIcon]="'mat_outline:check'"></mat-icon>
+                                </button>
+                                <button mat-icon-button (click)="reject(item)" >
+                                    <mat-icon class="icon-size-4 text-red-500" [svgIcon]="'mat_outline:close'"></mat-icon>
+                                </button>
+                            </div>
+                        </a>
+                    </ng-container>
+                    <mat-paginator #paginator
+                        class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                        [ngClass]="{'pointer-events-none': isLoading}" [length]="totalItems" [pageSize]="pageSize"
+                        [pageIndex]="pageNumber" [pageSizeOptions]="[5, 10, 25, 100]" [showFirstLastButtons]="true"
+                        (page)="onPageChange($event)">
+                    </mat-paginator>
+                </ng-container>
+            </ng-container>
+
+            <ng-template #nodata>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Không có dữ liệu</div>
+            </ng-template>
+
+        </div>
+    </div>
+</div>
+
+<fuse-drawer class="w-screen min-w-screen sm:w-200 sm:min-w-200 z-999" fixed [mode]="'over'" [name]="'addDrawer'"
+    [position]="'right'" [opened]="false" (openedChanged)="drawerOpenedChanged($event)" #addDrawer>
+    <div class="flex flex-col w-full overflow-auto bg-card">
+        <!-- New data -->
+        <ng-container *ngIf="drawerComponent === 'new-data'">
+            <app-giai-trinh [drawer]="addDrawer" [type]="'xac-nhan-giai-trinh'" [data]="selectedData" (onClosed)="getData()"></app-giai-trinh>
+        </ng-container>
+    </div>
+</fuse-drawer>

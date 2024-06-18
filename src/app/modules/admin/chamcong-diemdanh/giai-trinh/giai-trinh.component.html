@@ -1,0 +1,151 @@
+<div class="flex flex-col flex-auto h-full overflow-hidden bg-card dark:bg-default">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-18 -mb-px px-6 bg-gray-50 dark:bg-transparent">
+
+        <div class="ml-2 text-2xl font-semibold">Dữ liệu chấm công</div>
+
+        <div class="flex items-center">
+            <!-- More menu -->
+            <button *ngIf="type!=='xac-nhan-giai-trinh'" mat-flat-button [color]="'primary'" (click)="save()">
+                Gửi xác nhận
+            </button>
+            <button *ngIf="type==='xac-nhan-giai-trinh'" mat-flat-button [color]="'warn'" (click)="confirm()">
+                Xác nhận
+            </button>
+            <button class="px-6 ml-3" mat-button (click)="cancelAdd()">
+                Hủy
+            </button>
+        </div>
+
+    </div>
+    <mat-divider class="mb-4"></mat-divider>
+    <div class="flex flex-col gt-xs:flex-row gt-xs:items-start p-6">
+        <form [formGroup]="addDataForm" class="space-y-4">
+            <div class="flex-auto min-w-64 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>Ngày chấm công</mat-label>
+                            <input matInput formControlName="ngayChamCong" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>Loại lỗi</mat-label>
+                            <input matInput formControlName="loaiLoi" readonly>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+
+                <div class="flex flex-col ">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                </th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Ca làm việc</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Giờ vào</th>
+
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Giờ ra</th>
+
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Đi muộn</th>
+
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Về sớm</th>
+
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Giờ công</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Phân ca
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Khung Giờ làm việc hành
+                                    chính
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">08:00
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">17:00
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">8,00
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Thực tế
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Khung Giờ làm việc hành
+                                    chính
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">08:00
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">17:00
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">8,00
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="flex">
+                    <p class="text-2xl font-semibold">Xác nhận chấm công</p>
+                </div>
+                <!-- <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Ca gợi ý</mat-label>
+                        <input matInput formControlName="caGoiY" readonly>
+                    </mat-form-field>
+
+                </div> -->
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Công khai báo</mat-label>
+                        <mat-select [formControlName]="'congKhaiBaoId'">
+                            @for (congKhaiBao of congKhaiBaos; track congKhaiBao) {
+                            <mat-option [value]="congKhaiBao.id">{{congKhaiBao.tenCongKhaiBao}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Lý do</mat-label>
+                        <textarea matInput formControlName="lyDo"></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                      <mat-label>Người xác nhận</mat-label>
+                      <mat-select [formControlName]="'nguoiXacNhan'">
+                        <mat-option *ngFor="let truongPhong of listTruongPhong" [value]="truongPhong.id">
+                          {{ truongPhong.fullName }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+            </div>
+        </form>
+
+    </div>
+</div>

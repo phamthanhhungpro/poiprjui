@@ -1,0 +1,39 @@
+<div class="w-full max-w-3xl">
+
+    <!-- Form -->
+        <!-- Section -->
+        <div class="grid grid-cols-1 gap-4 w-full mt-4" *ngIf="items | async as itemsData; else loading">
+            <div class="flex items-center justify-between" *ngFor="let item of itemsData">
+                <div
+                    class="flex-auto leading-6 font-medium cursor-pointer"
+                    (click)="func.toggle()">
+                    {{item.tenNhomChucNang}}
+                </div>
+                <mat-slide-toggle [checked]="item.checked" (change)="toggleChecked(item)"
+                    class="ml-2"
+                    [color]="'primary'"
+                    #func>
+                </mat-slide-toggle>
+            </div>
+        </div>
+        <ng-template #loading>
+            <div>Loading...</div>
+          </ng-template>
+
+        <!-- Divider -->
+        <div class="my-10 border-t"></div>
+
+        <!-- Actions -->
+        <div class="flex items-center justify-end">
+            <button
+                class="ml-4"
+                mat-flat-button
+                type="button"
+                [color]="'primary'"
+                (click)="save()"
+                >Lưu
+            </button>
+        </div>
+
+
+</div>

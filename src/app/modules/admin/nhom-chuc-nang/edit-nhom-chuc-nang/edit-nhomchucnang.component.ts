@@ -1,0 +1,78 @@
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDrawer } from '@angular/material/sidenav';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormGroup, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { RoleService } from 'app/services/role.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { FunctionService } from 'app/services/function.service';
+import { MatSelectModule } from '@angular/material/select';
+import { NhomChucNangService } from 'app/services/nhomchucnang.service';
+
+@Component({
+  selector: 'app-edit-nhomchucnang',
+  standalone: true,
+  imports: [MatButtonModule, MatIconModule, NgIf, NgFor, MatDividerModule,
+    FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatFormFieldModule,
+    MatSelectModule
+  ],
+  templateUrl: './edit-nhomchucnang.component.html'
+})
+export class EditNhomChucNangComponent {
+  @Input() drawer: MatDrawer;
+  @Output() onClosed = new EventEmitter<any>();
+  @Input() data: any = {};
+
+  editFunctionForm: UntypedFormGroup;
+
+  /**
+   *
+   */
+  constructor(private _formBuilder: UntypedFormBuilder,
+    private _nhomchucnangService: NhomChucNangService,
+    private _snackBar: MatSnackBar,
+  ) {
+    this.editFunctionForm = this._formBuilder.group({
+      tenNhomChucNang: ['', Validators.required],
+      moTa: ['']
+    });
+  }
+
+  ngOnInit(): void {
+    this.editFunctionForm.patchValue(this.data);
+  }
+
+  // clear form when close drawer
+  clearForm(): void {
+    this.editFunctionForm.reset();
+  }
+
+  // close drawer and reset form
+  cancelAdd(): void {
+    this.drawer.close();
+    this.clearForm();
+  }
+
+  // save data
+  save(): void {
+    this._nhomchucnangService.update(this.data.id, this.editFunctionForm.value).subscribe(res => {
+      if (res.isSucceeded) {
+        this.openSnackBar('Thao tác thành công', 'Đóng');
+        this.onClosed.emit();
+        this.drawer.close();
+        this.clearForm();
+      } else {
+        this.openSnackBar('Thao tác thất bại', 'Đóng');
+      }
+    });
+  }
+
+  // snackbar
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, { duration: 2000 });
+  }
+}

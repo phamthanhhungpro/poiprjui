@@ -1,0 +1,92 @@
+<div class="flex flex-col flex-auto h-full overflow-hidden bg-card dark:bg-default">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-18 -mb-px px-6 bg-gray-50 dark:bg-transparent">
+
+        <div class="ml-2 text-2xl font-semibold">Thiết lập lại mật khẩu</div>
+
+        <div class="flex items-center">
+            <!-- More menu -->
+            <button mat-flat-button [color]="'primary'" (click)="save()">
+                Lưu
+            </button>
+            <button class="px-6 ml-3" mat-button (click)="cancelEdit()">
+                Hủy
+            </button>
+        </div>
+
+    </div>
+    <mat-divider class="mb-4"></mat-divider>
+    <div class="flex flex-col gt-xs:flex-row gt-xs:items-start overflow-y-auto p-6 h-180 min-h-180 max-h-180"
+        cdkScrollable>
+        <form [formGroup]="changePwdForm">
+            <div class="flex">
+                <mat-form-field class="flex-auto">
+                    <mat-label>Họ và tên</mat-label>
+                    <input matInput [placeholder]="'Họ và tên'" [formControlName]="'fullName'" readonly>
+                </mat-form-field>
+            </div>
+            <fuse-alert *ngIf="data.id !== userInfo.userId" [type]="'warning'" class="mb-4">
+                <span fuseAlertTitle>Cảnh báo</span>
+                Bạn đang thiết lập lại mật khẩu của người khác, việc thiết lập lại
+                mật khẩu có thể dẫn đến người dùng này không thể đăng nhập vào hệ thống
+            </fuse-alert>
+            <div class="flex">
+                <mat-form-field class="flex-auto">
+                    <mat-label>Mật khẩu mới</mat-label>
+                    <input
+                    [placeholder]="'Mật khẩu mới'"
+                    id="password"
+                    matInput
+                    type="password"
+                    [formControlName]="'newPwd'"
+                    #passwordField>
+                <button
+                    mat-icon-button
+                    type="button"
+                    (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+                    matSuffix>
+                    <mat-icon
+                        class="icon-size-5"
+                        *ngIf="passwordField.type === 'password'"
+                        [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                    <mat-icon
+                        class="icon-size-5"
+                        *ngIf="passwordField.type === 'text'"
+                        [svgIcon]="'heroicons_solid:eye-slash'"></mat-icon>
+                </button>
+                </mat-form-field>
+            </div>
+
+            <div class="flex">
+                <mat-form-field class="flex-auto">
+                    <mat-label>Nhập lại mật khẩu mới</mat-label>
+                    <input
+                    [placeholder]="'Nhập lại mật khẩu mới'"
+                    id="rePassword"
+                    matInput
+                    type="password"
+                    [formControlName]="'reNewPwd'"
+                    #rePasswordField>
+                <button
+                    mat-icon-button
+                    type="button"
+                    (click)="rePasswordField.type === 'password' ? rePasswordField.type = 'text' : rePasswordField.type = 'password'"
+                    matSuffix>
+                    <mat-icon
+                        class="icon-size-5"
+                        *ngIf="rePasswordField.type === 'password'"
+                        [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                    <mat-icon
+                        class="icon-size-5"
+                        *ngIf="rePasswordField.type === 'text'"
+                        [svgIcon]="'heroicons_solid:eye-slash'"></mat-icon>
+                    
+                </button>
+                <mat-error *ngIf="changePwdForm.get('reNewPwd').hasError('mustMatch')">Nhập lại mật khẩu mới không khớp</mat-error>
+                </mat-form-field>
+            </div>
+        </form>
+    </div>
+
+</div>

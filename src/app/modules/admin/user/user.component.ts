@@ -1,0 +1,246 @@
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { AsyncPipe, CurrencyPipe, NgForOf, NgIf } from '@angular/common';
+import { ChangeDetectorRef, Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { RouterLink } from '@angular/router';
+import { FuseDrawerComponent } from '@fuse/components/drawer';
+import { Observable, Subject, map, takeUntil } from 'rxjs';
+import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
+import { NewUserComponent } from './new-user/new-user.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { UserApiService } from 'app/services/user.service';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { isAllowCRUD, isOWnerRole, isSsaRole } from 'app/mock-api/common/user/roleHelper'
+import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AddManagerComponent } from './add-manager/add-manager.component';
+import { Constants } from 'app/mock-api/common/constants';
+import { environment } from 'environments/environment';
+import { ResetPwdComponent } from './reset-pwd/reset-pwd.component';
+
+@Component({
+  selector: 'app-user',
+  standalone: true,
+  templateUrl: './user.component.html',
+  encapsulation: ViewEncapsulation.None,
+  imports: [MatIconModule, RouterLink, MatButtonModule, CdkScrollable, NgIf,
+    AsyncPipe, NgForOf, CurrencyPipe, MatButtonModule, MatMenuModule,
+    FuseDrawerComponent, MatDividerModule, MatSidenavModule, NewUserComponent,
+    EditUserComponent, MatPaginatorModule, AddManagerComponent, ResetPwdComponent],
+})
+export class UserComponent {
+
+  @ViewChild('addDrawer', { static: false }) addDrawer: MatDrawer;
+  @ViewChild('paginator') paginator: MatPaginator;
+
+
+  public users$;
+  domain = environment.idApiUrlWithOutEndding;
+  drawerComponent: 'new-user' | 'edit-user' | 'add-manager' | 'reset-pwd';
+  configForm: UntypedFormGroup;
+  selectedData: any;
+  pageSize = 25; // Initial page size
+  pageNumber = 0; // Initial page index
+  totalItems = 0; // Total items
+
+  userInfo = {
+    role: localStorage.getItem('role'),
+    tenantId: localStorage.getItem('tenantId'),
+    userId: localStorage.getItem('userId')
+  }
+
+  drawerMode: 'side' | 'over';
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+
+  /**
+   * Constructor
+   */
+  constructor(private _fuseConfirmationService: FuseConfirmationService,
+    private _formBuilder: UntypedFormBuilder,
+    private _userService: UserApiService,
+    private _fuseMediaWatcherService: FuseMediaWatcherService,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _snackBar: MatSnackBar,
+
+  ) {
+  }
+
+  ngOnInit(): void {
+    this.getUsers();
+
+    // Build the config form
+    this.configForm = this._formBuilder.group({
+      title: 'Xóa thành viên',
+      message: 'Xóa thành viên này khỏi hệ thống? <span class="font-medium">Thao tác này không thể hoàn tác!</span>',
+      icon: this._formBuilder.group({
+        show: true,
+        name: 'heroicons_outline:exclamation-triangle',
+        color: 'warn',
+      }),
+      actions: this._formBuilder.group({
+        confirm: this._formBuilder.group({
+          show: true,
+          label: 'Remove',
+          color: 'warn',
+        }),
+        cancel: this._formBuilder.group({
+          show: true,
+          label: 'Cancel',
+        }),
+      }),
+      dismissible: true,
+    });
+
+    // Subscribe to media changes
+    this._fuseMediaWatcherService.onMediaChange$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(({ matchingAliases }) => {
+        // Set the drawerMode if the given breakpoint is active
+        if (matchingAliases.includes('lg')) {
+          this.drawerMode = 'over';
+        }
+        else {
+          this.drawerMode = 'over';
+        }
+
+        // Mark for check
+        this._changeDetectorRef.markForCheck();
+      });
+  }
+
+  addUser() {
+    this.drawerComponent = 'new-user';
+    this.addDrawer.open();
+  }
+
+  closeDrawer() {
+    this.addDrawer.close();
+  }
+
+  editUser(user: any) {
+    this.drawerComponent = 'edit-user';
+    this.selectedData = user;
+
+    this.addDrawer.open();
+  }
+
+  deleteUser(user: any) {
+    const dialogRef = this._fuseConfirmationService.open(this.configForm.value);
+    // Subscribe to afterClosed from the dialog reference
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'confirmed') {
+        this._userService.delete(user.id).subscribe(() => {
+          this.getUsers();
+        });
+      }
+    });
+  }
+
+  inActive(user) {
+    var isActive = !user.isActive;
+    this._userService.update(user.id, { isActive: isActive }).subscribe(
+      (res) => {
+        this.openSnackBar('Thao tác thành công', 'Đóng');
+        this.getUsers();
+      },
+      (error) => {
+        // Handle error if observable emits an error
+        console.error('Error:', error);
+        // You can also display an error message to the user if needed
+        this.openSnackBar('Có lỗi xảy ra khi thực hiện thao tác', 'Đóng');
+      }
+    );
+  }
+
+  addManager(user) {
+    this.drawerComponent = 'add-manager';
+    this.selectedData = user;
+
+    this.addDrawer.open();
+  }
+  // get data from api
+  getUsers() {
+    const query = {
+      pageNumber: this.pageNumber + 1,
+      pageSize: this.pageSize
+    };
+    this.users$ = this._userService.getListUser(query).pipe(
+      map((data: any) => {
+        const users: any[] = data.items.map((user, index: number) => ({
+          ...user,
+          stt: index + 1
+        }));
+        this.totalItems = data.count;
+        return { users };
+      })
+    );
+  }
+
+  onPageChange(event): void {
+    this.pageNumber = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.getUsers();
+  }
+
+  // we need this function to distroy the child component when drawer is closed
+  drawerOpenedChanged(isOpened) {
+    console.log(isOpened);
+    if (!isOpened) {
+      this.drawerComponent = null;
+    }
+  }
+
+  isAllowCRUD() {
+    return isAllowCRUD(this.userInfo.role);
+  }
+
+  isAllowSetRole() {
+    return isOWnerRole(this.userInfo.role) || isSsaRole(this.userInfo.role);
+  }
+  // snackbar
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, { duration: 2000 });
+  }
+
+  addToAdmin(user) {
+    this._userService.update(user.id, { roleCode: Constants.ROLE_ADMIN, isActive: user.isActive }).subscribe(
+      (res) => {
+        this.openSnackBar('Thao tác thành công', 'Đóng');
+        this.getUsers();
+      },
+      (error) => {
+        // Handle error if observable emits an error
+        console.error('Error:', error);
+        // You can also display an error message to the user if needed
+        this.openSnackBar('Có lỗi xảy ra khi thực hiện thao tác', 'Đóng');
+      }
+    );
+  }
+
+  addToOwner(user) {
+    this._userService.update(user.id, { roleCode: Constants.ROLE_OWNER, isActive: user.isActive }).subscribe(
+      (res) => {
+        this.openSnackBar('Thao tác thành công', 'Đóng');
+        this.getUsers();
+      },
+      (error) => {
+        // Handle error if observable emits an error
+        console.error('Error:', error);
+        // You can also display an error message to the user if needed
+        this.openSnackBar('Có lỗi xảy ra khi thực hiện thao tác', 'Đóng');
+      }
+    );
+  }
+
+  resetPass(user) {
+    this.drawerComponent = 'reset-pwd';
+    this.selectedData = user;
+
+    this.addDrawer.open();
+  }
+}

@@ -1,0 +1,57 @@
+<div class="flex flex-col flex-auto h-full overflow-hidden bg-card dark:bg-default">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-18 -mb-px px-6 bg-gray-50 dark:bg-transparent">
+
+        <div class="ml-2 text-2xl font-semibold">Sửa chức năng</div>
+
+        <div class="flex items-center">
+            <!-- More menu -->
+            <button mat-flat-button [color]="'primary'" (click)="save()">
+                Lưu
+            </button>
+            <button class="px-6 ml-3" mat-button (click)="cancelAdd()">
+                Hủy
+            </button>
+        </div>
+
+    </div>
+    <mat-divider class="mb-4"></mat-divider>
+    <div class="flex flex-col gt-xs:flex-row gt-xs:items-start p-6">
+        <form [formGroup]="editFunctionForm">
+        <div class="flex-auto min-w-64">
+            <div class="flex">
+                <mat-form-field class="flex-auto">
+                    <mat-label>Tên chức năng</mat-label>
+                    <input matInput [placeholder]="'Tên chức năng'" [formControlName]="'tenChucNang'">
+                </mat-form-field>
+            </div>
+            <div class="flex">
+                <mat-form-field class="flex-auto">
+                    <mat-label>Phương thức</mat-label>
+                    <mat-select [formControlName]="'method'">
+                        <mat-option value="POST">POST</mat-option>
+                        <mat-option value="GET">GET</mat-option>
+                        <mat-option value="PUT">PUT</mat-option>
+                        <mat-option value="PATCH">PATCH</mat-option>
+                        <mat-option value="DELETE">DELETE</mat-option>
+                      </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="flex">
+                <mat-form-field class="flex-auto">
+                    <mat-label>Đường dẫn</mat-label>
+                    <textarea matInput [placeholder]="'Đường dẫn /api/...'" [rows]="3" [formControlName]="'path'"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="flex">
+                <mat-slide-toggle
+                 class="flex-auto mb-4 mt-1"
+                 [color]="'primary'"
+                 labelPosition="before"
+                 [formControlName]="'isPublic'"><span class="font-medium">Là chức năng public</span></mat-slide-toggle>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>

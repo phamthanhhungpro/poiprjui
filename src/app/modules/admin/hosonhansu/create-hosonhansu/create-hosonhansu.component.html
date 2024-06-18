@@ -1,0 +1,154 @@
+<div class="flex flex-col flex-auto h-full overflow-hidden bg-card dark:bg-default">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-18 -mb-px px-6 bg-gray-50 dark:bg-transparent">
+
+        <div class="ml-2 text-2xl font-semibold">Tạo hồ sơ nhân sự</div>
+        <div class="flex items-center">
+            <!-- More menu -->
+            <button mat-flat-button [color]="'primary'" (click)="save()">
+                Lưu
+            </button>
+            <button class="px-6 ml-3" mat-button (click)="cancelEdit()">
+                Hủy
+            </button>
+        </div>
+
+    </div>
+    <mat-divider class="mb-4"></mat-divider>
+    <div class="flex flex-col gt-xs:flex-row gt-xs:items-start overflow-y-auto p-6 h-180 min-h-180 max-h-180"
+        cdkScrollable>
+        <mat-vertical-stepper [linear]="false" #stepper>
+            <mat-step [stepControl]="addDataForm">
+                <form [formGroup]="addDataForm">
+                    <ng-template matStepLabel>Tài khoản</ng-template>
+
+                    <div class="flex">
+                        <mat-form-field class="w-full">
+                            <mat-label>User name</mat-label>
+                            <input placeholder="Tìm kiếm..." #managerInput matInput [formControlName]="'searchUserName'"
+                                [matAutocomplete]="auto" />
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                @for (option of filteredOptions | async; track option) {
+                                <mat-option [value]="option">{{option.fullName}}</mat-option>
+                                }
+                            </mat-autocomplete>
+
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>1. Họ và tên</mat-label>
+                            <input matInput [placeholder]="'Họ và tên'" [formControlName]="'fullName'" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>Điện thoại</mat-label>
+                            <input matInput [placeholder]="'Điện thoại'" [formControlName]="'phone'" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>Email</mat-label>
+                            <input matInput [placeholder]="'Email'" [formControlName]="'email'" readonly>
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <button mat-button matStepperNext>Tiếp theo</button>
+                    </div>
+                </form>
+            </mat-step>
+
+            <mat-step [stepControl]="thongtinchungForm">
+                <form [formGroup]="thongtinchungForm">
+                    <ng-template matStepLabel>Thông tin chung</ng-template>
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>2. Tên gọi khác</mat-label>
+                            <input matInput [placeholder]="'Tên gọi khác'" [formControlName]="'tenKhac'">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>3. Sinh ngày</mat-label>
+                            <input matInput [placeholder]="'Sinh ngày'" [formControlName]="'ngaySinh'">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>4. Nơi sinh</mat-label>
+                            <input matInput [placeholder]="'Nơi sinh'" [formControlName]="'noiSinh'">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>5. Quê quán</mat-label>
+                            <input matInput [placeholder]="'Quê quán'" [formControlName]="'queQuan'">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>6. Dân tộc</mat-label>
+                            <input matInput [placeholder]="'Dân tộc'" [formControlName]="'danToc'">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>7. Tôn giáo</mat-label>
+                            <input matInput [placeholder]="'Tôn giáo'" [formControlName]="'tonGiao'">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>8. Nơi đăng ký hộ khẩu thường trú</mat-label>
+                            <input matInput [placeholder]="'Thường trú'" [formControlName]="'thuongTru'">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>9. Nơi ở hiện nay</mat-label>
+                            <input matInput [placeholder]="'Nơi ở'" [formControlName]="'noiO'">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex">
+                        <button mat-button matStepperPrevious>Trở lại</button>
+                        <button mat-button matStepperNext>Tiếp theo</button>
+                    </div>
+                </form>
+            </mat-step>
+
+            <mat-step [stepControl]="phongbanForm">
+                <form [formGroup]="phongbanForm">
+                    <ng-template matStepLabel>Phòng ban/Tổ nhóm</ng-template>
+                    <div *ngIf="options">
+                        <app-searchable-select [options]="options" [label]="'Vai trò'"
+                            placeholder="Chọn vai trò" (selectionChange)="setVaiTro($event)">
+                        </app-searchable-select>
+                    </div>
+                    <div *ngIf="vanPhongOptions">
+                        <app-searchable-select [options]="vanPhongOptions" [label]="'Văn phòng'"
+                            placeholder="Chọn văn phòng" (selectionChange)="setVanPhong($event)">
+                        </app-searchable-select>
+                    </div>
+
+                    <div *ngIf="phongBanOptions">
+                        <app-searchable-select [options]="phongBanOptions" [label]="'Đơn vị/Phòng ban'"
+                            placeholder="Chọn đơn vị/phòng ban" (selectionChange)="setPhongBan($event)">
+                        </app-searchable-select>
+                    </div>
+
+                    <div *ngIf="viTriCongViecOptions">
+                        <app-searchable-select [options]="viTriCongViecOptions" [label]="'Vị trí công việc'"
+                            placeholder="Chọn vị trí công việc" (selectionChange)="setViTriCongViec($event)">
+                        </app-searchable-select>
+                    </div>
+
+                    <div class="flex">
+                        <button mat-button matStepperPrevious>Trở lại</button>
+                    </div>
+                </form>
+            </mat-step>
+        </mat-vertical-stepper>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+<div class="w-full">
+    <mat-form-field class="w-full">
+        <mat-label>{{ label }}</mat-label>
+
+        <mat-select [placeholder]="placeholder"
+            (selectionChange)="onSelectionChange($event)">
+            <mat-option>
+                <ngx-mat-select-search [formControl]="searchControl" placeholderLabel="Search..."
+                    [noEntriesFoundLabel]="noEntriesFoundLabel">
+                </ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option.key">
+                {{ option.value }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>

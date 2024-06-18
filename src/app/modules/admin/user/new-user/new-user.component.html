@@ -1,0 +1,139 @@
+<div class="flex flex-col flex-auto h-full overflow-hidden bg-card dark:bg-default">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-18 -mb-px px-6 bg-gray-50 dark:bg-transparent">
+
+        <div class="ml-2 text-2xl font-semibold">Thêm thành viên</div>
+
+        <div class="flex items-center">
+            <!-- More menu -->
+            <button mat-flat-button [color]="'primary'" (click)="save()">
+                Lưu
+            </button>
+            <button class="px-6 ml-3" mat-button (click)="cancelAdd()">
+                Hủy
+            </button>
+        </div>
+
+    </div>
+    <mat-divider class="mb-4"></mat-divider>
+    <div class="flex flex-col gt-xs:flex-row gt-xs:items-start overflow-y-auto p-6 h-180 min-h-180 max-h-180"
+        cdkScrollable>
+        <form [formGroup]="addUserForm">
+            <div class="flex-auto min-w-64">
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label class="font-medium">Họ và tên đệm</mat-label>
+                        <input matInput [placeholder]="'Họ và tên đệm'" [formControlName]="'surName'">
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label class="font-medium">Tên</mat-label>
+                        <input matInput [placeholder]="'Tên'" [formControlName]="'name'">
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Địa chỉ Email</mat-label>
+                        <input matInput [placeholder]="'Địa chỉ email'" [formControlName]="'email'">
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Tên người dùng</mat-label>
+                        <input matInput [placeholder]="'Tên người dùng'" [formControlName]="'userName'">
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Mật khẩu</mat-label>
+                        <input
+                        [placeholder]="'Mật khẩu'"
+                        id="password"
+                        matInput
+                        type="password"
+                        [formControlName]="'passWord'"
+                        #passwordField>
+                    <button
+                        mat-icon-button
+                        type="button"
+                        (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+                        matSuffix>
+                        <mat-icon
+                            class="icon-size-5"
+                            *ngIf="passwordField.type === 'password'"
+                            [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                        <mat-icon
+                            class="icon-size-5"
+                            *ngIf="passwordField.type === 'text'"
+                            [svgIcon]="'heroicons_solid:eye-slash'"></mat-icon>
+                    </button>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Số điện thoại</mat-label>
+                        <input matInput [placeholder]="'Số điện thoại'" [formControlName]="'phone'">
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Cơ quan</mat-label>
+                        <mat-select [formControlName]="'tenantId'">
+                            @for (tenant of tenants; track tenant) {
+                            <mat-option [value]="tenant.id">{{tenant.name}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Vai trò</mat-label>
+                        <mat-select [formControlName]="'roleId'">
+                            @for (role of roles; track role) {
+                            <mat-option [value]="role.id">{{role.name}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="mb-4">
+                    <p class="font-medium">Ảnh đại diện</p>
+                    <div class="custom-image mt-2 mb-2"><img *ngIf="selectedFile" [src]="selectedFileURL"
+                            alt="Selected Image"></div>
+                    <div><input type="file" (change)="onFileSelected($event)"></div>
+                </div>
+                <div class="flex">
+                    <mat-slide-toggle
+                     class="flex-auto mb-4 mt-1"
+                     [color]="'primary'"
+                     labelPosition="before"
+                     [formControlName]="'isActive'"><span class="font-medium">Kích hoạt</span></mat-slide-toggle>
+                </div>
+            </div>
+        </form>
+        <div class="flex-auto mt-2">
+            <mat-label class="font-medium">Chọn ứng dụng</mat-label>
+            <section>
+                <span>
+                    <mat-checkbox [checked]="allComplete" [color]="appCheckbox.color" [indeterminate]="someComplete()"
+                        (change)="setAll($event.checked)">
+                        {{appCheckbox.name}}
+                    </mat-checkbox>
+                </span>
+                <span>
+                    <ul class="pl-4">
+                        @for (subtask of appCheckbox.subtasks; track subtask) {
+                        <li>
+                            <mat-checkbox [(ngModel)]="subtask.completed" [color]="subtask.color"
+                                (ngModelChange)="updateAllComplete()">
+                                {{subtask.name}}
+                            </mat-checkbox>
+                        </li>
+                        }
+                    </ul>
+                </span>
+            </section>
+        </div>
+    </div>
+</div>

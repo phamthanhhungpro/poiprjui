@@ -1,0 +1,64 @@
+<div class="flex flex-col flex-auto h-full overflow-hidden bg-card dark:bg-default">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-18 -mb-px px-6 bg-gray-50 dark:bg-transparent">
+
+        <div class="ml-2 text-2xl font-semibold">Thêm mới Công thức lương</div>
+
+        <div class="flex items-center">
+            <!-- More menu -->
+            <button mat-flat-button [color]="'primary'" (click)="save()">
+                Lưu
+            </button>
+            <button class="px-6 ml-3" mat-button (click)="cancelAdd()">
+                Hủy
+            </button>
+        </div>
+
+    </div>
+    <mat-divider class="mb-4"></mat-divider>
+    <div class="flex flex-col gt-xs:flex-row gt-xs:items-start p-6">
+        <form [formGroup]="addDataForm" class="space-y-4">
+            <div class="flex-auto min-w-64 space-y-4">
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Tên công thức</mat-label>
+                        <input matInput placeholder="Tên công thức" formControlName="tenCongThuc">
+                    </mat-form-field>
+                </div>
+ 
+                <div class="flex flex-col space-y-2">
+                    <mat-label>Danh sách tham số lương</mat-label>
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Tên tham số</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Mã tham số</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr *ngFor="let row of tableData">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ row.tenThamSoLuong }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ row.maThamSoLuong }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Chi tiết công thức</mat-label>
+                        <input matInput placeholder="Chi tiết công thức" formControlName="chiTietCongThuc">
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

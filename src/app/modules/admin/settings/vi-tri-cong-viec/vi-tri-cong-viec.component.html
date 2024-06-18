@@ -1,0 +1,121 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 pb-22 sm:pt-6 sm:pb-20 sm:px-10 bg-default dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Title -->
+            <div class="mt-2">
+                <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    Danh sách Vị trí công việc
+                </h2>
+            </div>
+            <!-- Breadcrumbs -->
+            <div>
+                <div class="hidden sm:flex flex-wrap items-center font-medium">
+                    <div>
+                        <a class="whitespace-nowrap text-primary-500">HRM</a>
+                    </div>
+                    <div class="flex items-center ml-1 whitespace-nowrap">
+                        <mat-icon class="icon-size-5 text-secondary"
+                            [svgIcon]="'heroicons_mini:chevron-right'"></mat-icon>
+                        <span class="ml-1 text-secondary">Vị trí công việc</span>
+                    </div>
+                </div>
+                <div class="flex sm:hidden">
+                    <a class="inline-flex items-center -ml-1.5 text-secondary font-medium" [routerLink]="'../'">
+                        <mat-icon class="icon-size-5 text-secondary"
+                            [svgIcon]="'heroicons_solid:chevron-left'"></mat-icon>
+                        <span class="ml-1">Back</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Actions -->
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+            <button mat-flat-button [color]="'primary'" (click)="addData()">
+                <mat-icon class="icon-size-4" [svgIcon]="'mat_outline:add'"></mat-icon>
+                <span class="ml-2">Thêm mới</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex flex-auto -mt-16 p-6 sm:p-10 overflow-hidden bg-card" cdkScrollable>
+
+        <!-- CONTENT GOES HERE -->
+        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+            <ng-container *ngIf="(data$ | async) as data">
+                <ng-container *ngIf="data.items.length > 0; else nodata">
+                    <div class="grid">
+                        <!-- Header -->
+                        <div class="vitri-grid z-10 sticky top-0 grid gap-10 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                            matSort matSortDisableClear>
+                            <div class="hidden lg:block">STT</div>
+
+                            <div>Tên vị trí công việc</div>
+                            <div class="hidden lg:block">Mô tả</div>
+
+                            <div>Thao tác</div>
+                        </div>
+                        <!-- Rows -->
+                        <ng-container *ngIf="(data$ | async) as data">
+                            <ng-container *ngFor="let model of data.items; trackBy: trackByFn">
+                                <div class="vitri-grid grid items-center gap-10 py-3 px-6 md:px-8 border-b">
+                                    <div class="hidden lg:block">
+                                        {{model.stt}}
+                                    </div>
+                                    <div>
+                                        {{model.tenViTri}}
+                                    </div>
+                                    
+                                    <div class="hidden lg:block">
+                                        {{model.moTa}}
+                                    </div>
+
+                                    <div class="">
+                                        <button mat-icon-button (click)="editData(model)">
+                                            <mat-icon class="icon-size-5"
+                                                [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
+                                        </button>
+
+                                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                                            <mat-icon class="icon-size-5" [svgIcon]="'mat_solid:more_vert'"></mat-icon>
+                                        </button>
+                                        <mat-menu #menu="matMenu">
+                                            <button (click)="delData(model)" mat-menu-item>
+                                                <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                                                <span>Xóa</span>
+                                            </button>
+
+                                        </mat-menu>
+                                    </div>
+                                </div>
+
+                            </ng-container>
+                        </ng-container>
+                    </div>
+
+                </ng-container>
+            </ng-container>
+
+            <ng-template #nodata>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Không có dữ liệu</div>
+            </ng-template>
+
+        </div>
+    </div>
+</div>
+
+<fuse-drawer class="w-screen min-w-screen sm:w-140 sm:min-w-140 z-999" fixed [mode]="'over'" [name]="'addDrawer'"
+    [position]="'right'" [opened]="false" (openedChanged)="drawerOpenedChanged($event)" #addDrawer>
+    <div class="flex flex-col w-full overflow-auto bg-card">
+        <!-- add data component -->
+        <ng-container *ngIf="drawerComponent === 'new-data'">
+            <app-create-vitricongviec [drawer]="addDrawer" (onClosed)="getTableData()"></app-create-vitricongviec>
+        </ng-container>
+        <!-- edit data component -->
+        <ng-container *ngIf="drawerComponent === 'edit-data'">
+            <app-edit-vitricongviec [drawer]="addDrawer" [data]="selectedData" (onClosed)="getTableData()"></app-edit-vitricongviec>
+        </ng-container>
+
+    </div>
+</fuse-drawer>
