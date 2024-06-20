@@ -10,4 +10,5 @@ export const environment = {
     idApiUrl: apiUrl + 'id/api/',
     idApiUrlWithOutEndding: apiUrl + 'id',
     hrmApiUrl: apiUrl + 'hrm/api/',
+    prjApiUrl: apiUrl + 'prj/api/',
 };

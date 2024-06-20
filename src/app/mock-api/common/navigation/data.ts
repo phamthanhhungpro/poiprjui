@@ -113,18 +113,11 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon: 'heroicons_outline:home',
         children: [
             {
-                id: 'vai-tro',
-                title: 'Vai trò',
+                id: 'phong-ban-bo-phan',
+                title: 'Phòng/Ban/Bộ phận',
                 type: 'basic',
                 icon: 'mat_outline:arrow_drop_down',
-                link: '/vai-tro'
-            },
-            {
-                id: 'vi-tri-cong-viec',
-                title: 'Vị trí công việc',
-                type: 'basic',
-                icon: 'mat_outline:arrow_drop_down',
-                link: '/vi-tri-cong-viec'
+                link: '/phong-ban-bo-phan'
             },
             {
                 id: 'to-nhom',
@@ -132,6 +125,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type: 'basic',
                 icon: 'mat_outline:arrow_drop_down',
                 link: '/to-nhom'
+            },
+            {
+                id: 'linh-vuc',
+                title: 'Lĩnh vực',
+                type: 'basic',
+                icon: 'mat_outline:arrow_drop_down',
+                link: '/linh-vuc'
             },
         ]
     }

@@ -3,13 +3,13 @@ import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { objectToQueryString } from './queryStringHelper';
-const baseUrl = environment.idApiUrl + 'PhongBanBoPhan';
+const baseUrl = environment.prjApiUrl + 'LinhVuc';
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class PhongBanBoPhanService {
+export class LinhVucService {
   constructor(private http: HttpClient) { }
 
   getAll(query: any): Observable<any[]> {
@@ -35,9 +35,5 @@ export class PhongBanBoPhanService {
 
   delete(id: any): Observable<any> {
     return this.http.delete(`${baseUrl}/${id}`);
-  }
-
-  updatePhongBanUser(id: any, data: any): Observable<any> {
-    return this.http.put(`${baseUrl}/member/${id}`, data);
   }
 }
