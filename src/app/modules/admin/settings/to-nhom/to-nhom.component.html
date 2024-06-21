@@ -52,6 +52,7 @@
                             <div class="hidden lg:block">STT</div>
 
                             <div>Tên tổ/nhóm</div>
+                            <div class="hidden md:block">Lãnh đạo</div>
                             <div class="hidden lg:block">Mô tả</div>
 
                             <div>Thao tác</div>
@@ -66,7 +67,32 @@
                                     <div>
                                         {{model.tenToNhom}}
                                     </div>
-                                    
+                                    <div class="hidden md:block">
+                                        <ng-container *ngIf="model.lanhDao?.length">
+                                            <div class="flex items-center -space-x-1.5">
+                                                <ng-container
+                                                    *ngFor="let member of model.lanhDao.slice(0, 3); trackBy: trackByFn">
+                                                    <div
+                                                        class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+                                                        <ng-container *ngIf="member.name">
+                                                            <div matTooltip="{{member.fullName}}"
+                                                                class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                                                {{member.name.charAt(0)}}
+                                                            </div>
+                                                        </ng-container>
+                                                    </div>
+                                                </ng-container>
+                                                <ng-container *ngIf="model.lanhDao.length > 3">
+                                                    <div
+                                                        class="flex flex-0 items-center justify-center w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent bg-gray-200 text-gray-500">
+                                                        <div class="text-md font-semibold">
+                                                            +{{ model.lanhDao.slice(3).length }}
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </ng-container>
+                                    </div>
                                     <div class="hidden lg:block">
                                         {{model.description}}
                                     </div>
@@ -85,12 +111,6 @@
                                                 <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
                                                 <span>Xóa</span>
                                             </button>
-
-                                            <button (click)="addMember(model)" mat-menu-item>
-                                                <mat-icon class="icon-size-4" [svgIcon]="'mat_outline:manage_accounts'"></mat-icon>
-                                                <span>Quản lý thành viên</span>
-                                            </button>
-
                                         </mat-menu>
                                     </div>
                                 </div>

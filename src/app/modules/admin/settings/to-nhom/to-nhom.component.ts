@@ -14,6 +14,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { ToNhomService } from 'app/services/tonhom.service';
 import { CreateToNhomComponent } from './create-tonhom/create-tonhom.component';
 import { EditToNhomComponent } from './edit-tonhom/edit-tonhom.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @Component({
@@ -26,15 +27,15 @@ import { EditToNhomComponent } from './edit-tonhom/edit-tonhom.component';
             grid-template-columns: auto 96px;
 
             @screen sm {
-                grid-template-columns:  250px 96px;
+                grid-template-columns:  250px 100px 96px;
             }
 
             @screen md {
-                grid-template-columns: 250px 96px;
+                grid-template-columns: 250px 100px 96px;
             }
 
             @screen lg {
-                grid-template-columns: 20px 250px auto 96px;
+                grid-template-columns: 20px 250px 100px auto 96px;
             }
         }
     `,
@@ -42,7 +43,7 @@ import { EditToNhomComponent } from './edit-tonhom/edit-tonhom.component';
   imports: [MatIconModule, RouterLink, MatButtonModule, CdkScrollable, NgIf,
     AsyncPipe, NgForOf, CurrencyPipe, MatButtonModule, MatMenuModule,
     FuseDrawerComponent, MatDividerModule, MatSidenavModule, CreateToNhomComponent,
-    EditToNhomComponent, CommonModule],
+    EditToNhomComponent, CommonModule, MatTooltipModule],
   templateUrl: './to-nhom.component.html'
 })
 export class ToNhomComponent {

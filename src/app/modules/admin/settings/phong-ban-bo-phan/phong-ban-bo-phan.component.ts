@@ -16,6 +16,7 @@ import { CreatePhongbanComponent } from './create-phongban/create-phongban.compo
 import { EditPhongbanComponent } from './edit-phongban/edit-phongban.component';
 import { environment } from 'environments/environment';
 import { AddUserToPhongBanComponent } from './add-user-to-phongban/add-user-to-phongban.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-phong-ban-bo-phan',
@@ -43,7 +44,7 @@ import { AddUserToPhongBanComponent } from './add-user-to-phongban/add-user-to-p
   imports: [MatIconModule, RouterLink, MatButtonModule, CdkScrollable, NgIf,
     AsyncPipe, NgForOf, CurrencyPipe, MatButtonModule, MatMenuModule,
     FuseDrawerComponent, MatDividerModule, MatSidenavModule, CreatePhongbanComponent,
-    EditPhongbanComponent, AddUserToPhongBanComponent],
+    EditPhongbanComponent, AddUserToPhongBanComponent, MatTooltipModule],
   templateUrl: './phong-ban-bo-phan.component.html'
 })
 export class PhongBanBoPhanComponent {

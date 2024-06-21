@@ -10,7 +10,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ToNhomService } from 'app/services/tonhom.service';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatChipsModule } from '@angular/material/chips';
+import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
 import { startWith, map } from 'rxjs';
 import { UserApiService } from 'app/services/user.service';
@@ -35,6 +35,12 @@ export class EditToNhomComponent {
   filteredOptions: any;
   allManagers: any;
   selectedUser;
+
+  @ViewChild('thanhvienInput') thanhvienInput: ElementRef<HTMLInputElement>;
+  listThanhVien = [];
+  filteredOptionThanhVien: any;
+  allThanhVien: any;
+  selectedMember;
   /**
    *
    */
@@ -49,16 +55,19 @@ export class EditToNhomComponent {
       tenToNhom: ['', Validators.required],
       description: [''],
       searchManager: [''],
+      searchThanhVien: [''],
     });
   }
 
   ngOnInit(): void {
     this.getUser();
+    this.getMember();
     this.editDataForm.patchValue(this.data);
-    if(this.data.truongNhom) {
-      this.selectedUser = this.data.truongNhom;
-      this.editDataForm.get('searchManager')!.setValue(this.selectedUser.userName);
-      this.editDataForm.get('searchManager')!.updateValueAndValidity({ emitEvent: true });    
+    if(this.data) {
+      // set lanhdao
+      this.listManager = this.data.lanhDao;
+      // set thanhvien
+      this.listThanhVien = this.data.thanhVien;
     }
   }
 
@@ -75,8 +84,8 @@ export class EditToNhomComponent {
 
   // save data
   save(): void {
-    this.editDataForm.value.truongNhomId = this.selectedUser.id;
-    this._tonhomService.update(this.data.id, this.editDataForm.value).subscribe(res => {
+    this.editDataForm.value.lanhDaoIds = this.listManager.map(item => item.id);
+    this.editDataForm.value.memberIds = this.listThanhVien.map(item => item.id);    this._tonhomService.update(this.data.id, this.editDataForm.value).subscribe(res => {
       if (res.isSucceeded) {
         this.openSnackBar('Thao tác thành công', 'Đóng');
         this.onClosed.emit();
@@ -98,21 +107,29 @@ export class EditToNhomComponent {
       this.allManagers = res;
       this.filteredOptions = this.editDataForm.get('searchManager')?.valueChanges.pipe(
         startWith(null),
-        map((item: any | null) => (item ? this._filter(item) : this.allManagers.slice())));
+        map((item: any | null) => (item ? this._filter(item) : this.allManagers.slice())),
+        map(managers => managers.filter(m => !this.listManager.some(i => i.userName === m.userName)))
+      );
     }
     );
   }
-
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.selectedUser = event.option.value;
-    this.editDataForm.get('searchManager')!.setValue(this.selectedUser.userName);
-    this.editDataForm.patchValue(this.selectedUser);
+  getMember() {
+    this._userService.getUserInTenant().subscribe(res => {
+      this.allThanhVien = res;
+      this.filteredOptionThanhVien = this.editDataForm.get('searchThanhVien')?.valueChanges.pipe(
+        startWith(null),
+        map((item: any | null) => (item ? this._filterThanhVien(item) : this.allThanhVien.slice())),
+        map(tvien => tvien.filter(m => !this.listThanhVien.some(i => i.userName === m.userName)))
+      );
+    }
+    );
   }
 
   private _filter(value: any): any[] {
     if (typeof (value) === 'object') {
       let res = this.allManagers.filter(item => (item.fullName.toLowerCase().includes(value.fullName.toLowerCase())
         || item.userName.toLowerCase().includes(value.userName.toLowerCase())));
+
       return res;
     }
 
@@ -122,7 +139,69 @@ export class EditToNhomComponent {
     }
 
     const filterValue = value.toLowerCase();
+
     return this.allManagers.filter(item => (item.fullName.toLowerCase().includes(filterValue)
       || item.userName.toLowerCase().includes(filterValue)));
   }
+
+  private _filterThanhVien(value: any): any[] {
+    if (typeof (value) === 'object') {
+      let res = this.allThanhVien.filter(item => (item.fullName.toLowerCase().includes(value.fullName.toLowerCase())
+        || item.userName.toLowerCase().includes(value.userName.toLowerCase())));
+
+      return res;
+    }
+
+    if (value && value.startsWith('@')) {
+      // delete @
+      value = value.slice(1);
+    }
+
+    const filterValue = value.toLowerCase();
+
+    return this.allThanhVien.filter(item => (item.fullName.toLowerCase().includes(filterValue)
+      || item.userName.toLowerCase().includes(filterValue)));
+  }
+
+  add(event: MatChipInputEvent): void {
+    // do nothing
+    // don't allow to add by keyboard
+  }
+
+  remove(item: any): void {
+    const index = this.listManager.indexOf(item);
+
+    if (index >= 0) {
+      this.listManager.splice(index, 1);
+      this._changeDetectorRef.markForCheck();
+      this.editDataForm.get('searchManager')!.setValue(null);
+    }
+  }
+
+  removeThanhVien(item: any): void {
+    const index = this.listThanhVien.indexOf(item);
+
+    if (index >= 0) {
+      this.listThanhVien.splice(index, 1);
+      this._changeDetectorRef.markForCheck();
+      this.editDataForm.get('searchThanhVien')!.setValue(null);
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    let selectedUser = event.option.value;
+    this.listManager.push(selectedUser);
+
+    this.managerInput.nativeElement.value = '';
+    this.editDataForm.get('searchManager')!.setValue(null);
+  }
+
+  selectedThanhVien(event: MatAutocompleteSelectedEvent): void {
+    let selectedMember = event.option.value;
+    this.listThanhVien.push(selectedMember);
+
+    this.thanhvienInput.nativeElement.value = '';
+    this.editDataForm.get('searchThanhVien')!.setValue(null);
+  }
+
 }
