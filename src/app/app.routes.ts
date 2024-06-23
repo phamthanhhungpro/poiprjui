@@ -8,6 +8,8 @@ import { ViTriCongViecComponent } from './modules/admin/settings/vi-tri-cong-vie
 import { LinhVucComponent } from './modules/admin/settings/linh-vuc/linh-vuc.component';
 import { ToNhomComponent } from './modules/admin/settings/to-nhom/to-nhom.component';
 import { PhongBanBoPhanComponent } from './modules/admin/settings/phong-ban-bo-phan/phong-ban-bo-phan.component';
+import { NhiemVuChuyenMonComponent } from './modules/admin/nhiem-vu-chuyen-mon/nhiem-vu-chuyen-mon.component';
+import { DuAnComponent } from './modules/admin/du-an/du-an.component';
 
 // @formatter:off
 /* eslint-disable max-len */
@@ -91,8 +93,8 @@ export const appRoutes: Route[] = [
 
             { path: 'viec-ca-nhan', component: VaiTroComponent },
             { path: 'quan-ly-cong-viec', component: VaiTroComponent },
-            { path: 'nhiem-vu-chuyen-mon', component: VaiTroComponent },
-            { path: 'du-an', component: VaiTroComponent },
+            { path: 'nhiem-vu-chuyen-mon', component: NhiemVuChuyenMonComponent },
+            { path: 'du-an', component: DuAnComponent },
             { path: 'to-nhom', component: ToNhomComponent },
             { path: 'linh-vuc', component: LinhVucComponent },
             { path: 'phong-ban-bo-phan', component: PhongBanBoPhanComponent },

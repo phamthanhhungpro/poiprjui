@@ -1,0 +1,146 @@
+<div class="flex flex-col flex-auto h-full overflow-hidden bg-card dark:bg-default">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-18 -mb-px px-6 bg-gray-50 dark:bg-transparent">
+
+        <div class="ml-2 text-2xl font-semibold">Thêm mới Dự án</div>
+
+        <div class="flex items-center">
+            <!-- More menu -->
+            <button mat-flat-button [color]="'primary'" (click)="save()">
+                Lưu
+            </button>
+            <button class="px-6 ml-3" mat-button (click)="cancelAdd()">
+                Hủy
+            </button>
+        </div>
+
+    </div>
+    <mat-divider class="mb-4"></mat-divider>
+    <div class="flex flex-col gt-xs:flex-row gt-xs:items-start p-6">
+        <form [formGroup]="addDataForm">
+            <div class="flex-auto min-w-64">
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Tên Dự án</mat-label>
+                        <input matInput [placeholder]="'Tên dự án'" [formControlName]="'tenDuAn'">
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Mô tả</mat-label>
+                        <textarea matInput [placeholder]="'Mô tả'" [formControlName]="'moTaDuAn'"></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Lĩnh vực</mat-label>
+                        <mat-select [formControlName]="'linhVucId'">
+                            @for (model of listLinhVuc; track model) {
+                            <mat-option [value]="model.id">{{model.tenLinhVuc}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="flex mb-2">
+                    <mat-radio-group aria-label="Select an option" formControlName="option">
+                        <mat-radio-button value="1">Phòng/Ban/Bộ phận</mat-radio-button>
+                        <mat-radio-button value="2">Tổ/Nhóm</mat-radio-button>
+                      </mat-radio-group>
+                </div>
+                <div class="flex" *ngIf="addDataForm.get('option')?.value === '1'">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Chọn Phòng/Ban/Bộ phận</mat-label>
+                        <mat-select [formControlName]="'phongBanBoPhanId'" (selectionChange)="selectPhongBanBoPhan($event)">
+                            @for (model of listBoPhan; track model) {
+                            <mat-option [value]="model.id">{{model.name}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="flex" *ngIf="addDataForm.get('option')?.value === '2'">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Chọn Tổ/Nhóm</mat-label>
+                        <mat-select [formControlName]="'toNhomId'" (selectionChange)="selectToNhom($event)">
+                            @for (model of listToNhom; track model) {
+                            <mat-option [value]="model.id">{{model.tenToNhom}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <!-- Cán bộ quản lý -->
+                <div class="flex">
+                    <mat-form-field class="w-full">
+                        <mat-label>Cán bộ phụ trách</mat-label>
+                        <mat-chip-grid class="w-auto" #chipGridManager>
+                            @for (mananger of listManager; track mananger) {
+                            <mat-chip-row (removed)="removeManager(mananger)">
+                                {{mananger.surName}} {{mananger.name}}
+                                <button matChipRemove>
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                            </mat-chip-row>
+                            }
+                        </mat-chip-grid>
+                        <input placeholder="Thêm..." #managerInput [formControlName]="'searchManager'"
+                            [matChipInputFor]="chipGridManager" [matAutocomplete]="auto" />
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedManager($event)">
+                            @for (option of filteredOptionManager | async; track option) {
+                            <mat-option [value]="option">{{option.fullName}}</mat-option>
+                            }
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="flex" *ngIf="listManager.length > 1">
+                    <mat-error>Chỉ được chọn một cán bộ phụ trách</mat-error>
+                </div>
+
+                <!-- Thành viên -->
+                <div class="flex">
+                    <mat-form-field class="w-full">
+                        <mat-label>Thành viên</mat-label>
+                        <mat-chip-grid class="w-auto" #chipGridThanhvien>
+                            @for (thanhvien of listThanhVien; track thanhvien) {
+                            <mat-chip-row (removed)="removeThanhVien(thanhvien)">
+                                {{thanhvien.surName}} {{thanhvien.name}}
+                                <button matChipRemove>
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                            </mat-chip-row>
+                            }
+                        </mat-chip-grid>
+                        <input placeholder="Thêm..." #thanhvienInput [formControlName]="'searchThanhVien'"
+                            [matChipInputFor]="chipGridThanhvien" [matAutocomplete]="auto1" />
+                        <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selectedThanhVien($event)">
+                            @for (option of filteredOptionThanhVien | async; track option) {
+                            <mat-option [value]="option">{{option.fullName}}</mat-option>
+                            }
+                        </mat-autocomplete>
+
+                    </mat-form-field>
+                </div>
+                <!-- Thời gian bắt đầu -->
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Thời gian bắt đầu</mat-label>
+                        <input matInput [matDatepicker]="picker" [formControlName]="'thoiGianBatDau'">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <!-- Thời gian kết thúc -->
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Thời gian kết thúc</mat-label>
+                        <input matInput [matDatepicker]="picker2" [formControlName]="'thoiGianKetThuc'">
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
