@@ -46,7 +46,7 @@
             <ng-container *ngIf="(data$ | async) as data">
                 <ng-container *ngIf="data.items.length; else nodata">
                     <ng-container *ngFor="let item of data.items; let i = index; trackBy: trackByFn">
-                        <a
+                        <a [routerLink]="['/nhiem-vu-chuyen-mon', item.id]"
                             class="z-10 flex items-center px-0 py-4 md:px-0 cursor-pointer border-b hover:bg-gray-100 dark:hover:bg-hover">
                             <div class="min-w-60 max-w-60 ml-2">
                                 <div class="font-medium leading-5 truncate">{{item.tenDuAn}}</div>
@@ -63,14 +63,14 @@
                             </div>
                             <div class="flex-grow"></div>
                             <div class="min-w-0 max-w-80 ml-4">
-                                <button mat-icon-button (click)="editData(item)">
+                                <button mat-icon-button (click)="editData(item); $event.stopPropagation(); $event.preventDefault()">
                                     <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
                                 </button>
-                                <button mat-icon-button [matMenuTriggerFor]="menu">
+                                <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation(); $event.preventDefault()">
                                     <mat-icon class="icon-size-4" [svgIcon]="'mat_solid:more_vert'"></mat-icon>
                                 </button>
                                 <mat-menu #menu="matMenu">
-                                    <button (click)="delData(item)" mat-menu-item>
+                                    <button (click)="delData(item); $event.stopPropagation()" mat-menu-item>
                                         <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
                                         <span>Xóa</span>
                                     </button>
