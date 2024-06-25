@@ -30,13 +30,6 @@
                 </div>
             </div>
         </div>
-        <!-- Actions -->
-        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4" *ngIf="isAllowCRUD()">
-            <button mat-flat-button [color]="'primary'" (click)="addUser()">
-                <mat-icon class="icon-size-4" [svgIcon]="'mat_outline:add'"></mat-icon>
-                <span class="ml-2">Thêm mới</span>
-            </button>
-        </div>
     </div>
 
     <!-- Main -->
@@ -61,7 +54,7 @@
                                     </div>
                                 </ng-container>
                             </div>
-                            <div class="min-w-60 max-w-60 ml-4" (click)="editUser(user)">
+                            <div class="min-w-60 max-w-60 ml-4">
                                 <div class="font-medium leading-5 truncate">{{user.fullName}}</div>
                                 <div class="leading-5 truncate text-secondary">{{user.email}}</div>
                                 <div class="leading-5 truncate text-secondary">{{'@' +user.userName}} - {{user.phone}}
@@ -78,51 +71,9 @@
                             </div>
                             <div class="flex-grow"></div>
                             <div class="min-w-0 max-w-80 ml-4">
-                                <button mat-icon-button (click)="editUser(user)">
-                                    <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
+                                <button mat-icon-button (click)="goToPoiId()" matTooltip="Quản lý thành viên">
+                                    <mat-icon class="icon-size-4" [svgIcon]="'mat_outline:manage_accounts'"></mat-icon>
                                 </button>
-                                <button mat-icon-button (click)="inActive(user)">
-                                    <mat-icon class="icon-size-4" [svgIcon]="'heroicons_outline:x-circle'"></mat-icon>
-                                </button>
-                                <button mat-icon-button [matMenuTriggerFor]="menu">
-                                    <mat-icon class="icon-size-4" [svgIcon]="'mat_solid:more_vert'"></mat-icon>
-                                </button>
-                                <mat-menu #menu="matMenu">
-                                    <button (click)="editUser(user)" mat-menu-item>
-                                        <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
-                                        <span>Sửa thông tin</span>
-                                    </button>
-                                    <button (click)="deleteUser(user)" mat-menu-item>
-                                        <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
-                                        <span>Xóa thành viên</span>
-                                    </button>
-                                    <button (click)="inActive(user)" mat-menu-item>
-                                        <mat-icon class="icon-size-4"
-                                            [svgIcon]="'heroicons_outline:x-circle'"></mat-icon>
-                                        <span>Active/Inactive</span>
-                                    </button>
-                                    <button (click)="addManager(user)" mat-menu-item *ngIf="isAllowCRUD()">
-                                        <mat-icon class="icon-size-4"
-                                            [svgIcon]="'mat_outline:manage_accounts'"></mat-icon>
-                                        <span>Chỉnh sửa người quản lý trực tiếp</span>
-                                    </button>
-                                    <!-- Chỉ role owner nhìn thấy menu -->
-                                    <button (click)="addToAdmin(user)" mat-menu-item *ngIf="isAllowSetRole()">
-                                        <mat-icon class="icon-size-4"
-                                            [svgIcon]="'mat_outline:manage_accounts'"></mat-icon>
-                                        <span>Chọn làm quản lý</span>
-                                    </button>
-                                    <button (click)="addToOwner(user)" mat-menu-item *ngIf="isAllowSetRole()">
-                                        <mat-icon class="icon-size-4"
-                                            [svgIcon]="'mat_outline:manage_accounts'"></mat-icon>
-                                        <span>Chọn làm quản lý cấp cao</span>
-                                    </button>
-                                    <button (click)="resetPass(user)" mat-menu-item *ngIf="isAllowSetRole()">
-                                        <mat-icon class="icon-size-4"
-                                            [svgIcon]="'mat_outline:manage_accounts'"></mat-icon>
-                                        <span>Thiết lập lại mật khẩu</span>
-                                    </button>
-                                </mat-menu>
                             </div>
                         </a>
                     </ng-container>

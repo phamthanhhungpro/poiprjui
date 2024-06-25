@@ -48,9 +48,9 @@
                     <ng-container *ngFor="let item of data.items; let i = index; trackBy: trackByFn">
                         <a [routerLink]="['/du-an', item.id]"
                             class="z-10 flex items-center px-0 py-4 md:px-0 cursor-pointer border-b hover:bg-gray-100 dark:hover:bg-hover">
-                            <div class="min-w-60 max-w-60 ml-2">
-                                <div class="font-medium leading-5 truncate">{{item.tenDuAn}}</div>
-                                <div class="leading-5 truncate text-secondary">{{item.moTaDuAn}}</div>
+                            <div class="min-w-80 max-w-80 ml-2">
+                                <div class="font-medium leading-5">{{item.tenDuAn}}</div>
+                                <div class="leading-5 text-secondary">{{item.moTaDuAn}}</div>
                             </div>
                             <div class="min-w-60 max-w-60 ml-4 hidden lg:block">
                                 <div class="leading-5 truncate text-secondary text-warn-800">{{item.linhVuc.tenLinhVuc}}</div>

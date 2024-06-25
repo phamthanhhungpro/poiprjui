@@ -11,11 +11,31 @@ import { NhomCongViecComponent } from '../nhom-cong-viec/nhom-cong-viec.componen
   standalone: true,
   imports: [CommonModule, MatIconModule, RouterLink, MatTabsModule, NhomCongViecComponent],
   templateUrl: './chi-tiet-du-an.component.html',
+  styles: [
+    `
+      .mat-tab-group {
+        @apply w-full;
+      }
+
+      .mat-tab-header {
+        overflow: hidden;
+      }
+
+      .mat-tab-label-container {
+        overflow-x: auto;
+      }
+
+      .mat-tab-header-pagination-controls {
+        @apply block;
+      }
+    `
+  ]
 })
 export class ChiTietDuAnComponent {
 
   id: string;
   model: any = {};
+  selectedTabIndex = 2;
   constructor(private route: ActivatedRoute,
               private _duAnNvChuyenMonService: DuAnNvChuyenMonService
   ) { }

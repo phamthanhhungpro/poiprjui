@@ -22,6 +22,7 @@ import { AddManagerComponent } from './add-manager/add-manager.component';
 import { Constants } from 'app/mock-api/common/constants';
 import { environment } from 'environments/environment';
 import { ResetPwdComponent } from './reset-pwd/reset-pwd.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-user',
@@ -31,7 +32,7 @@ import { ResetPwdComponent } from './reset-pwd/reset-pwd.component';
   imports: [MatIconModule, RouterLink, MatButtonModule, CdkScrollable, NgIf,
     AsyncPipe, NgForOf, CurrencyPipe, MatButtonModule, MatMenuModule,
     FuseDrawerComponent, MatDividerModule, MatSidenavModule, NewUserComponent,
-    EditUserComponent, MatPaginatorModule, AddManagerComponent, ResetPwdComponent],
+    EditUserComponent, MatPaginatorModule, AddManagerComponent, ResetPwdComponent, MatTooltipModule],
 })
 export class UserComponent {
 
@@ -207,40 +208,7 @@ export class UserComponent {
     this._snackBar.open(message, action, { duration: 2000 });
   }
 
-  addToAdmin(user) {
-    this._userService.update(user.id, { roleCode: Constants.ROLE_ADMIN, isActive: user.isActive }).subscribe(
-      (res) => {
-        this.openSnackBar('Thao tác thành công', 'Đóng');
-        this.getUsers();
-      },
-      (error) => {
-        // Handle error if observable emits an error
-        console.error('Error:', error);
-        // You can also display an error message to the user if needed
-        this.openSnackBar('Có lỗi xảy ra khi thực hiện thao tác', 'Đóng');
-      }
-    );
-  }
-
-  addToOwner(user) {
-    this._userService.update(user.id, { roleCode: Constants.ROLE_OWNER, isActive: user.isActive }).subscribe(
-      (res) => {
-        this.openSnackBar('Thao tác thành công', 'Đóng');
-        this.getUsers();
-      },
-      (error) => {
-        // Handle error if observable emits an error
-        console.error('Error:', error);
-        // You can also display an error message to the user if needed
-        this.openSnackBar('Có lỗi xảy ra khi thực hiện thao tác', 'Đóng');
-      }
-    );
-  }
-
-  resetPass(user) {
-    this.drawerComponent = 'reset-pwd';
-    this.selectedData = user;
-
-    this.addDrawer.open();
+  goToPoiId() {
+    window.open(environment.idFrontEndUrl + 'user', '_blank');
   }
 }
