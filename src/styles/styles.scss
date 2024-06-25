@@ -2,3 +2,10 @@
 /*  @ Import/write your custom styles here.
 /*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
 /* ----------------------------------------------------------------------------------------------------- */
+.mat-tab-labels {
+    flex-flow: wrap;
+}
+.mat-tab-header {
+    flex-flow: wrap;
+
+  }

@@ -4,38 +4,22 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { DuAnNvChuyenMonService } from 'app/services/duan-nvchuyenmon.service';
 import { MatTabsModule } from '@angular/material/tabs';
-import { NhomCongViecComponent } from '../nhom-cong-viec/nhom-cong-viec.component';
+import { NhomCongViecComponent } from '../thiet-lap-du-an/nhom-cong-viec/nhom-cong-viec.component';
+import { ThietLapDuAnComponent } from '../thiet-lap-du-an/thiet-lap-du-an.component';
 
 @Component({
   selector: 'app-chi-tiet-du-an',
   standalone: true,
-  imports: [CommonModule, MatIconModule, RouterLink, MatTabsModule, NhomCongViecComponent],
+  imports: [CommonModule, MatIconModule, RouterLink, MatTabsModule, NhomCongViecComponent,
+            ThietLapDuAnComponent
+  ],
   templateUrl: './chi-tiet-du-an.component.html',
-  styles: [
-    `
-      .mat-tab-group {
-        @apply w-full;
-      }
-
-      .mat-tab-header {
-        overflow: hidden;
-      }
-
-      .mat-tab-label-container {
-        overflow-x: auto;
-      }
-
-      .mat-tab-header-pagination-controls {
-        @apply block;
-      }
-    `
-  ]
 })
 export class ChiTietDuAnComponent {
 
   id: string;
   model: any = {};
-  selectedTabIndex = 2;
+  selectedTabIndex = 1;
   constructor(private route: ActivatedRoute,
               private _duAnNvChuyenMonService: DuAnNvChuyenMonService
   ) { }

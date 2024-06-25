@@ -1,8 +1,11 @@
-<div class="flex flex-col flex-auto sm:mb-18 h-full overflow-hidden">
-    <!-- Add btn -->
-    <div class="flex mb-6">
-        <button mat-stroked-button (click)="openCreateItemDialog()">Thêm mới</button>
+<div class="flex flex-col flex-auto sm:mb-4 h-full overflow-hidden">
+    <div class="flex mb-3 justify-end">
+        <button mat-flat-button [color]="'primary'" (click)="openCreateItemDialog()">
+            <mat-icon class="icon-size-4" [svgIcon]="'mat_outline:add'"></mat-icon>
+            <span class="ml-2">Thêm mới</span>
+        </button>
     </div>
+
     <ng-container *ngIf="(data$ | async) as data">
         <ng-container *ngIf="data.items.length > 0; else nodata">
             <div class="grid overflow-auto">
@@ -11,7 +14,7 @@
                     matSort matSortDisableClear>
                     <div class="hidden lg:block">STT</div>
 
-                    <div>Tên nhóm công việc</div>
+                    <div>Tên loại công việc</div>
                     <div class="hidden lg:block">Mô tả</div>
 
                     <div>Thao tác</div>
@@ -23,7 +26,7 @@
                             {{model.stt}}
                         </div>
                         <div>
-                            {{model.tenNhomCongViec}}
+                            {{model.tenLoaiCongViec}}
                         </div>
 
                         <div class="hidden lg:block">

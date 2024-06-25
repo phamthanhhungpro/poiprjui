@@ -1,7 +1,7 @@
 <div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
     <!-- Header -->
     <div
-        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 pb-22 sm:pt-6 sm:pb-20 sm:px-10 bg-default dark:bg-transparent">
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 pb-6 sm:pt-6 sm:pb-6 sm:px-10 bg-default dark:bg-transparent">
         <div class="flex-1 min-w-0">
             <!-- Title -->
             <div class="">
@@ -34,34 +34,27 @@
     </div>
 
     <!-- Main -->
-    <div class="flex flex-auto -mt-16 p-2 sm:p-4 overflow-hidden bg-card" cdkScrollable>
+    <mat-tab-group [ngClass]="'mat-tab-header-pagination-controls-enabled'"  [(selectedIndex)]="selectedTabIndex" mat-stretch-tabs="false" mat-align-tabs="start">
+        <mat-tab label="Tổng quan">
+            <ng-template matTabContent>
+                NA
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="Công việc">
+            <ng-template matTabContent>
+                NA
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="Thiết lập">
+            <ng-template matTabContent>
+                <app-thiet-lap-du-an></app-thiet-lap-du-an>
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="Kanban">
+            <ng-template matTabContent>
+                NA
+            </ng-template>
+        </mat-tab>
 
-        <!-- CONTENT GOES HERE -->
-        <div class="flex flex-col flex-auto sm:mb-18">
-            <mat-tab-group class="w-full" [(selectedIndex)]="selectedTabIndex" mat-stretch-tabs="false" mat-align-tabs="start">
-                <mat-tab label="Tổng quan">
-                    <ng-template matTabContent>
-                        NA
-                    </ng-template>
-                </mat-tab>
-                <mat-tab label="Nhóm công việc">
-                    <ng-template matTabContent>
-                        <app-nhom-cong-viec></app-nhom-cong-viec>
-                    </ng-template>
-                </mat-tab>
-                <mat-tab label="Công việc">
-                    <ng-template matTabContent>
-                        NA
-                    </ng-template>
-                </mat-tab>
-                <mat-tab label="Kanban">
-                    <ng-template matTabContent>
-                        NA
-                    </ng-template>
-                </mat-tab>
-
-            </mat-tab-group>
-        </div>
-
-    </div>
+    </mat-tab-group>
 </div>
