@@ -11,6 +11,8 @@ import { PhongBanBoPhanComponent } from './modules/admin/settings/phong-ban-bo-p
 import { NhiemVuChuyenMonComponent } from './modules/admin/nhiem-vu-chuyen-mon/nhiem-vu-chuyen-mon.component';
 import { DuAnComponent } from './modules/admin/du-an/du-an.component';
 import { ChiTietDuAnComponent } from './modules/admin/chi-tiet-du-an/chi-tiet-du-an.component';
+import { DonViComponent } from './modules/admin/settings/don-vi/don-vi.component';
+import { ChiNhanhComponent } from './modules/admin/settings/chi-nhanh/chi-nhanh.component';
 
 // @formatter:off
 /* eslint-disable max-len */
@@ -101,6 +103,8 @@ export const appRoutes: Route[] = [
             { path: 'to-nhom', component: ToNhomComponent },
             { path: 'linh-vuc', component: LinhVucComponent },
             { path: 'phong-ban-bo-phan', component: PhongBanBoPhanComponent },
+            { path: 'don-vi', component: DonViComponent},
+            { path: 'chi-nhanh', component: ChiNhanhComponent},
         ]
     }
 ];

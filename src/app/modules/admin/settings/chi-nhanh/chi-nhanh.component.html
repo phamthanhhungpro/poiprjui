@@ -1,12 +1,11 @@
 <div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
     <!-- Header -->
-    <div
-        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 pb-22 sm:pt-6 sm:pb-20 sm:px-10 bg-default dark:bg-transparent">
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 pb-22 sm:pt-6 sm:pb-20 sm:px-10 bg-default dark:bg-transparent">
         <div class="flex-1 min-w-0">
             <!-- Title -->
             <div class="mt-2">
                 <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
-                    Danh sách Phòng/Ban/Bộ phận
+                    Danh sách Chi nhánh/Văn phòng
                 </h2>
             </div>
             <!-- Breadcrumbs -->
@@ -18,7 +17,7 @@
                     <div class="flex items-center ml-1 whitespace-nowrap">
                         <mat-icon class="icon-size-5 text-secondary"
                             [svgIcon]="'heroicons_mini:chevron-right'"></mat-icon>
-                        <span class="ml-1 text-secondary">Phòng/Ban/Bộ phận</span>
+                        <span class="ml-1 text-secondary">Chi nhánh/Văn phòng</span>
                     </div>
                 </div>
                 <div class="flex sm:hidden">
@@ -52,10 +51,11 @@
                             matSort matSortDisableClear>
                             <div class="hidden lg:block">STT</div>
 
-                            <div>Tên phòng/ban/bộ phận</div>
-                            <div class="hidden md:block">Lãnh đạo</div>
-                            <div class="hidden md:block">Bộ phận cấp trên</div>
-                            <div class="hidden md:block">Group Email</div>
+                            <div>Tên Chi nhánh/văn phòng</div>
+                            <div class="hidden md:block">Địa chỉ</div>
+                            <div class="hidden md:block">Số điện thoại</div>
+                            <div class="hidden md:block">Địa chỉ Email</div>
+                            <div class="hidden lg:block">Mô tả</div>
 
                             <!-- <div>Thao tác</div> -->
                         </div>
@@ -70,41 +70,23 @@
                                         {{model.name}}
                                     </div>
                                     <div class="hidden md:block">
-                                        <ng-container *ngIf="model.quanLy?.length">
-                                            <div class="flex items-center -space-x-1.5">
-                                                <ng-container
-                                                    *ngFor="let member of model.quanLy.slice(0, 3); trackBy: trackByFn">
-                                                    <div
-                                                        class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
-                                                        <ng-container *ngIf="member.name">
-                                                            <div matTooltip="{{member.fullName}}"
-                                                                class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                                                                {{member.name.charAt(0)}}
-                                                            </div>
-                                                        </ng-container>
-                                                    </div>
-                                                </ng-container>
-                                                <ng-container *ngIf="model.quanLy.length > 3">
-                                                    <div
-                                                        class="flex flex-0 items-center justify-center w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent bg-gray-200 text-gray-500">
-                                                        <div class="text-md font-semibold">
-                                                            +{{ model.quanLy.slice(5).length }}
-                                                        </div>
-                                                    </div>
-                                                </ng-container>
-                                            </div>
-                                        </ng-container>
+                                        {{model.address}}
                                     </div>
                                     <div class="hidden md:block">
-                                        {{model.parent?.name}}
+                                        {{model.phone}}
                                     </div>
 
                                     <div class="hidden md:block">
                                         {{model.email}}
                                     </div>
 
+                                    
+                                    <div class="hidden lg:block">
+                                        {{model.description}}
+                                    </div>
+
                                     <!-- <div class="">
-                                        <button mat-icon-button (click)="editData(model)" disabled>
+                                        <button mat-icon-button (click)="editData(model)">
                                             <mat-icon class="icon-size-5"
                                                 [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
                                         </button>
@@ -114,13 +96,8 @@
                                         </button>
                                         <mat-menu #menu="matMenu">
                                             <button (click)="delData(model)" mat-menu-item>
-                                                <mat-icon class="icon-size-4"
-                                                    [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                                                <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
                                                 <span>Xóa</span>
-                                            </button>
-                                            <button (click)="addMember(model)" mat-menu-item>
-                                                <mat-icon class="icon-size-4" [svgIcon]="'mat_outline:manage_accounts'"></mat-icon>
-                                                <span>Quản lý thành viên</span>
                                             </button>
 
                                         </mat-menu>
@@ -135,8 +112,7 @@
             </ng-container>
 
             <ng-template #nodata>
-                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Không có dữ liệu
-                </div>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">Không có dữ liệu</div>
             </ng-template>
 
         </div>
@@ -148,17 +124,12 @@
     <div class="flex flex-col w-full overflow-auto bg-card">
         <!-- add data component -->
         <ng-container *ngIf="drawerComponent === 'new-data'">
-            <app-create-phongban [drawer]="addDrawer" (onClosed)="getTableData()"></app-create-phongban>
+            <app-create-chinhanh [drawer]="addDrawer" (onClosed)="getTableData()"></app-create-chinhanh>
         </ng-container>
         <!-- edit data component -->
         <ng-container *ngIf="drawerComponent === 'edit-data'">
-            <app-edit-phongban [drawer]="addDrawer" [data]="selectedData"
-                (onClosed)="getTableData()"></app-edit-phongban>
+            <app-edit-chinhanh [drawer]="addDrawer" [data]="selectedData" (onClosed)="getTableData()"></app-edit-chinhanh>
         </ng-container>
-        <!-- add user to phong ban -->
-        <ng-container *ngIf="drawerComponent === 'add-user'">
-            <app-add-user-to-phongban [drawer]="addDrawer" [data]="selectedData"
-                (onClosed)="getTableData()"></app-add-user-to-phongban>
-        </ng-container>
+
     </div>
 </fuse-drawer>

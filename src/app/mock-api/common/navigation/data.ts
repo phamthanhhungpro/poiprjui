@@ -113,24 +113,44 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon: 'heroicons_outline:home',
         children: [
             {
+                id: 'don-vi',
+                title: 'Thông tin Cơ quan - Đơn vị',
+                type: 'basic',
+                link: '/don-vi',
+                icon: 'mat_outline:arrow_forward',
+                hidden(item) {
+                    return false;
+                },
+            },
+            {
+                id: 'chi-nhanh',
+                title: 'Chi nhánh/Văn phòng',
+                type: 'basic',
+                link: '/chi-nhanh',
+                icon: 'mat_outline:arrow_forward',
+                hidden(item) {
+                    return false;
+                },
+            },
+            {
                 id: 'phong-ban-bo-phan',
                 title: 'Phòng/Ban/Bộ phận',
                 type: 'basic',
-                icon: 'mat_outline:arrow_drop_down',
+                icon: 'mat_outline:arrow_forward',
                 link: '/phong-ban-bo-phan'
             },
             {
                 id: 'to-nhom',
                 title: 'Tổ/Nhóm',
                 type: 'basic',
-                icon: 'mat_outline:arrow_drop_down',
+                icon: 'mat_outline:arrow_forward',
                 link: '/to-nhom'
             },
             {
                 id: 'linh-vuc',
                 title: 'Lĩnh vực',
                 type: 'basic',
-                icon: 'mat_outline:arrow_drop_down',
+                icon: 'mat_outline:arrow_forward',
                 link: '/linh-vuc'
             },
         ]

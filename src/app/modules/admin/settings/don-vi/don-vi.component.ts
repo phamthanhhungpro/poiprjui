@@ -11,15 +11,13 @@ import { FuseDrawerComponent } from '@fuse/components/drawer';
 import { map } from 'rxjs';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { PhongBanBoPhanService } from 'app/services/phongbanbophan.service';
-import { CreatePhongbanComponent } from './create-phongban/create-phongban.component';
-import { EditPhongbanComponent } from './edit-phongban/edit-phongban.component';
+import { CoquandonviService } from 'app/services/coquandonvi.service';
+import { CreateDonviComponent } from './create-donvi/create-donvi.component';
+import { EditDonviComponent } from './edit-donvi/edit-donvi.component';
 import { environment } from 'environments/environment';
-import { AddUserToPhongBanComponent } from './add-user-to-phongban/add-user-to-phongban.component';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'app-phong-ban-bo-phan',
+  selector: 'app-don-vi',
   standalone: true,
   styles: [
     /* language=SCSS */
@@ -32,29 +30,28 @@ import { MatTooltipModule } from '@angular/material/tooltip';
             }
 
             @screen md {
-                grid-template-columns: 48px 250px 80px auto 96px;
+                grid-template-columns: 48px 250px 150px auto 96px;
             }
 
             @screen lg {
-                grid-template-columns: 20px 250px 200px 150px auto 96px;
+                grid-template-columns: 20px 250px 150px 100px 100px auto 96px;
             }
         }
     `,
   ],
   imports: [MatIconModule, RouterLink, MatButtonModule, CdkScrollable, NgIf,
     AsyncPipe, NgForOf, CurrencyPipe, MatButtonModule, MatMenuModule,
-    FuseDrawerComponent, MatDividerModule, MatSidenavModule, CreatePhongbanComponent,
-    EditPhongbanComponent, AddUserToPhongBanComponent, MatTooltipModule],
-  templateUrl: './phong-ban-bo-phan.component.html'
+    FuseDrawerComponent, MatDividerModule, MatSidenavModule, CreateDonviComponent,
+    EditDonviComponent],
+  templateUrl: './don-vi.component.html'
 })
-export class PhongBanBoPhanComponent {
+export class DonViComponent {
   @ViewChild('addDrawer', { static: false }) addDrawer: FuseDrawerComponent;
-  domain = environment.idApiUrlWithOutEndding;
 
   public data$;
   selectedData: any;
 
-  drawerComponent: 'new-data' | 'edit-data' | 'add-user';
+  drawerComponent: 'new-data' | 'edit-data';
   configForm: UntypedFormGroup;
 
   /**
@@ -62,7 +59,7 @@ export class PhongBanBoPhanComponent {
    */
   constructor(private _fuseConfirmationService: FuseConfirmationService,
     private _formBuilder: UntypedFormBuilder,
-    private _phongbanbophanService: PhongBanBoPhanService
+    private _coquandonviService: CoquandonviService
   ) 
   {
   }
@@ -115,7 +112,7 @@ export class PhongBanBoPhanComponent {
     // Subscribe to afterClosed from the dialog reference
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'confirmed') {
-        this._phongbanbophanService.delete(role.id).subscribe(() => {
+        this._coquandonviService.delete(role.id).subscribe(() => {
           this.getTableData();
         });
       }
@@ -125,7 +122,7 @@ export class PhongBanBoPhanComponent {
 
   // get data from api
   getTableData() {
-    this.data$ = this._phongbanbophanService.getAllNoPaging().pipe(
+    this.data$ = this._coquandonviService.getAllNoPaging().pipe(
       map((data: any) => {
         const items: any[] = data.map((item, index: number) => ({
           ...item,
@@ -143,13 +140,7 @@ export class PhongBanBoPhanComponent {
     }
   }
 
-  addMember(model) {
-    this.selectedData = model;
-    this.drawerComponent = 'add-user';
-    this.addDrawer.open();
-  }
-
   goToPoiId() {
-    window.open(environment.idFrontEndUrl + 'settings/phong-ban-bo-phan', '_blank');
+    window.open(environment.idFrontEndUrl + 'settings/don-vi', '_blank');
   }
 }

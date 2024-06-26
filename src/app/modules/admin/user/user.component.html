@@ -13,7 +13,7 @@
             <div>
                 <div class="hidden sm:flex flex-wrap items-center font-medium">
                     <div>
-                        <a class="whitespace-nowrap text-primary-500">ID</a>
+                        <a class="whitespace-nowrap text-primary-500">PRJ</a>
                     </div>
                     <div class="flex items-center ml-1 whitespace-nowrap">
                         <mat-icon class="icon-size-5 text-secondary"
@@ -29,6 +29,12 @@
                     </a>
                 </div>
             </div>
+        </div>
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+            <button mat-flat-button [color]="'primary'" (click)="goToPoiId()">
+                <mat-icon class="icon-size-4" [svgIcon]="'mat_outline:manage_accounts'"></mat-icon>
+                <span class="ml-2">Quản lý</span>
+            </button>
         </div>
     </div>
 
@@ -54,27 +60,27 @@
                                     </div>
                                 </ng-container>
                             </div>
-                            <div class="min-w-60 max-w-60 ml-4">
+                            <div class="min-w-100 max-w-100 ml-4">
                                 <div class="font-medium leading-5 truncate">{{user.fullName}}</div>
                                 <div class="leading-5 truncate text-secondary">{{user.email}}</div>
                                 <div class="leading-5 truncate text-secondary">{{'@' +user.userName}} - {{user.phone}}
                                 </div>
                             </div>
-                            <div class="min-w-80 max-w-80 ml-4 hidden lg:block">
+                            <div class="min-w-120 max-w-120 ml-4 hidden lg:block">
                                 <div class="leading-5 truncate text-secondary text-warn-800">{{user.role}}</div>
                                 <div class="font-medium leading-5 truncate">{{user.tenantName}}</div>
                             </div>
-                            <div class="min-w-20 max-w-20 ml-4 hidden sm:block">
+                            <div class="min-w-40 max-w-40 ml-4 hidden sm:block">
                                 <div *ngIf="!user.isActive" class="leading-6 line-through font-medium text-red-500">Vô
                                     hiệu hóa</div>
                                 <div *ngIf="user.isActive" class="leading-6 font-medium text-green-500">Hoạt động</div>
                             </div>
                             <div class="flex-grow"></div>
-                            <div class="min-w-0 max-w-80 ml-4">
+                            <!-- <div class="min-w-0 max-w-80 ml-4">
                                 <button mat-icon-button (click)="goToPoiId()" matTooltip="Quản lý thành viên">
                                     <mat-icon class="icon-size-4" [svgIcon]="'mat_outline:manage_accounts'"></mat-icon>
                                 </button>
-                            </div>
+                            </div> -->
                         </a>
                     </ng-container>
                     <mat-paginator #paginator
