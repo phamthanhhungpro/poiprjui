@@ -12,6 +12,7 @@ import { VaiTroService } from 'app/services/vaitro.service';
 import { ViTriCongViecService } from 'app/services/vitricongviec.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NhomCongViecService } from 'app/services/nhomcongviec.service';
+import { generateCodeFromName } from 'app/common/helper';
 
 @Component({
   selector: 'app-create-nhomcongviec',
@@ -37,6 +38,7 @@ export class CreateNhomCongViecComponent {
   ) {
     this.addDataForm = this._formBuilder.group({
       tenNhomCongViec: ['', Validators.required],
+      maNhomCongViec: ['', Validators.required],
       moTa: ['']
     });
   }
@@ -46,6 +48,10 @@ export class CreateNhomCongViecComponent {
   }
 
   ngOnInit(): void {
+    this.addDataForm.get('tenNhomCongViec').valueChanges.subscribe(value => {
+      this.addDataForm.get('maNhomCongViec').setValue(generateCodeFromName(value));
+    }
+    );
   }
 
   // clear form when close drawer
@@ -69,7 +75,7 @@ export class CreateNhomCongViecComponent {
         this.dialogRef.close();
         this.clearForm();
       } else {
-        this.openSnackBar('Thao tác thất bại', 'Đóng');
+        this.openSnackBar(`Thao tác thất bại: ${res.message}`, 'Đóng');
       }
     });
   }

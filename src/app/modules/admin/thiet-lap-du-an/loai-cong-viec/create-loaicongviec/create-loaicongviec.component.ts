@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LoaiCongViecService } from 'app/services/loaicongviec.service';
+import { generateCodeFromName } from 'app/common/helper';
 
 @Component({
   selector: 'app-create-loaicongviec',
@@ -44,6 +45,9 @@ export class CreateLoaiCongViecComponent {
   }
 
   ngOnInit(): void {
+    this.addDataForm.get('tenLoaiCongViec').valueChanges.subscribe(value => {
+      this.addDataForm.get('maLoaiCongViec').setValue(generateCodeFromName(value));
+    });
   }
 
   // clear form when close drawer
@@ -67,7 +71,7 @@ export class CreateLoaiCongViecComponent {
         this.dialogRef.close();
         this.clearForm();
       } else {
-        this.openSnackBar('Thao tác thất bại', 'Đóng');
+        this.openSnackBar(`Thao tác thất bại: ${res.message}`, 'Đóng');
       }
     });
   }

@@ -12,6 +12,7 @@ import { VaiTroService } from 'app/services/vaitro.service';
 import { ViTriCongViecService } from 'app/services/vitricongviec.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NhomCongViecService } from 'app/services/nhomcongviec.service';
+import { generateCodeFromName } from 'app/common/helper';
 
 @Component({
   selector: 'app-edit-nhomcongviec',
@@ -37,6 +38,7 @@ export class EditNhomCongViecComponent {
   ) {
     this.addDataForm = this._formBuilder.group({
       tenNhomCongViec: ['', Validators.required],
+      maNhomCongViec: ['', Validators.required],
       moTa: ['']
     });
   }
@@ -46,7 +48,9 @@ export class EditNhomCongViecComponent {
   }
 
   ngOnInit(): void {
-    console.log(this.data);
+    this.addDataForm.get('tenNhomCongViec').valueChanges.subscribe(value => {
+      this.addDataForm.get('maNhomCongViec').setValue(generateCodeFromName(value));
+    });    
     this.addDataForm.patchValue(this.data);
   }
 
@@ -63,13 +67,15 @@ export class EditNhomCongViecComponent {
 
   // save data
   save(): void {
+    this.addDataForm.value.duAnNvChuyenMonId = this.data.duAnNvChuyenMonId;
+
     this._nhomCongViecService.update(this.data.id, this.addDataForm.value).subscribe(res => {
       if (res.isSucceeded) {
         this.openSnackBar('Thao tác thành công', 'Đóng');
         this.dialogRef.close();
         this.clearForm();
       } else {
-        this.openSnackBar('Thao tác thất bại', 'Đóng');
+        this.openSnackBar(`Thao tác thất bại: ${res.message}`, 'Đóng');
       }
     });
   }

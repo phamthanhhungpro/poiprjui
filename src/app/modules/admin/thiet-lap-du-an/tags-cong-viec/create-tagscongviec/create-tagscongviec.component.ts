@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TagCongViecService } from 'app/services/tagcongviec.service';
+import { generateCodeFromName } from 'app/common/helper';
 
 @Component({
   selector: 'app-create-tagscongviec',
@@ -43,6 +44,9 @@ export class CreateTagsCongViecComponent {
   }
 
   ngOnInit(): void {
+    this.addDataForm.get('tenTag').valueChanges.subscribe(value => {
+      this.addDataForm.get('maTag').setValue(generateCodeFromName(value));
+    });
   }
 
   // clear form when close drawer
@@ -66,7 +70,7 @@ export class CreateTagsCongViecComponent {
         this.dialogRef.close();
         this.clearForm();
       } else {
-        this.openSnackBar('Thao tác thất bại', 'Đóng');
+        this.openSnackBar(`Thao tác thất bại: ${res.message}`, 'Đóng');
       }
     });
   }

@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LoaiCongViecService } from 'app/services/loaicongviec.service';
+import { generateCodeFromName } from 'app/common/helper';
 
 @Component({
   selector: 'app-edit-loaicongviec',
@@ -44,7 +45,10 @@ export class EditLoaiCongViecComponent {
   }
 
   ngOnInit(): void {
-    console.log(this.data);
+    this.addDataForm.get('tenLoaiCongViec').valueChanges.subscribe(value => {
+      this.addDataForm.get('maLoaiCongViec').setValue(generateCodeFromName(value));
+    }
+    );
     this.addDataForm.patchValue(this.data);
   }
 
@@ -61,13 +65,15 @@ export class EditLoaiCongViecComponent {
 
   // save data
   save(): void {
+    this.addDataForm.value.duAnNvChuyenMonId = this.data.duAnNvChuyenMonId;
+
     this._LoaiCongViecService.update(this.data.id, this.addDataForm.value).subscribe(res => {
       if (res.isSucceeded) {
         this.openSnackBar('Thao tác thành công', 'Đóng');
         this.dialogRef.close();
         this.clearForm();
       } else {
-        this.openSnackBar('Thao tác thất bại', 'Đóng');
+        this.openSnackBar(`Thao tác thất bại: ${res.message}`, 'Đóng');
       }
     });
   }

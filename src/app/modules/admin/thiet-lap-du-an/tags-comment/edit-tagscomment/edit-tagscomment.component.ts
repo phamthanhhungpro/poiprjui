@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TagCommentService } from 'app/services/tagcomment.service';
+import { generateCodeFromName } from 'app/common/helper';
 
 @Component({
   selector: 'app-edit-tagscomment',
@@ -43,7 +44,9 @@ export class EditTagsCommentComponent {
   }
 
   ngOnInit(): void {
-    console.log(this.data);
+    this.addDataForm.get('tenTag').valueChanges.subscribe(value => {
+      this.addDataForm.get('maTag').setValue(generateCodeFromName(value));
+    });
     this.addDataForm.patchValue(this.data);
   }
 
@@ -60,13 +63,15 @@ export class EditTagsCommentComponent {
 
   // save data
   save(): void {
+    this.addDataForm.value.duAnNvChuyenMonId = this.data.duAnNvChuyenMonId;
+
     this._TagCommentService.update(this.data.id, this.addDataForm.value).subscribe(res => {
       if (res.isSucceeded) {
         this.openSnackBar('Thao tác thành công', 'Đóng');
         this.dialogRef.close();
         this.clearForm();
       } else {
-        this.openSnackBar('Thao tác thất bại', 'Đóng');
+        this.openSnackBar(`Thao tác thất bại: ${res.message}`, 'Đóng');
       }
     });
   }

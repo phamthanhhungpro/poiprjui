@@ -107,6 +107,7 @@ export class LoaiCongViecComponent {
   }
 
   openEditItemDialog(data): void {
+    console.log(data);
     this.dialogService.openDialog(EditLoaiCongViecComponent,
        data,
        { width: '600px', height: 'auto'},

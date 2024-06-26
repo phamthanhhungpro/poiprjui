@@ -7,7 +7,7 @@
 
         <div class="flex items-center">
             <!-- More menu -->
-            <button mat-flat-button [color]="'primary'" (click)="save()">
+            <button mat-flat-button [color]="'primary'" (click)="save()" [disabled]="addDataForm.invalid">
                 Lưu
             </button>
             <button class="px-6 ml-3" mat-button (click)="cancelAdd()">
@@ -24,6 +24,12 @@
                 <mat-form-field class="flex-auto">
                     <mat-label>Tên nhóm công việc</mat-label>
                     <input matInput [placeholder]="'Tên nhóm công việc'" [formControlName]="'tenNhomCongViec'">
+                </mat-form-field>
+            </div>
+            <div class="flex">
+                <mat-form-field class="flex-auto">
+                    <mat-label>Mã nhóm công việc</mat-label>
+                    <input matInput [placeholder]="'Mã nhóm công việc'" [formControlName]="'maNhomCongViec'">
                 </mat-form-field>
             </div>
             <div class="flex">

@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TagCongViecService } from 'app/services/tagcongviec.service';
+import { generateCodeFromName } from 'app/common/helper';
 
 @Component({
   selector: 'app-edit-tagscongviec',
@@ -43,7 +44,10 @@ export class EditTagsCongViecComponent {
   }
 
   ngOnInit(): void {
-    console.log(this.data);
+    this.addDataForm.get('tenTag').valueChanges.subscribe(value => {
+      this.addDataForm.get('maTag').setValue(generateCodeFromName(value));
+    });
+    
     this.addDataForm.patchValue(this.data);
   }
 
@@ -60,13 +64,15 @@ export class EditTagsCongViecComponent {
 
   // save data
   save(): void {
+    this.addDataForm.value.duAnNvChuyenMonId = this.data.duAnNvChuyenMonId;
+
     this._TagCongViecService.update(this.data.id, this.addDataForm.value).subscribe(res => {
       if (res.isSucceeded) {
         this.openSnackBar('Thao tác thành công', 'Đóng');
         this.dialogRef.close();
         this.clearForm();
       } else {
-        this.openSnackBar('Thao tác thất bại', 'Đóng');
+        this.openSnackBar(`Thao tác thất bại: ${res.message}`, 'Đóng');
       }
     });
   }
