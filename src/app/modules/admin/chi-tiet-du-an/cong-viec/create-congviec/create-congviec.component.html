@@ -1,0 +1,73 @@
+<div class="flex flex-col flex-auto h-full overflow-hidden bg-card dark:bg-default">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-18 -mb-px px-6 bg-gray-50 dark:bg-transparent">
+
+        <div class="ml-2 text-xl font-semibold">Thêm công việc - {{data.tenDuAn}}</div>
+
+        <div class="flex items-center">
+            <!-- More menu -->
+            <button mat-flat-button [color]="'primary'" (click)="save()" [disabled]="addDataForm.invalid">
+                Lưu
+            </button>
+            <button class="px-6 ml-3" mat-button (click)="cancelAdd()">
+                Hủy
+            </button>
+        </div>
+
+    </div>
+    <mat-divider class="mb-4"></mat-divider>
+    <div class="flex flex-col gt-xs:flex-row gt-xs:items-start p-6">
+        <form [formGroup]="addDataForm" class="grid grid-cols-2 gap-6">
+            <mat-form-field appearance="fill" class="col-span-2">
+                <mat-label>Tên Công việc</mat-label>
+                <input matInput formControlName="tenCongViec" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="col-span-2">
+                <mat-label>Mô tả công việc</mat-label>
+                <textarea matInput formControlName="moTaCongViec"></textarea>
+            </mat-form-field>
+
+            <!-- <mat-form-field appearance="fill">
+                <mat-label>Giao cho</mat-label>
+                <input matInput formControlName="giaoChoId" />
+            </mat-form-field> -->
+
+            <mat-form-field appearance="fill">
+                <mat-label>Giao cho</mat-label>
+                <input placeholder="Tìm kiếm..." #managerInput matInput [formControlName]="'searchUserName'"
+                    [matAutocomplete]="auto" />
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                    @for (option of filteredOptions | async; track option) {
+                    <mat-option [value]="option">{{option.fullName}}</mat-option>
+                    }
+                </mat-autocomplete>
+
+            </mat-form-field>
+
+            <app-searchable-select [options]="nhomCongViecOptions" [label]="'Nhóm công việc'"
+                placeholder="Chọn nhóm công việc" (selectionChange)="setNhomCongViec($event)">
+            </app-searchable-select>
+
+
+            <mat-form-field appearance="fill">
+                <mat-label>Ngày bắt đầu</mat-label>
+                <input matInput [matDatepicker]="startDatePicker" formControlName="ngayBatDau" />
+                <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #startDatePicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Hạn hoàn thành</mat-label>
+                <input matInput [matDatepicker]="endDatePicker" formControlName="hanHoanThanh" />
+                <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #endDatePicker></mat-datepicker>
+            </mat-form-field>
+        </form>
+        <mat-divider class="mb-6"></mat-divider>
+        <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+            <button mat-flat-button  color="primary" (click)="onExpand()">Giao diện nâng cao</button>
+        </div>
+    </div>
+</div>

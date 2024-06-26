@@ -4,14 +4,15 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { DuAnNvChuyenMonService } from 'app/services/duan-nvchuyenmon.service';
 import { MatTabsModule } from '@angular/material/tabs';
-import { NhomCongViecComponent } from '../thiet-lap-du-an/nhom-cong-viec/nhom-cong-viec.component';
-import { ThietLapDuAnComponent } from '../thiet-lap-du-an/thiet-lap-du-an.component';
+import { NhomCongViecComponent } from './thiet-lap-du-an/nhom-cong-viec/nhom-cong-viec.component';
+import { ThietLapDuAnComponent } from './thiet-lap-du-an/thiet-lap-du-an.component';
+import { CongViecComponent } from './cong-viec/cong-viec.component';
 
 @Component({
   selector: 'app-chi-tiet-du-an',
   standalone: true,
   imports: [CommonModule, MatIconModule, RouterLink, MatTabsModule, NhomCongViecComponent,
-            ThietLapDuAnComponent
+            ThietLapDuAnComponent, CongViecComponent
   ],
   templateUrl: './chi-tiet-du-an.component.html',
 })

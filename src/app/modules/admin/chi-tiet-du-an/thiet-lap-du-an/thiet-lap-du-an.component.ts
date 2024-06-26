@@ -7,17 +7,19 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 import { VaiTroService } from 'app/services/vaitro.service';
 import { Subject, takeUntil } from 'rxjs';
-import { AssignPermissionComponent } from '../permission/assign-permission/assign-permission.component';
+import { AssignPermissionComponent } from '../../permission/assign-permission/assign-permission.component';
 import { NhomCongViecComponent } from './nhom-cong-viec/nhom-cong-viec.component';
 import { LoaiCongViecComponent } from './loai-cong-viec/loai-cong-viec.component';
 import { TagsCongViecComponent } from './tags-cong-viec/tags-cong-viec.component';
 import { TagsCommentComponent } from './tags-comment/tags-comment.component';
+import { CaiDatKhacComponent } from './cai-dat-khac/cai-dat-khac.component';
 
 @Component({
   selector: 'app-thiet-lap-du-an',
   standalone: true,
   imports: [MatSidenavModule, MatButtonModule, MatIconModule, NgForOf, NgClass, NgSwitch, NgSwitchCase, AsyncPipe,
-    NgIf, NhomCongViecComponent, MatTabsModule, LoaiCongViecComponent, TagsCongViecComponent, TagsCommentComponent],
+    NgIf, NhomCongViecComponent, MatTabsModule, LoaiCongViecComponent, TagsCongViecComponent, TagsCommentComponent,
+    CaiDatKhacComponent],
   templateUrl: './thiet-lap-du-an.component.html',
 })
 export class ThietLapDuAnComponent {

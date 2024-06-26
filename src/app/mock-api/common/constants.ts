@@ -21,3 +21,11 @@ export const TrangThaiLabel = {
     [TrangThai.ChoXacNhan]: 'Chờ xác nhận'
 };
 
+export class SettingConstants {
+    static readonly createCongViecUiDefault = 'createCongViecUiDefault';
+    static readonly createCongViecUiDefaultOptions = [
+        { value: 'giao-dien-rut-gon', label: 'Giao diện rút gọn' },
+        { value: 'giao-dien-nang-cao', label: 'Giao diện đầy đủ' }
+    ];
+}
+

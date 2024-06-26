@@ -18,9 +18,12 @@ export class DialogService {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (callback) {
-        callback(result);
+      if (result !== 'expand' && result !== 'collapse') {
+        if (callback) {
+          callback(result);
+        }
       }
+
     });
 
     return dialogRef.afterClosed();

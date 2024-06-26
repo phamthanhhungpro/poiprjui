@@ -1,0 +1,93 @@
+<div class="flex flex-col flex-auto h-full overflow-hidden bg-card dark:bg-default">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-18 -mb-px px-6 bg-gray-50 dark:bg-transparent">
+
+        <div class="ml-2 text-xl font-semibold">Thêm công việc</div>
+
+        <div class="flex items-center">
+            <!-- More menu -->
+            <button mat-flat-button [color]="'primary'" (click)="save()" [disabled]="addDataForm.invalid">
+                Lưu
+            </button>
+            <button class="px-6 ml-3" mat-button (click)="cancelAdd()">
+                Hủy
+            </button>
+        </div>
+
+    </div>
+    <mat-divider class="mb-4"></mat-divider>
+    <div class="flex flex-col gt-xs:flex-row gt-xs:items-start p-6">
+        <form [formGroup]="addDataForm" class="grid grid-cols-2 gap-6">
+            <mat-form-field appearance="fill" class="col-span-2">
+                <mat-label>Tên Công việc</mat-label>
+                <input matInput formControlName="tenCongViec" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="col-span-2">
+                <mat-label>Mô tả công việc</mat-label>
+                <textarea matInput formControlName="moTaCongViec"></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Nhóm công việc</mat-label>
+                <mat-select formControlName="nhomCongViec">
+                    <mat-option value="nhom-1">Nhóm 1</mat-option>
+                    <mat-option value="nhom-2">Nhóm 2</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Loại công việc</mat-label>
+                <mat-select formControlName="loaiCongViec">
+                    <mat-option value="loai-1">Loại 1</mat-option>
+                    <mat-option value="loai-2">Loại 2</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Giao cho</mat-label>
+                <input matInput formControlName="giaoCho" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Người phối hợp</mat-label>
+                <input matInput formControlName="nguoiPhoiHop" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Tags</mat-label>
+                <input matInput formControlName="tags" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Mức độ ưu tiên</mat-label>
+                <mat-select formControlName="mucDoUuTien">
+                    <mat-option value="cao">Cao</mat-option>
+                    <mat-option value="trung-binh">Trung bình</mat-option>
+                    <mat-option value="thap">Thấp</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Ngày bắt đầu</mat-label>
+                <input matInput [matDatepicker]="startDatePicker" formControlName="ngayBatDau" />
+                <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #startDatePicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Hạn hoàn thành</mat-label>
+                <input matInput [matDatepicker]="endDatePicker" formControlName="hanHoanThanh" />
+                <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #endDatePicker></mat-datepicker>
+            </mat-form-field>
+
+            <!-- <mat-form-field appearance="fill" class="col-span-2">
+                <mat-label>File đính kèm</mat-label>
+                <input type="file" (change)="onFileSelected($event)" />
+            </mat-form-field> -->
+        </form>
+
+    </div>
+</div>
