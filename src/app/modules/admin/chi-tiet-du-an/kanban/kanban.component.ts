@@ -1,109 +1,32 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-
-interface Task {
-  title: string;
-  labels: string[];
-  dueDate: Date;
-}
-
-interface KanbanList {
-  title: string;
-  tasks: Task[];
-}
+import { CongViecService } from 'app/services/congviec.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-kanban',
   standalone: true,
-  imports: [CommonModule, DragDropModule ],
+  imports: [CommonModule, DragDropModule],
   templateUrl: './kanban.component.html',
 })
-export class KanbanComponent {
-  kanbanLists: KanbanList[] = [
-    {
-      title: 'To do',
-      tasks: [
-        {
-          title: 'Example that showcases all of the available bits on the card with a fairly long title compared to other cards',
-          labels: ['Research', 'Wireframing', 'Design', 'Development', 'Bug'],
-          dueDate: new Date('2024-06-17')
-        },
-        {
-          title: 'Do a research about most needed admin applications',
-          labels: ['Research'],
-          dueDate: new Date('2024-06-17')
-        },
-        {
-          title: 'Implement the Project dashboard',
-          labels: ['Development'],
-          dueDate: new Date('2024-06-27')
-        },
-        {
-          title: 'Implement the Analytics dashboard',
-          labels: ['Development'],
-          dueDate: new Date('2024-06-26')
-        }
-      ]
-    },
-    {
-      title: 'In progress',
-      tasks: [
-        {
-          title: 'Analytics dashboard design',
-          labels: ['Design'],
-          dueDate: new Date('2024-06-15')
-        },
-        {
-          title: 'Project dashboard design',
-          labels: ['Design'],
-          dueDate: new Date('2024-06-15')
-        }
-      ]
-    },
-    {
-      title: 'In review',
-      tasks: [
-        {
-          title: 'JWT Auth implementation',
-          labels: ['Development'],
-          dueDate: new Date('2024-06-15')
-        }
-      ]
-    },
-    {
-      title: 'Completed',
-      tasks: [
-        {
-          title: 'Create low fidelity wireframes',
-          labels: ['Design'],
-          dueDate: new Date('2024-06-17')
-        },
-        {
-          title: 'Create high fidelity wireframes',
-          labels: ['Design'],
-          dueDate: new Date('2024-06-17')
-        },
-        {
-          title: 'Collect information about most used admin layouts',
-          labels: ['Research'],
-          dueDate: new Date('2024-06-15')
-        },
-        {
-          title: 'Do a research about latest UI trends',
-          labels: ['Research'],
-          dueDate: new Date('2024-06-15')
-        },
-        {
-          title: 'Learn more about UX',
-          labels: ['Research'],
-          dueDate: new Date('2024-06-15')
-        }
-      ]
-    }
-  ];
+export class KanbanComponent implements OnInit {
+  congviecKanban: any = [];
+  id: string;
+  connectedTo: string[] = [];
 
-  drop(event: CdkDragDrop<Task[]>) {
+  constructor(
+    private _congViecService: CongViecService,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
+  ) { }
+
+  ngOnInit(): void {
+    this.id = this.route.snapshot.paramMap.get('id');
+    this.getCongViecKanban();
+  }
+
+  drop(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -114,5 +37,13 @@ export class KanbanComponent {
         event.currentIndex,
       );
     }
+    //this.cdr.detectChanges();  // Manually trigger change detection
+  }
+
+  getCongViecKanban(): void {
+    this._congViecService.getCongViecKanban({ duanId: this.id }).subscribe(res => {
+      this.congviecKanban = res;
+      this.connectedTo = this.congviecKanban.map((list: any) => list.id);
+    });
   }
 }

@@ -1,25 +1,28 @@
-<div class="flex space-x-4 p-4 overflow-auto">
-    <div *ngFor="let list of kanbanLists" class="flex flex-col bg-gray-50 p-4 rounded-lg shadow w-64">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-lg font-bold">{{ list.title }}</h3>
-        <span class="text-gray-500">{{ list.tasks.length }}</span>
-      </div>
-      <div class="flex-1 space-y-4" cdkDropList [cdkDropListData]="list.tasks" (cdkDropListDropped)="drop($event)">
-        <div *ngFor="let task of list.tasks" class="bg-white p-4 rounded-lg shadow" cdkDrag>
-          <h4 class="font-medium">{{ task.title }}</h4>
-          <div class="flex flex-wrap gap-2 mt-2">
-            <span *ngFor="let label of task.labels" class="bg-gray-200 text-gray-600 text-sm px-2 py-1 rounded">{{ label }}</span>
-          </div>
-          <div class="mt-2 text-gray-500 text-sm flex items-center">
-            <span class="material-icons mr-1">schedule</span>
-            {{ task.dueDate | date:'MMM d, yyyy' }}
-          </div>
+<div class="flex space-x-8 p-4 overflow-auto">
+  <div *ngFor="let list of congviecKanban; let i = index" 
+       class="flex flex-col bg-gray-50 p-4 rounded-lg shadow w-80"
+       cdkDropList 
+       [id]="list.id" 
+       [cdkDropListData]="list.listCongViec" 
+       (cdkDropListDropped)="drop($event)"
+       [cdkDropListConnectedTo]="connectedTo">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-bold">{{ list.tenCot }}</h3>
+      <span class="text-gray-500">{{ list.listCongViec.length }}</span>
+    </div>
+    <div class="flex-1 space-y-4">
+      <div *ngFor="let task of list.listCongViec" class="bg-white p-4 rounded-lg shadow" cdkDrag>
+        <h4 class="font-medium">{{ task.tenCongViec }}</h4>
+        <p class="text-gray-500 text-sm">Người thực hiện: {{ task.nguoiThucHien?.fullName }}</p>
+        <p class="text-gray-500 text-sm">{{ task.moTa }}</p>
+        <div class="flex flex-wrap gap-2 mt-2">
+          <span *ngFor="let tag of task.tagCongViec" class="bg-gray-200 text-gray-600 text-sm px-2 py-1 rounded">{{ tag.tenTag }}</span>
+        </div>
+        <div class="mt-2 text-gray-500 text-sm flex items-center">
+          <span class="material-icons mr-1 text-red-500">schedule</span>
+          {{ task.ngayKetThuc | date:'MMM d, yyyy' }}
         </div>
       </div>
-      <!-- <button class="mt-4 text-blue-500 flex items-center">
-        <span class="material-icons mr-1">add</span>
-        Add another card
-      </button> -->
     </div>
   </div>
-  
+</div>

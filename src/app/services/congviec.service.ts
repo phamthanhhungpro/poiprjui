@@ -41,4 +41,9 @@ export class CongViecService {
     const queryString = objectToQueryString(query);
     return this.http.get<any[]>(`${baseUrl}/GetCongViecGrid?${queryString}`);
   }
+
+  getCongViecKanban(query: any): Observable<any[]> {
+    const queryString = objectToQueryString(query);
+    return this.http.get<any[]>(`${baseUrl}/GetCongViecKanban?${queryString}`);
+  }
 }
