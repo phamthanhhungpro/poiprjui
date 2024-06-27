@@ -37,7 +37,7 @@
     <mat-tab-group [ngClass]="'mat-tab-header-pagination-controls-enabled'"  [(selectedIndex)]="selectedTabIndex" mat-stretch-tabs="false" mat-align-tabs="start">
         <mat-tab label="Tổng quan">
             <ng-template matTabContent>
-                NA
+                <app-overview></app-overview>
             </ng-template>
         </mat-tab>
         <mat-tab label="Công việc">
@@ -52,7 +52,7 @@
         </mat-tab>
         <mat-tab label="Kanban">
             <ng-template matTabContent>
-                NA
+                <app-kanban></app-kanban>
             </ng-template>
         </mat-tab>
 

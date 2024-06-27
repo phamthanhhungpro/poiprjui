@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormControl, FormControlName, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -33,6 +33,10 @@ export class SearchableSelectComponent implements OnInit {
   @Input() placeholder: string = 'Select an option';
   @Input() noEntriesFoundLabel: string = 'Không tìm thấy kết quả';
   @Output() selectionChange = new EventEmitter<string>();
+  @Input() selectedValue: any; // This will hold the value passed from the parent component
+
+  selectFormControl = new FormControl();
+
   searchControl = new FormControl();
   filteredOptions: Observable<Option[]>;
 
@@ -41,8 +45,16 @@ export class SearchableSelectComponent implements OnInit {
       startWith(''),
       map(value => this._filter(value))
     );
+
+    this.selectFormControl.setValue(this.selectedValue);
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.selectedValue) {
+      this.selectFormControl.setValue(changes.selectedValue.currentValue);
+    }
+  }
+  
   private _filter(value: string): Option[] {
     const filterValue = value.toLowerCase();
     return this.options.filter(option => option.value.toLowerCase().includes(filterValue));

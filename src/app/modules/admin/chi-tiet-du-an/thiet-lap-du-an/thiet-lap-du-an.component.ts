@@ -13,13 +13,14 @@ import { LoaiCongViecComponent } from './loai-cong-viec/loai-cong-viec.component
 import { TagsCongViecComponent } from './tags-cong-viec/tags-cong-viec.component';
 import { TagsCommentComponent } from './tags-comment/tags-comment.component';
 import { CaiDatKhacComponent } from './cai-dat-khac/cai-dat-khac.component';
+import { KanbanSettingComponent } from './kan-ban/kan-ban-setting.component';
 
 @Component({
   selector: 'app-thiet-lap-du-an',
   standalone: true,
   imports: [MatSidenavModule, MatButtonModule, MatIconModule, NgForOf, NgClass, NgSwitch, NgSwitchCase, AsyncPipe,
     NgIf, NhomCongViecComponent, MatTabsModule, LoaiCongViecComponent, TagsCongViecComponent, TagsCommentComponent,
-    CaiDatKhacComponent],
+    CaiDatKhacComponent, KanbanSettingComponent],
   templateUrl: './thiet-lap-du-an.component.html',
 })
 export class ThietLapDuAnComponent {

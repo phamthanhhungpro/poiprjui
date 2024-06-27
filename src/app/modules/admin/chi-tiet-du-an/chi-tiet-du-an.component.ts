@@ -7,12 +7,14 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { NhomCongViecComponent } from './thiet-lap-du-an/nhom-cong-viec/nhom-cong-viec.component';
 import { ThietLapDuAnComponent } from './thiet-lap-du-an/thiet-lap-du-an.component';
 import { CongViecComponent } from './cong-viec/cong-viec.component';
+import { OverviewComponent } from './overview/overview.component';
+import { KanbanComponent } from './kanban/kanban.component';
 
 @Component({
   selector: 'app-chi-tiet-du-an',
   standalone: true,
   imports: [CommonModule, MatIconModule, RouterLink, MatTabsModule, NhomCongViecComponent,
-            ThietLapDuAnComponent, CongViecComponent
+            ThietLapDuAnComponent, CongViecComponent, OverviewComponent, KanbanComponent
   ],
   templateUrl: './chi-tiet-du-an.component.html',
 })

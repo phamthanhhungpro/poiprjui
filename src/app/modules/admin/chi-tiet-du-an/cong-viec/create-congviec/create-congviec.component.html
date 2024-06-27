@@ -25,13 +25,18 @@
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="col-span-2">
+                <mat-label>Mã Công việc</mat-label>
+                <input matInput formControlName="maCongViec" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="col-span-2">
                 <mat-label>Mô tả công việc</mat-label>
                 <textarea matInput formControlName="moTaCongViec"></textarea>
             </mat-form-field>
 
             <!-- <mat-form-field appearance="fill">
                 <mat-label>Giao cho</mat-label>
-                <input matInput formControlName="giaoChoId" />
+                <input matInput formControlName="nguoiThucHienId" />
             </mat-form-field> -->
 
             <mat-form-field appearance="fill">
@@ -60,7 +65,7 @@
 
             <mat-form-field appearance="fill">
                 <mat-label>Hạn hoàn thành</mat-label>
-                <input matInput [matDatepicker]="endDatePicker" formControlName="hanHoanThanh" />
+                <input matInput [matDatepicker]="endDatePicker" formControlName="ngayKetThuc" />
                 <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
                 <mat-datepicker #endDatePicker></mat-datepicker>
             </mat-form-field>

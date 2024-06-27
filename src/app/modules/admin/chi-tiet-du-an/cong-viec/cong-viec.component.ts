@@ -14,6 +14,7 @@ import { SettingConstants } from 'app/mock-api/common/constants';
 import { CreateCongviecAdvanceComponent } from './create-congviec-advance/create-congviec-advance.component';
 import { co } from '@fullcalendar/core/internal-common';
 import { DuAnNvChuyenMonService } from 'app/services/duan-nvchuyenmon.service';
+import { CongViecService } from 'app/services/congviec.service';
 
 @Component({
   selector: 'app-cong-viec',
@@ -25,17 +26,62 @@ export class CongViecComponent {
   id: string;
   duAnSetting: any;
   duAn: any;
+  congViecGroupData = [];
+  congViecGroup = [
+    {
+      name: 'NHÓM VIỆC 1',
+      tasks: [
+        {
+          title: 'Việc 1',
+          description: 'Mô tả việc 1',
+          creator: 'Lê Đình Dũng',
+          creatorHandle: 'dzungld',
+          creationTime: '16:20:00 - 15/6/2024',
+          dueDate: new Date('2024-06-20'),
+          assignee: 'Lê Đình Dũng',
+          status: 'Đang thực hiện'
+        }
+      ]
+    },
+    {
+      name: 'NHÓM VIỆC 2',
+      tasks: [
+        {
+          title: 'Việc 1',
+          description: 'Mô tả việc 1',
+          creator: 'Lê Đình Dũng',
+          creatorHandle: 'dzungld',
+          creationTime: '16:20:00 - 15/6/2024',
+          dueDate: new Date('2024-06-20'),
+          assignee: 'Lê Đình Dũng',
+          status: 'Hoàn thành'
+        },
+        {
+          title: 'Việc 2',
+          description: 'Mô tả việc 2',
+          creator: 'Lê Đình Dũng',
+          creatorHandle: 'dzungld',
+          creationTime: '16:20:00 - 15/6/2024',
+          dueDate: new Date('2024-06-20'),
+          assignee: 'Lê Đình Dũng',
+          status: 'Đang thực hiện'
+        }
+      ]
+    }
+  ];
 
   constructor(private _fuseConfirmationService: FuseConfirmationService,
     private _formBuilder: UntypedFormBuilder,
     private _duAnSettingService: DuAnSettingService,
     private route: ActivatedRoute,
     private dialogService: DialogService,
-    private _duAnService: DuAnNvChuyenMonService) { }
+    private _duAnService: DuAnNvChuyenMonService,
+    private _congviecService: CongViecService) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
     this.getThongTinDuAn();
+    this.getTableData();
   }
 
   openCreateItemDialog(): void {
@@ -66,7 +112,9 @@ export class CongViecComponent {
   }
 
   getTableData(): void {
-    console.log('get table data');
+    this._congviecService.getCongViecGrid({duAnId: this.id}).subscribe(res => {
+      this.congViecGroupData = res;
+    });
   }
 
   getThongTinDuAn(): void {

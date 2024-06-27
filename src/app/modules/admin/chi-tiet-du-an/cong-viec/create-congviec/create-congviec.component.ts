@@ -18,6 +18,8 @@ import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/ma
 import { map, startWith } from 'rxjs';
 import { MatChipsModule } from '@angular/material/chips';
 import { co } from '@fullcalendar/core/internal-common';
+import { CongViecService } from 'app/services/congviec.service';
+import { generateCodeFromName } from 'app/common/helper';
 
 @Component({
   selector: 'app-create-congviec',
@@ -42,18 +44,19 @@ export class CreateCongviecComponent {
    *
    */
   constructor(private _formBuilder: UntypedFormBuilder,
-    private _TagCongViecService: TagCongViecService,
+    private _CongViec: CongViecService,
     private _snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<CreateTagsCongViecComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.addDataForm = this._formBuilder.group({
       tenCongViec: ['', Validators.required],
+      maCongViec: ['', Validators.required],
       moTaCongViec: [''],
       nhomCongViecId: ['', Validators.required],
-      giaoChoId: ['', Validators.required],
+      nguoiThucHienId: ['', Validators.required],
       ngayBatDau: [new Date(), Validators.required],
-      hanHoanThanh: [''],
+      ngayKetThuc: [''],
       searchUserName: [''],
     });
   }
@@ -66,12 +69,16 @@ export class CreateCongviecComponent {
           value: item.tenNhomCongViec
           }}
         );
-    
+        
         this.allManagers = this.data.thanhVienDuAn;
         this.filteredOptions = this.addDataForm.get('searchUserName')?.valueChanges.pipe(
           startWith(null),
           map((item: any | null) => (item ? this._filter(item) : this.allManagers.slice()))
         );
+
+        this.addDataForm.get('tenCongViec').valueChanges.subscribe(value => {
+          this.addDataForm.get('maCongViec').setValue(generateCodeFromName(value));
+        });
     }
     // clear form when close drawer
     clearForm(): void {
@@ -87,7 +94,7 @@ export class CreateCongviecComponent {
     // save data
     save(): void {
       this.addDataForm.value.duAnNvChuyenMonId = this.data.id;
-      this._TagCongViecService.create(this.addDataForm.value).subscribe(res => {
+      this._CongViec.create(this.addDataForm.value).subscribe(res => {
         if (res.isSucceeded) {
           this.openSnackBar('Thao tác thành công', 'Đóng');
           this.dialogRef.close();
@@ -122,7 +129,7 @@ export class CreateCongviecComponent {
     selected(event: MatAutocompleteSelectedEvent): void {
       this.selectedUser = event.option.value;
       this.addDataForm.get('searchUserName')!.setValue(this.selectedUser.userName);
-      this.addDataForm.get('giaoChoId')!.setValue(this.selectedUser.id);
+      this.addDataForm.get('nguoiThucHienId')!.setValue(this.selectedUser.id);
 
       this.addDataForm.patchValue(this.selectedUser);
 

@@ -1,0 +1,54 @@
+<div class="flex flex-col flex-auto h-full overflow-hidden bg-card dark:bg-default">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-18 -mb-px px-6 bg-gray-50 dark:bg-transparent">
+
+        <div class="ml-2 text-xl font-semibold">Sửa cột KanBan</div>
+
+        <div class="flex items-center">
+            <!-- More menu -->
+            <button mat-flat-button [color]="'primary'" (click)="save()" [disabled]="addDataForm.invalid">
+                Lưu
+            </button>
+            <button class="px-6 ml-3" mat-button (click)="cancelAdd()">
+                Hủy
+            </button>
+        </div>
+
+    </div>
+    <mat-divider class="mb-4"></mat-divider>
+    <div class="flex flex-col gt-xs:flex-row gt-xs:items-start p-6">
+        <form [formGroup]="addDataForm">
+            <div class="flex-auto min-w-64">
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Tiêu đề</mat-label>
+                        <input matInput [placeholder]="'Tiêu đề'" [formControlName]="'tenCot'">
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Mô tả</mat-label>
+                        <textarea matInput [placeholder]="'Mô tả'" [rows]="3" [formControlName]="'moTa'"></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Thứ tự</mat-label>
+                        <input matInput type="number" [placeholder]="'Thứ tự'" [formControlName]="'thuTu'">
+                    </mat-form-field>
+                </div>
+                <app-searchable-select [selectedValue]="data.trangThaiCongViec" [options]="trangThaiOptions" [label]="'Chọn trạng thái cột KanBan'" (selectionChange)="setTrangThai($event)">
+                </app-searchable-select>
+
+                <div class="flex">
+                    <mat-slide-toggle
+                     class="flex-auto mb-4 mt-1"
+                     [color]="'primary'"
+                     labelPosition="before"
+                     [formControlName]="'yeuCauXacNhan'"><span class="font-medium">Yêu cầu xác nhận</span></mat-slide-toggle>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
