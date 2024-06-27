@@ -36,8 +36,14 @@ export class KanbanComponent implements OnInit {
         event.previousIndex,
         event.currentIndex,
       );
+      // Call API to update item status
+      console.log(event.container);
+      const movedItem = event.container.data[event.currentIndex];
+      this.updateItemStatus(movedItem, event.container.id);
     }
-    //this.cdr.detectChanges();  // Manually trigger change detection
+
+    // Trigger change detection to update the UI
+    this.cdr.detectChanges();
   }
 
   getCongViecKanban(): void {
@@ -45,5 +51,17 @@ export class KanbanComponent implements OnInit {
       this.congviecKanban = res;
       this.connectedTo = this.congviecKanban.map((list: any) => list.id);
     });
+  }
+
+  updateItemStatus(item: any, kanbanId): void {
+    // Assuming you have an API endpoint to update the item status
+    this._congViecService.updateKanbanStatus({idCongViec: item.id, idKanban: kanbanId}).subscribe(
+      res => {
+        console.log('Item status updated successfully');
+      },
+      err => {
+        console.error('Error updating item status', err);
+      }
+    );
   }
 }

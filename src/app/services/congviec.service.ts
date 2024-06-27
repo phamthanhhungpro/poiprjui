@@ -46,4 +46,8 @@ export class CongViecService {
     const queryString = objectToQueryString(query);
     return this.http.get<any[]>(`${baseUrl}/GetCongViecKanban?${queryString}`);
   }
+
+  updateKanbanStatus(data: any): Observable<any> {
+    return this.http.put(`${baseUrl}/UpdateKanbanStatus`, data);
+  }
 }
