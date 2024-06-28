@@ -16,4 +16,17 @@ export class AppComponent
     constructor()
     {
     }
+
+    ngOnInit() {
+        window.addEventListener('storage', (event) => {
+          if (event.key === 'logout-event') {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('expireDate');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('role');
+            localStorage.removeItem('tenantId');
+            localStorage.removeItem('userId');
+          }
+        }, false);
+      }
 }
