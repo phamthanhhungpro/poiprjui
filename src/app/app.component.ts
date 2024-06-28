@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { environment } from 'environments/environment';
 
 @Component({
     selector   : 'app-root',
@@ -18,15 +19,19 @@ export class AppComponent
     }
 
     ngOnInit() {
-        window.addEventListener('storage', (event) => {
-          if (event.key === 'logout-event') {
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('expireDate');
-            localStorage.removeItem('refreshToken');
-            localStorage.removeItem('role');
-            localStorage.removeItem('tenantId');
-            localStorage.removeItem('userId');
-          }
-        }, false);
+      window.addEventListener('message', (event) => {
+        if (event.origin !== environment.idFrontEndUrl) {
+          return;
+        }
+      
+        if (event.data.type === 'LOGOUT') {
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('expireDate');
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('role');
+          localStorage.removeItem('tenantId');
+          localStorage.removeItem('userId');
+        }
+      });
       }
 }
