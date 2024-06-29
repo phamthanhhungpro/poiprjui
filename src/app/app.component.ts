@@ -19,8 +19,11 @@ export class AppComponent
     }
 
     ngOnInit() {
+      console.log('app component init');
       window.addEventListener('message', (event) => {
+        console.log('app component message', event);
         if (event.origin !== environment.idFrontEndUrl) {
+          console.log('app component message origin not match', environment.idFrontEndUrl);
           return;
         }
       
