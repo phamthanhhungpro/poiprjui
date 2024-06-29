@@ -8,7 +8,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         id: 'poi-project',
         title: 'Hệ thống thông tin công việc',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
             {
                 id: 'viec-ca-nhan',
@@ -45,7 +45,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         id: 'id',
         title: 'Thành viên',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
             {
                 id: 'user',
@@ -60,7 +60,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         id: 'permission',
         title: 'Phân quyền người dùng',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
             {
                 id: 'function',
@@ -110,7 +110,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         id: 'cai-dat',
         title: 'Cài đặt',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
             {
                 id: 'don-vi',
@@ -170,7 +170,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         id: 'poi-project',
         title: 'Hệ thống thông tin công việc',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
         ]
     },
@@ -178,7 +178,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         id: 'id',
         title: 'Thành viên',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
         ]
     },
@@ -186,7 +186,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         id: 'permission',
         title: 'Phân quyền người dùng',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
 
         ]
@@ -195,7 +195,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         id: 'cai-dat',
         title: 'Cài đặt',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
 
         ]
