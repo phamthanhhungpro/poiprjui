@@ -13,6 +13,7 @@ import { DuAnComponent } from './modules/admin/du-an/du-an.component';
 import { ChiTietDuAnComponent } from './modules/admin/chi-tiet-du-an/chi-tiet-du-an.component';
 import { DonViComponent } from './modules/admin/settings/don-vi/don-vi.component';
 import { ChiNhanhComponent } from './modules/admin/settings/chi-nhanh/chi-nhanh.component';
+import { ExampleComponent } from './modules/admin/example/example.component';
 
 // @formatter:off
 /* eslint-disable max-len */
@@ -94,8 +95,8 @@ export const appRoutes: Route[] = [
             { path: 'nhom-chuc-nang', loadChildren: () => import('app/modules/admin/nhom-chuc-nang/nhom-chuc-nang.routes') },
             { path: 'user', loadChildren: () => import('app/modules/admin/user/user.routes') },
 
-            { path: 'viec-ca-nhan', component: VaiTroComponent },
-            { path: 'quan-ly-cong-viec', component: VaiTroComponent },
+            { path: 'viec-ca-nhan', component: ExampleComponent },
+            { path: 'quan-ly-cong-viec', component: ExampleComponent },
             { path: 'nhiem-vu-chuyen-mon', component: NhiemVuChuyenMonComponent },
             { path: 'du-an', component: DuAnComponent },
             { path: 'nhiem-vu-chuyen-mon/:id', component: ChiTietDuAnComponent },
