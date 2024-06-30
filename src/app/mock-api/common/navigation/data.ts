@@ -208,7 +208,7 @@ export const firstNavigation: FuseNavigationItem[] = [
         title: 'Hệ thống thông tin nhân sự',
         type: 'basic',
         icon: 'mat_outline:psychology',
-        link: 'https://poihrmui.vercel.app/',
+        link: 'https://hrm.poi.vn/',
         externalLink: true,
         target: "_blank"
     },
@@ -217,7 +217,7 @@ export const firstNavigation: FuseNavigationItem[] = [
         title: 'Hệ thống thông tin công việc',
         type: 'basic',
         icon: 'mat_outline:task',
-        link: 'https://poiprjui.vercel.app/',
+        link: 'https://prj.poi.vn/',
         externalLink: true,
         target: "_blank"
     },
@@ -226,18 +226,8 @@ export const firstNavigation: FuseNavigationItem[] = [
         title: 'Hệ thống thông tin điểm danh',
         type: 'basic',
         icon: 'mat_outline:emoji_people',
-        link: 'https://poicheckinui.vercel.app/',
+        link: 'https://io.poi.vn/',
         externalLink: true,
         target: "_blank"
-    }
-];
-
-export const horizontalNavigation: FuseNavigationItem[] = [
-    {
-        id: 'example',
-        title: 'Example',
-        type: 'basic',
-        icon: 'heroicons_outline:chart-pie',
-        link: '/example'
     }
 ];
