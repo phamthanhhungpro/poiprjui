@@ -1,4 +1,4 @@
-const apiUrl = 'http://api.poi.vn:1118/';
+const apiUrl = 'https://api.poi.vn:1118/';
 const idFrontEndUrl = 'https://id.poi.vn/';
 const prjFrontEndUrl = 'https://prj.poi.vn';
 
