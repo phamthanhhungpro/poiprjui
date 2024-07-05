@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,6 +11,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SearchableSelectComponent } from 'app/common/components/select-search/searchable-select.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { KanbanService } from 'app/services/kanban.service';
+import { DuAnSettingService } from 'app/services/duanSetting.service';
 
 @Component({
   selector: 'app-create-kanban',
@@ -25,13 +26,7 @@ export class CreateKanbanComponent {
   @Output() onClosed = new EventEmitter<any>();
 
   addDataForm: UntypedFormGroup;
-
-  trangThaiList = [
-    { id: 0, tenTrangThai: 'Chưa bắt đầu' },
-    { id: 1, tenTrangThai: 'Đang thực hiện' },
-    { id: 2, tenTrangThai: 'Hoàn thành' },
-    { id: 3, tenTrangThai: 'Đã xác nhận' }
-  ];
+  trangThaiList;
 
   trangThaiOptions;
   /**
@@ -41,14 +36,16 @@ export class CreateKanbanComponent {
     private _KanbanService: KanbanService,
     private _snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<CreateKanbanComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private _duAnSettingService: DuAnSettingService,
+    private _cdf: ChangeDetectorRef
   ) {
     this.addDataForm = this._formBuilder.group({
       tenCot: ['', Validators.required],
       moTa: [''],
       trangThaiCongViec: ['', Validators.required],
       thuTu: ['', Validators.required],
-      yeuCauXacNhan: [false],
+      yeuCauXacNhan: [''],
     });
   }
 
@@ -57,12 +54,8 @@ export class CreateKanbanComponent {
   }
 
   ngOnInit(): void {
-    this.trangThaiOptions = this.trangThaiList.map(item => {
-      return {
-        key: item.id,
-        value: item.tenTrangThai
-      };
-    });
+    this.addDataForm.get('yeuCauXacNhan')?.disable();
+    this.getSetting();
   }
 
   // clear form when close drawer
@@ -79,6 +72,8 @@ export class CreateKanbanComponent {
   // save data
   save(): void {
     this.addDataForm.value.duAnNvChuyenMonId = this.data.id;
+    this.addDataForm.value.yeuCauXacNhan = this.addDataForm.get('yeuCauXacNhan').value;
+
     this._KanbanService.create(this.addDataForm.value).subscribe(res => {
       if (res.isSucceeded) {
         this.openSnackBar('Thao tác thành công', 'Đóng');
@@ -98,5 +93,30 @@ export class CreateKanbanComponent {
 
   setTrangThai(value: any): void {
     this.addDataForm.get('trangThaiCongViec').setValue(value);
+
+    let trangthai = this.trangThaiList.find(x => x.key === value);
+    if (trangthai) {
+      this.addDataForm.get('yeuCauXacNhan').setValue(trangthai.yeuCauXacNhan);
+    }
+  }
+
+  getSetting(): void {
+    this._duAnSettingService.getNoPagingByDuAn({ duAnId: this.data.id }).subscribe(res => {
+      let trangthaiSetting = [];
+      if (res && res.length > 0) {
+        const trangThaiSettingItem = res.find(x => x.key === 'trangThaiSetting');
+        if (trangThaiSettingItem) {
+          trangthaiSetting = JSON.parse(trangThaiSettingItem.jsonValue);
+          this.trangThaiList = trangthaiSetting;
+        }
+      }
+
+      this.trangThaiOptions = trangthaiSetting.map(item => {
+        return {
+          key: item.key,
+          value: item.value
+        };
+      });
+    });
   }
 }

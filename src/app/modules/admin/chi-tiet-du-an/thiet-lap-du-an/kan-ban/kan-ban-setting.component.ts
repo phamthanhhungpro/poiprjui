@@ -15,6 +15,7 @@ import { DialogService } from 'app/common/dialog.service';
 import { CreateKanbanComponent } from './create-kanban/create-kanban.component';
 import { EditKanbanComponent } from './edit-kanban/edit-kanban.component';
 import { KanbanService } from 'app/services/kanban.service';
+import { DuAnSettingService } from 'app/services/duanSetting.service';
 
 
 @Component({
@@ -24,18 +25,18 @@ import { KanbanService } from 'app/services/kanban.service';
     /* language=SCSS */
     `
         .vitri-grid {
-            grid-template-columns: 200px 96px;
+            grid-template-columns: 100px 100px  96px;
 
             @screen sm {
-                grid-template-columns:  250px 96px;
+                grid-template-columns:  250px 150px 96px;
             }
 
             @screen md {
-                grid-template-columns: 250px 96px;
+                grid-template-columns: 250px 150px 96px;
             }
 
             @screen lg {
-                grid-template-columns: 20px 250px auto 200px 120px;
+                grid-template-columns: 20px 250px 150px auto 200px 120px;
             }
         }
     `,
@@ -61,7 +62,7 @@ export class KanbanSettingComponent {
     private _formBuilder: UntypedFormBuilder,
     private _KanbanService: KanbanService,
     private route: ActivatedRoute,
-    private dialogService: DialogService
+    private dialogService: DialogService,
   ) 
   {
   }
@@ -151,7 +152,7 @@ export class KanbanSettingComponent {
       map((data: any) => {
         const items: any[] = data.map((item, index: number) => ({
           ...item,
-          stt: index + 1
+          stt: index + 1,
         }));
         return { items };
       })
@@ -164,4 +165,9 @@ export class KanbanSettingComponent {
       this.drawerComponent = null;
     }
   }
+
+  findValueByKey(key: string, src: any): any {
+    return src.find(x => x.key === key);
+  }
+
 }

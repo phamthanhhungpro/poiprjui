@@ -60,6 +60,7 @@ export const authInterceptor = (req: HttpRequest<unknown>, next: HttpHandlerFn):
 
                 const currentRoute = router.url;
                 if (!currentRoute.includes('sign-in')) {
+                    // navigate to the login page
                     // Reload the app
                     location.reload();
                 }

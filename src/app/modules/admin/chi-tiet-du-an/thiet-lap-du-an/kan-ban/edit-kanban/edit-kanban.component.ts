@@ -11,6 +11,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SearchableSelectComponent } from 'app/common/components/select-search/searchable-select.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { KanbanService } from 'app/services/kanban.service';
+import { DuAnSettingService } from 'app/services/duanSetting.service';
 
 @Component({
   selector: 'app-edit-kanban',
@@ -26,14 +27,10 @@ export class EditKanbanComponent {
 
   addDataForm: UntypedFormGroup;
 
-  trangThaiList = [
-    { id: 0, tenTrangThai: 'Chưa bắt đầu' },
-    { id: 1, tenTrangThai: 'Đang thực hiện' },
-    { id: 2, tenTrangThai: 'Hoàn thành' },
-    { id: 3, tenTrangThai: 'Đã xác nhận' }
-  ];
+  trangThaiList;
 
   trangThaiOptions;
+  selectedTrangThai;
   /**
    *
    */
@@ -41,7 +38,8 @@ export class EditKanbanComponent {
     private _KanbanService: KanbanService,
     private _snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<EditKanbanComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private _duAnSettingService: DuAnSettingService,
   ) {
     this.addDataForm = this._formBuilder.group({
       tenCot: ['', Validators.required],
@@ -57,13 +55,8 @@ export class EditKanbanComponent {
   }
 
   ngOnInit(): void {
-    this.trangThaiOptions = this.trangThaiList.map(item => {
-      return {
-        key: item.id,
-        value: item.tenTrangThai
-      };
-    });
-
+    this.addDataForm.get('yeuCauXacNhan')?.disable();
+    this.getSetting();
     this.addDataForm.patchValue(this.data);
   }
 
@@ -81,6 +74,8 @@ export class EditKanbanComponent {
   // save data
   save(): void {
     this.addDataForm.value.duAnNvChuyenMonId = this.data.duAnNvChuyenMonId;
+    this.addDataForm.value.yeuCauXacNhan = this.addDataForm.get('yeuCauXacNhan').value;
+
     this._KanbanService.update(this.data.id, this.addDataForm.value).subscribe(res => {
       if (res.isSucceeded) {
         this.openSnackBar('Thao tác thành công', 'Đóng');
@@ -99,6 +94,34 @@ export class EditKanbanComponent {
   }
 
   setTrangThai(value: any): void {
+    this.selectedTrangThai = value;
     this.addDataForm.get('trangThaiCongViec').setValue(value);
+
+    let trangthai = this.trangThaiList.find(x => x.key === value);
+    if (trangthai) {
+      this.addDataForm.get('yeuCauXacNhan').setValue(trangthai.yeuCauXacNhan);
+    }
+  }
+
+  getSetting(): void {
+    this._duAnSettingService.getNoPagingByDuAn({ duAnId: this.data.duAnNvChuyenMonId }).subscribe(res => {
+      let trangthaiSetting = [];
+      if (res && res.length > 0) {
+        const trangThaiSettingItem = res.find(x => x.key === 'trangThaiSetting');
+        if (trangThaiSettingItem) {
+          trangthaiSetting = JSON.parse(trangThaiSettingItem.jsonValue);
+          this.trangThaiList = trangthaiSetting;
+        }
+      }
+
+      this.trangThaiOptions = trangthaiSetting.map(item => {
+        return {
+          key: item.key,
+          value: item.value
+        };
+      });
+      
+      this.setTrangThai(this.data.trangThaiCongViec);
+    });
   }
 }

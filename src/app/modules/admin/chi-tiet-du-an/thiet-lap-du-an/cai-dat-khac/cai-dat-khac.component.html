@@ -1,19 +1,59 @@
 <div class="flex flex-col flex-auto sm:mb-4 h-full overflow-hidden">
-    <div class="flex mb-3 justify-end">
-      <button mat-flat-button color="primary" (click)="onSave()">
-        <mat-icon class="icon-size-4" svgIcon="mat_outline:save"></mat-icon>
-        <span class="ml-2">Lưu</span>
+  <div class="flex mb-3 justify-end">
+    <button mat-flat-button color="primary" (click)="onSave()">
+      <mat-icon class="icon-size-4" svgIcon="mat_outline:save"></mat-icon>
+      <span class="ml-2">Lưu</span>
+    </button>
+  </div>
+
+  <form [formGroup]="addDataForm" class="grid grid-cols-2 gap-4 items-center">
+    <span class="font-bold">Giao diện tạo mới công việc mặc định</span>
+    <mat-form-field appearance="fill" class="w-1/2">
+      <mat-select formControlName="createCongViecUiDefault">
+        <mat-option value="giao-dien-rut-gon">Giao diện rút gọn</mat-option>
+        <mat-option value="giao-dien-nang-cao">Giao diện nâng cao</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Trạng thái công việc setting -->
+    <span class="font-bold col-span-2">Trạng thái công việc</span>
+
+    <div class="col-span-2 flex justify-end mb-2">
+      <button mat-flat-button color="primary" (click)="addTrangThai()">
+        <mat-icon class="icon-size-4" svgIcon="mat_outline:add"></mat-icon>
+        <span class="ml-2">Thêm</span>
       </button>
     </div>
-  
-    <form [formGroup]="addDataForm" class="grid grid-cols-2 gap-4 items-center">
-      <span class="font-bold">Giao diện tạo mới công việc mặc định</span>
-      <mat-form-field appearance="fill" class="w-1/2">
-        <mat-select formControlName="createCongViecUiDefault">
-          <mat-option value="giao-dien-rut-gon">Giao diện rút gọn</mat-option>
-          <mat-option value="giao-dien-nang-cao">Giao diện nâng cao</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </form>
-  </div>
-  
+
+    <div class="col-span-2 overflow-x-auto">
+      <table class="min-w-full bg-white border">
+        <thead>
+          <tr>
+            <th class="py-2 px-4 border">Mã trạng thái</th>
+            <th class="py-2 px-4 border">Tên trạng thái</th>
+            <th class="py-2 px-4 border">Yêu cầu xác nhận</th>
+            <th class="py-2 px-4 border">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody formArrayName="trangThaiSettings">
+          <tr *ngFor="let item of trangThaiSettings.controls; let i = index" [formGroupName]="i">
+            <td class="py-2 px-4 border">
+              <input formControlName="key" class="form-input mt-1 block w-full" placeholder="Mã trạng thái">
+            </td>
+            <td class="py-2 px-4 border">
+              <input formControlName="value" class="form-input mt-1 block w-full" placeholder="Tên trạng thái">
+            </td>
+            <td class="py-2 px-4 border">
+              <mat-slide-toggle formControlName="yeuCauXacNhan"></mat-slide-toggle>
+            </td>
+            <td class="py-2 px-4 border text-center">
+              <button mat-icon-button color="warn" (click)="removeTrangThai(i)">
+                <mat-icon svgIcon="mat_outline:delete"></mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+</div>

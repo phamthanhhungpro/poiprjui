@@ -29,6 +29,8 @@ export const AuthGuard: CanActivateFn | CanActivateChildFn = (route, state) => {
                     localStorage.setItem('userId', userId);
                     localStorage.setItem('expireDate', expireDate);
 
+                    // clear the URL
+                    router.navigateByUrl(state.url.split('?')[0]);
                     return of(true);
                 } else {
                     // Redirect to the sign-in page in another domain with a redirectUrl param
