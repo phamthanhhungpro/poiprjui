@@ -1,6 +1,6 @@
-const apiUrl = 'https://api.poi.vn:1118/';
-const idFrontEndUrl = 'https://id.poi.vn/';
-const prjFrontEndUrl = 'https://prj.poi.vn';
+const apiUrl = 'http://113.160.187.187:1118/';
+const idFrontEndUrl = 'https://poiidui.vercel.app/';
+const prjFrontEndUrl = 'https://poiprjui.vercel.app';
 
 export const environment = {
     production: true,

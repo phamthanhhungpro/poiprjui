@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { environment } from 'environments/environment';
 
 @Component({
     selector   : 'app-root',
@@ -16,4 +17,8 @@ export class AppComponent
     constructor()
     {
     }
+
+    ngOnInit() {
+      console.log('app component init');
+      }
 }

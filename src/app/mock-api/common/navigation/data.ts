@@ -8,7 +8,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         id: 'poi-project',
         title: 'Hệ thống thông tin công việc',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
             {
                 id: 'viec-ca-nhan',
@@ -45,7 +45,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         id: 'id',
         title: 'Thành viên',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
             {
                 id: 'user',
@@ -60,7 +60,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         id: 'permission',
         title: 'Phân quyền người dùng',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
             {
                 id: 'function',
@@ -110,7 +110,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         id: 'cai-dat',
         title: 'Cài đặt',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
             {
                 id: 'don-vi',
@@ -170,7 +170,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         id: 'poi-project',
         title: 'Hệ thống thông tin công việc',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
         ]
     },
@@ -178,7 +178,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         id: 'id',
         title: 'Thành viên',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
         ]
     },
@@ -186,7 +186,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         id: 'permission',
         title: 'Phân quyền người dùng',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
 
         ]
@@ -195,7 +195,7 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         id: 'cai-dat',
         title: 'Cài đặt',
         type: 'group',
-        icon: 'heroicons_outline:home',
+        icon: 'mat_outline:arrow_drop_down',
         children: [
 
         ]
@@ -208,7 +208,7 @@ export const firstNavigation: FuseNavigationItem[] = [
         title: 'Hệ thống thông tin nhân sự',
         type: 'basic',
         icon: 'mat_outline:psychology',
-        link: 'https://poihrmui.vercel.app/',
+        link: 'https://hrm.poi.vn/',
         externalLink: true,
         target: "_blank"
     },
@@ -217,7 +217,7 @@ export const firstNavigation: FuseNavigationItem[] = [
         title: 'Hệ thống thông tin công việc',
         type: 'basic',
         icon: 'mat_outline:task',
-        link: 'https://poiprjui.vercel.app/',
+        link: 'https://prj.poi.vn/',
         externalLink: true,
         target: "_blank"
     },
@@ -226,7 +226,7 @@ export const firstNavigation: FuseNavigationItem[] = [
         title: 'Hệ thống thông tin điểm danh',
         type: 'basic',
         icon: 'mat_outline:emoji_people',
-        link: 'https://poicheckinui.vercel.app/',
+        link: 'https://io.poi.vn/',
         externalLink: true,
         target: "_blank"
     }
