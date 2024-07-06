@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { AsyncPipe, CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -40,6 +40,8 @@ export class CreateCongviecComponent {
   selectedUser: any = {};
   filteredOptions: any = [];
   allManagers: any = [];
+  listGiaoViec = []; // list người thực hiện công việc max = 1
+  checkGiaoCho = false;
   /**
    *
    */
@@ -47,11 +49,11 @@ export class CreateCongviecComponent {
     private _CongViec: CongViecService,
     private _snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<CreateTagsCongViecComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private _changeDetectorRef: ChangeDetectorRef
   ) {
     this.addDataForm = this._formBuilder.group({
       tenCongViec: ['', Validators.required],
-      maCongViec: ['', Validators.required],
       moTaCongViec: [''],
       nhomCongViecId: ['', Validators.required],
       nguoiThucHienId: ['', Validators.required],
@@ -62,7 +64,6 @@ export class CreateCongviecComponent {
   }
   
     ngOnInit(): void {
-      console.log(this.data);
       this.nhomCongViecOptions = this.data.nhomCongViec.map(item => {
         return {
           key: item.id,
@@ -73,12 +74,10 @@ export class CreateCongviecComponent {
         this.allManagers = this.data.thanhVienDuAn;
         this.filteredOptions = this.addDataForm.get('searchUserName')?.valueChanges.pipe(
           startWith(null),
-          map((item: any | null) => (item ? this._filter(item) : this.allManagers.slice()))
-        );
+          map((item: any | null) => (item ? this._filter(item) : this.allManagers.slice())),
+          map(tvien => tvien.filter(m => !this.listGiaoViec.some(i => i.userName === m.userName)))
 
-        this.addDataForm.get('tenCongViec').valueChanges.subscribe(value => {
-          this.addDataForm.get('maCongViec').setValue(generateCodeFromName(value));
-        });
+        );
     }
     // clear form when close drawer
     clearForm(): void {
@@ -94,6 +93,7 @@ export class CreateCongviecComponent {
     // save data
     save(): void {
       this.addDataForm.value.duAnNvChuyenMonId = this.data.id;
+      this.addDataForm.value.nguoiThucHienId = this.listGiaoViec[0].id;
       this._CongViec.create(this.addDataForm.value).subscribe(res => {
         if (res.isSucceeded) {
           this.openSnackBar('Thao tác thành công', 'Đóng');
@@ -126,16 +126,31 @@ export class CreateCongviecComponent {
       this.addDataForm.get('nhomCongViecId')!.setValue(value);
     }
 
-    selected(event: MatAutocompleteSelectedEvent): void {
-      this.selectedUser = event.option.value;
-      this.addDataForm.get('searchUserName')!.setValue(this.selectedUser.userName);
-      this.addDataForm.get('nguoiThucHienId')!.setValue(this.selectedUser.id);
+    removeGiaoViec(item: any): void {
+      const index = this.listGiaoViec.indexOf(item);
+  
+      if (index >= 0) {
+        this.listGiaoViec.splice(index, 1);
+        this._changeDetectorRef.markForCheck();
+        this.addDataForm.get('searchUserName')!.setValue(null);
+      }
+    }
+  
+    selectedGiaoViec(event: MatAutocompleteSelectedEvent): void {
+      if(this.listGiaoViec.length > 0) {
+        this.openSnackBar('Vui lòng chỉ chọn 1 người được giao', 'Đóng');
+        return;
+      };
+      let selectedMember = event.option.value;
+      this.listGiaoViec.push(selectedMember);
+      this.addDataForm.get('nguoiThucHienId')!.setValue(selectedMember.id);
 
-      this.addDataForm.patchValue(this.selectedUser);
-
+      this.managerInput.nativeElement.value = '';
+      this.addDataForm.get('searchUserName')!.setValue(null);
     }
   
     private _filter(value: any): any[] {
+      console.log("filterd");
       if (typeof (value) === 'object') {
         let res = this.allManagers.filter(item => (item.fullName.toLowerCase().includes(value.fullName.toLowerCase())
           || item.userName.toLowerCase().includes(value.userName.toLowerCase())));

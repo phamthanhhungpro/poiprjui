@@ -45,16 +45,27 @@
                 <app-cong-viec></app-cong-viec>
             </ng-template>
         </mat-tab>
+        <mat-tab label="Bảng Kanban">
+            <ng-template matTabContent>
+                <app-kanban></app-kanban>
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="Chờ duyệt">
+            <ng-template matTabContent>
+                Chờ duyệt
+            </ng-template>
+        </mat-tab>
         <mat-tab label="Thiết lập">
             <ng-template matTabContent>
                 <app-thiet-lap-du-an></app-thiet-lap-du-an>
             </ng-template>
         </mat-tab>
-        <mat-tab label="Kanban">
+        <mat-tab label="Hoạt động">
             <ng-template matTabContent>
-                <app-kanban></app-kanban>
+                Hoạt động
             </ng-template>
         </mat-tab>
+
 
     </mat-tab-group>
 </div>

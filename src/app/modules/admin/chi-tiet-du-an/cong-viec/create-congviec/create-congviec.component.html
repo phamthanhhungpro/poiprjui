@@ -18,37 +18,36 @@
     </div>
     <mat-divider class="mb-4"></mat-divider>
     <div class="flex flex-col gt-xs:flex-row gt-xs:items-start p-6">
-        <form [formGroup]="addDataForm" class="grid grid-cols-2 gap-6">
+        <form [formGroup]="addDataForm" class="grid grid-cols-2 gap-x-6">
             <mat-form-field appearance="fill" class="col-span-2">
                 <mat-label>Tên Công việc</mat-label>
                 <input matInput formControlName="tenCongViec" required />
             </mat-form-field>
-
-            <!-- <mat-form-field appearance="fill" class="col-span-2">
-                <mat-label>Mã Công việc</mat-label>
-                <input matInput formControlName="maCongViec" required />
-            </mat-form-field> -->
 
             <mat-form-field appearance="fill" class="col-span-2">
                 <mat-label>Mô tả công việc</mat-label>
                 <textarea matInput formControlName="moTaCongViec"></textarea>
             </mat-form-field>
 
-            <!-- <mat-form-field appearance="fill">
-                <mat-label>Giao cho</mat-label>
-                <input matInput formControlName="nguoiThucHienId" />
-            </mat-form-field> -->
-
             <mat-form-field appearance="fill">
                 <mat-label>Giao cho</mat-label>
-                <input placeholder="Tìm kiếm..." #managerInput matInput [formControlName]="'searchUserName'"
-                    [matAutocomplete]="auto" />
-                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                <mat-chip-grid class="w-auto" #chipGiaoCho>
+                    @for (thanhvien of listGiaoViec; track thanhvien) {
+                    <mat-chip-row (removed)="removeGiaoViec(thanhvien)">
+                        {{thanhvien.surName}} {{thanhvien.name}}
+                        <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip-row>
+                    }
+                </mat-chip-grid>
+                <input placeholder="@" #managerInput [formControlName]="'searchUserName'"
+                    [matChipInputFor]="chipGiaoCho" [matAutocomplete]="auto1" />
+                <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="selectedGiaoViec($event)">
                     @for (option of filteredOptions | async; track option) {
                     <mat-option [value]="option">{{option.fullName}}</mat-option>
                     }
                 </mat-autocomplete>
-
             </mat-form-field>
 
             <app-searchable-select [options]="nhomCongViecOptions" [label]="'Nhóm công việc'"

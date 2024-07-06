@@ -1,0 +1,12 @@
+<!-- multi-select.component.html -->
+<div class="w-full">
+    <mat-form-field class="w-full">
+        <mat-select [value]="selectedValues" (selectionChange)="onSelectionChange($event)" multiple class="w-full">
+            <mat-option *ngFor="let option of options" [value]="option">
+                <input type="checkbox" [checked]="selectedValues.includes(option)" (click)="$event.stopPropagation()"
+                    (change)="toggleSelection(option)" class="mr-2" />
+                {{ option }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>

@@ -29,7 +29,7 @@ interface Option {
 export class SearchableSelectComponent implements OnInit {
   @Input() options: Option[] = [];
   @Input() label: string = "Select an option";
-
+  @Input() multiple: boolean = false;
   @Input() placeholder: string = 'Select an option';
   @Input() noEntriesFoundLabel: string = 'Không tìm thấy kết quả';
   @Output() selectionChange = new EventEmitter<string>();

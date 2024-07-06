@@ -108,4 +108,12 @@ export class CaiDatKhacComponent {
   removeTrangThai(index: number): void {
     this.trangThaiSettings.removeAt(index);
   }
+
+  checkTrangThai(item: any): boolean {
+    if(item.value.key === 'chua-xac-dinh') {
+      return true;
+    }
+
+    return false;
+  }
 }

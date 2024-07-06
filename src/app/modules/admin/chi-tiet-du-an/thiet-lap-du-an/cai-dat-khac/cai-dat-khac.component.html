@@ -47,7 +47,7 @@
               <mat-slide-toggle formControlName="yeuCauXacNhan"></mat-slide-toggle>
             </td>
             <td class="py-2 px-4 border text-center">
-              <button mat-icon-button color="warn" (click)="removeTrangThai(i)">
+              <button mat-icon-button color="warn" (click)="removeTrangThai(i)" [disabled]="checkTrangThai(item)">
                 <mat-icon svgIcon="mat_outline:delete"></mat-icon>
               </button>
             </td>

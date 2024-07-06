@@ -87,6 +87,10 @@ export class AddNhiemvuchuyenmonComponent {
 
   // save data
   save(): void {
+    if(this.listManager.length > 1) {
+      this.openSnackBar('Chỉ chọn 1 người quản lý', 'Đóng');
+      return;
+    }
     const listIds = this.listManager.map(manager => manager.id);
     this.addDataForm.value.quanLyDuAnId = listIds[0];
     this.addDataForm.value.thanhVienDuAnIds = this.listThanhVien.map(item => item.id);

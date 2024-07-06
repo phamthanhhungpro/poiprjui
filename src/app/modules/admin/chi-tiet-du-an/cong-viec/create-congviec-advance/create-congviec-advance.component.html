@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex flex-0 items-center justify-between h-18 -mb-px px-6 bg-gray-50 dark:bg-transparent">
 
-        <div class="ml-2 text-xl font-semibold">Thêm công việc</div>
+        <div class="ml-2 text-xl font-semibold">Thêm công việc - {{data.tenDuAn}}</div>
 
         <div class="flex items-center">
             <!-- More menu -->
@@ -18,7 +18,7 @@
     </div>
     <mat-divider class="mb-4"></mat-divider>
     <div class="flex flex-col gt-xs:flex-row gt-xs:items-start p-6">
-        <form [formGroup]="addDataForm" class="grid grid-cols-2 gap-6">
+        <form [formGroup]="addDataForm" class="grid grid-cols-2 gap-x-6">
             <mat-form-field appearance="fill" class="col-span-2">
                 <mat-label>Tên Công việc</mat-label>
                 <input matInput formControlName="tenCongViec" required />
@@ -29,37 +29,36 @@
                 <textarea matInput formControlName="moTaCongViec"></textarea>
             </mat-form-field>
 
-            <mat-form-field appearance="fill">
-                <mat-label>Nhóm công việc</mat-label>
-                <mat-select formControlName="nhomCongViec">
-                    <mat-option value="nhom-1">Nhóm 1</mat-option>
-                    <mat-option value="nhom-2">Nhóm 2</mat-option>
-                </mat-select>
-            </mat-form-field>
+            <app-searchable-select [options]="nhomCongViecOptions" [label]="'Nhóm công việc'"
+                placeholder="Chọn nhóm công việc" (selectionChange)="setNhomCongViec($event)">
+            </app-searchable-select>
 
-            <mat-form-field appearance="fill">
-                <mat-label>Loại công việc</mat-label>
-                <mat-select formControlName="loaiCongViec">
-                    <mat-option value="loai-1">Loại 1</mat-option>
-                    <mat-option value="loai-2">Loại 2</mat-option>
-                </mat-select>
-            </mat-form-field>
+            <app-searchable-select [options]="loaiCongViecOptions" [label]="'Loại công việc'"
+                placeholder="Chọn loại công việc" (selectionChange)="setLoaiCongViec($event)">
+            </app-searchable-select>
 
             <mat-form-field appearance="fill">
                 <mat-label>Giao cho</mat-label>
-                <input matInput formControlName="giaoCho" />
+                <input matInput formControlName="giaoChoId" />
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Thời gian hoàn thành dự kiến h/điểm/độ phức tạp</mat-label>
+                <input matInput formControlName="thoiGianHoanThanhDuKien" />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Người thực hiện</mat-label>
+                <input matInput formControlName="nguoiThucHienIds" />
             </mat-form-field>
 
             <mat-form-field appearance="fill">
                 <mat-label>Người phối hợp</mat-label>
-                <input matInput formControlName="nguoiPhoiHop" />
+                <input matInput formControlName="nguoiPhoiHopIds" />
             </mat-form-field>
 
-            <mat-form-field appearance="fill">
-                <mat-label>Tags</mat-label>
-                <input matInput formControlName="tags" />
-            </mat-form-field>
-
+            <app-searchable-select [options]="tagCongViecOptions" [label]="'Tags'"
+                placeholder="Chọn tag" (selectionChange)="setTagCongViec($event)" [multiple]="true">
+            </app-searchable-select>
             <mat-form-field appearance="fill">
                 <mat-label>Mức độ ưu tiên</mat-label>
                 <mat-select formControlName="mucDoUuTien">

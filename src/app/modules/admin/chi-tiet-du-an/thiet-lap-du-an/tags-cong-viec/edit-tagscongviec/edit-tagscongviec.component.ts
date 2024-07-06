@@ -35,7 +35,8 @@ export class EditTagsCongViecComponent {
   ) {
     this.addDataForm = this._formBuilder.group({
       tenTag: ['', Validators.required],
-      maTag: ['', Validators.required]
+      maTag: ['', Validators.required],
+      mauSac: [''],
     });
   }
 
