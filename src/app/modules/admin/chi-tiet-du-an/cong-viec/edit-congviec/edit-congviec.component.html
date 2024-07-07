@@ -1,1 +1,142 @@
-<p>edit-congviec works!</p>
+<div class="flex flex-col flex-auto overflow-hidden bg-white dark:bg-default">
+    <!-- Header -->
+    <div class="flex flex-col h-25 p-6 bg-gray-50 dark:bg-transparent">
+        <div class="flex items-center justify-between">
+            <div class="text-xl font-semibold">{{congviec.tenCongViec}}</div>
+            <div class="flex items-center">
+                <button mat-flat-button [color]="'primary'" (click)="save()" [disabled]="taskForm.invalid">Lưu</button>
+                <button class="ml-3" mat-button (click)="cancelAdd()">Đóng</button>
+            </div>
+        </div>
+        <div class="text-sm text-gray-600">
+            Dự án/Nhiệm vụ: {{congviec.duAnNvChuyenMon?.tenDuAn}}
+        </div>
+    </div>
+
+    <mat-divider class="mb-4"></mat-divider>
+    <div class="p-6 overflow-auto" style="height: calc(80vh - 144px);"> <!-- Adjust the height as needed -->
+        <form [formGroup]="taskForm" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- Left side with form details -->
+            <div class="lg:col-span-2">
+                <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mb-4">
+                    <div class="font-semibold">
+                        <label class="text-gray-700 ">Tạo bởi: </label>
+                        <span>{{ congviec.nguoiGiaoViec?.fullName }} {{'@' +
+                            congviec.nguoiGiaoViec?.userName }} lúc: {{ congviec.createdAt }}</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-4">
+                    <div class="font-semibold">
+                        <label class="text-gray-700">Mô tả: </label>
+                        <span>Nội dung mô tả công việc ABC điền ở đây</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="text-gray-700">Thuộc nhóm: </label>
+                        <span>{{congviec.nhomCongViec?.tenNhomCongViec}}</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="text-gray-700">Loại công việc: </label>
+                        <span>{{congviec.loaiCongViec?.tenLoaiCongViec}}</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="text-gray-700">Trạng thái hiện tại: </label>
+                        <span class="bg-gray-100 px-4 py-2 rounded text-blue-600">{{congviec.trangThai}}</span>
+                    </div>
+                    <div>
+                        <label class="text-gray-700">Mức ưu tiên: </label>
+                        <span class="bg-gray-100 px-4 py-2 rounded text-blue-600">Không ưu tiên</span>
+                    </div>
+                    <div class="pt-1">
+                        <label class="text-gray-700">Thời gian hoàn thành dự kiến: </label>
+                        <span class="bg-gray-100 px-4 py-2 rounded text-blue-600">Đơn giản</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <app-user-selector label="Giao cho/Chủ trì:" [options]="listGiaoViecOptions"
+                            [selectedItems]="selectedGiaoViec" length="1">
+                        </app-user-selector>
+                    </div>
+                    <div>
+                        <app-user-selector label="Người thực hiện:" [options]="listNguoiThucHienOptions"
+                            [selectedItems]="selectedNguoiThucHien">
+                        </app-user-selector>
+                    </div>
+                </div>
+                <div>
+                    <app-user-selector label="Người phối hợp:" [options]="listNguoiPhoiHopOptions"
+                        [selectedItems]="selectedNguoiPhoiHop">
+                    </app-user-selector>
+                </div>
+                <div class="mt-4">
+                    <label class="block text-gray-700">Trao đổi</label>
+                    <div class="border-t border-gray-200 pt-4">
+                        <div *ngFor="let exchange of exchanges" class="flex items-start space-x-2 mb-2">
+                            <span class="text-gray-500">{{ exchange.time }}</span>
+                            <span>{{ exchange.user }}: {{ exchange.content }}</span>
+                            <span class="text-blue-500">{{ exchange.tag }}</span>
+                        </div>
+                        <div class="flex items-center mt-2">
+                            <input class="flex-grow form-input" placeholder="#để gắn tag, @ để gắn người">
+                            <button mat-button color="primary" class="ml-2">Gửi</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right side with sections -->
+            <div class="lg:col-span-1 grid grid-cols-1 md:grid-cols-1 gap-4">
+                <div class="bg-green-100 p-4 rounded-lg">
+                    <h3 class="font-bold text-green-700">Thời gian</h3>
+                    <div>
+                        <label class="block text-gray-700">Bắt đầu:</label>
+                        <span>20/6/2024</span>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700">Hạn hoàn thành:</label>
+                        <span>30/6/2024</span>
+                    </div>
+                    <button class="mt-2 bg-green-500 text-white px-4 py-2 rounded">Gia hạn</button>
+                </div>
+                <div class="bg-yellow-100 p-4 rounded-lg">
+                    <h3 class="font-bold text-yellow-700">Tags/Nhãn</h3>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                        <span class="bg-blue-500 text-white px-2 py-1 rounded">#Phát sinh</span>
+                        <span class="bg-red-500 text-white px-2 py-1 rounded">#Khẩn cấp</span>
+                    </div>
+                </div>
+                <div class="bg-blue-100 p-4 rounded-lg">
+                    <h3 class="font-bold text-blue-700">Files</h3>
+                    <ul>
+                        <li><a href="#" class="text-blue-500">1. Mo_ta_nghiep_vu.docx</a></li>
+                        <li><a href="#" class="text-blue-500">2. Phan_ra_tien_do.xlsx</a></li>
+                    </ul>
+                    <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Thêm file</button>
+                </div>
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <h3 class="font-bold text-gray-700">Báo cáo/Đánh giá</h3>
+                    <div>
+                        <label class="block text-gray-700">Chất lượng/Hiệu quả:</label>
+                        <span>Chưa đảm bảo</span>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700">Tiến độ:</label>
+                        <span>Chậm</span>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700">Chấp hành chế độ thông tin/Báo cáo:</label>
+                        <span>Không chấp hành</span>
+                    </div>
+                    <button class="mt-2 bg-gray-500 text-white px-4 py-2 rounded">Xác nhận đánh giá</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

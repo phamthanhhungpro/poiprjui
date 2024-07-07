@@ -1,0 +1,20 @@
+<div class="w-full">
+    <mat-form-field class="w-full">
+        <mat-label>{{label}}</mat-label>
+        <mat-chip-grid class="w-auto" #chipGrid>
+            <mat-chip-row *ngFor="let item of selectedItems" (removed)="removeItem(item)">
+                {{item.surName}} {{item.name}}
+                <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip-row>
+        </mat-chip-grid>
+        <input placeholder="@" #inputElement [formControl]="searchControl" [matChipInputFor]="chipGrid"
+            [matAutocomplete]="auto" />
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{option.fullName}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</div>

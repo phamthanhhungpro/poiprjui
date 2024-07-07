@@ -54,9 +54,9 @@ export class CreateCongviecComponent {
   ) {
     this.addDataForm = this._formBuilder.group({
       tenCongViec: ['', Validators.required],
-      moTaCongViec: [''],
+      moTa: [''],
       nhomCongViecId: ['', Validators.required],
-      nguoiThucHienId: ['', Validators.required],
+      nguoiDuocGiaoId: ['', Validators.required],
       ngayBatDau: [new Date(), Validators.required],
       ngayKetThuc: [''],
       searchUserName: [''],
@@ -93,7 +93,7 @@ export class CreateCongviecComponent {
     // save data
     save(): void {
       this.addDataForm.value.duAnNvChuyenMonId = this.data.id;
-      this.addDataForm.value.nguoiThucHienId = this.listGiaoViec[0].id;
+      this.addDataForm.value.nguoiDuocGiaoId = this.listGiaoViec[0].id;
       this._CongViec.create(this.addDataForm.value).subscribe(res => {
         if (res.isSucceeded) {
           this.openSnackBar('Thao tác thành công', 'Đóng');
@@ -139,18 +139,20 @@ export class CreateCongviecComponent {
     selectedGiaoViec(event: MatAutocompleteSelectedEvent): void {
       if(this.listGiaoViec.length > 0) {
         this.openSnackBar('Vui lòng chỉ chọn 1 người được giao', 'Đóng');
+        this.managerInput.nativeElement.value = '';
+        this.addDataForm.get('searchUserName')!.setValue(null);
         return;
       };
       let selectedMember = event.option.value;
       this.listGiaoViec.push(selectedMember);
-      this.addDataForm.get('nguoiThucHienId')!.setValue(selectedMember.id);
+      this.addDataForm.get('nguoiDuocGiaoId')!.setValue(selectedMember.id);
 
       this.managerInput.nativeElement.value = '';
       this.addDataForm.get('searchUserName')!.setValue(null);
     }
   
     private _filter(value: any): any[] {
-      console.log("filterd");
+      
       if (typeof (value) === 'object') {
         let res = this.allManagers.filter(item => (item.fullName.toLowerCase().includes(value.fullName.toLowerCase())
           || item.userName.toLowerCase().includes(value.userName.toLowerCase())));

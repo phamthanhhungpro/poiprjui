@@ -26,7 +26,7 @@
 
             <mat-form-field appearance="fill" class="col-span-2">
                 <mat-label>Mô tả công việc</mat-label>
-                <textarea matInput formControlName="moTaCongViec"></textarea>
+                <textarea matInput formControlName="moTa"></textarea>
             </mat-form-field>
 
             <app-searchable-select [options]="nhomCongViecOptions" [label]="'Nhóm công việc'"
@@ -37,28 +37,25 @@
                 placeholder="Chọn loại công việc" (selectionChange)="setLoaiCongViec($event)">
             </app-searchable-select>
 
-            <mat-form-field appearance="fill">
-                <mat-label>Giao cho</mat-label>
-                <input matInput formControlName="giaoChoId" />
-            </mat-form-field>
+            <app-user-selector label="Giao cho" [options]="listGiaoViecOptions" [selectedItems]="selectedGiaoViec"
+                length="1" (selectionChange)="onSelectionChange($event)">
+            </app-user-selector>
+
             <mat-form-field appearance="fill">
                 <mat-label>Thời gian hoàn thành dự kiến h/điểm/độ phức tạp</mat-label>
                 <input matInput formControlName="thoiGianHoanThanhDuKien" />
             </mat-form-field>
 
-            <mat-form-field appearance="fill">
-                <mat-label>Người thực hiện</mat-label>
-                <input matInput formControlName="nguoiThucHienIds" />
-            </mat-form-field>
+            <app-user-selector label="Người thực hiện" [options]="listNguoiThucHienOptions" [selectedItems]="selectedNguoiThucHien">
+            </app-user-selector>
 
-            <mat-form-field appearance="fill">
-                <mat-label>Người phối hợp</mat-label>
-                <input matInput formControlName="nguoiPhoiHopIds" />
-            </mat-form-field>
+            <app-user-selector label="Người phối hợp" [options]="listNguoiPhoiHopOptions" [selectedItems]="selectedNguoiPhoiHop">
+            </app-user-selector>
 
-            <app-searchable-select [options]="tagCongViecOptions" [label]="'Tags'"
-                placeholder="Chọn tag" (selectionChange)="setTagCongViec($event)" [multiple]="true">
+            <app-searchable-select [options]="tagCongViecOptions" [label]="'Tags'" placeholder="Chọn tag"
+                (selectionChange)="setTagCongViec($event)" [multiple]="true">
             </app-searchable-select>
+
             <mat-form-field appearance="fill">
                 <mat-label>Mức độ ưu tiên</mat-label>
                 <mat-select formControlName="mucDoUuTien">
@@ -77,7 +74,7 @@
 
             <mat-form-field appearance="fill">
                 <mat-label>Hạn hoàn thành</mat-label>
-                <input matInput [matDatepicker]="endDatePicker" formControlName="hanHoanThanh" />
+                <input matInput [matDatepicker]="endDatePicker" formControlName="ngayKetThuc" />
                 <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
                 <mat-datepicker #endDatePicker></mat-datepicker>
             </mat-form-field>

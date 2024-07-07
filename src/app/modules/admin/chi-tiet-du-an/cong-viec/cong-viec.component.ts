@@ -15,6 +15,7 @@ import { CreateCongviecAdvanceComponent } from './create-congviec-advance/create
 import { co } from '@fullcalendar/core/internal-common';
 import { DuAnNvChuyenMonService } from 'app/services/duan-nvchuyenmon.service';
 import { CongViecService } from 'app/services/congviec.service';
+import { EditCongviecComponent } from './edit-congviec/edit-congviec.component';
 
 @Component({
   selector: 'app-cong-viec',
@@ -123,4 +124,14 @@ export class CongViecComponent {
       this.duAnSetting = res.duAnSetting;
     });
   }
+
+  viewDetail(task): void {
+    this.dialogService.openDialog(EditCongviecComponent,
+      task,
+      { width: '1200px', height: 'auto'},
+      this.getTableData.bind(this)
+     )
+     .subscribe(result => {
+
+     });  }
 }

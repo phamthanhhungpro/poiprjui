@@ -15,6 +15,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { SearchableSelectComponent } from 'app/common/components/select-search/searchable-select.component';
 import { MultiSelectComponent } from 'app/common/components/multi-select/multi-select.component';
+import { UserSelectorComponent } from 'app/common/components/user-selector/user-selector.component';
+import { CongViecService } from 'app/services/congviec.service';
 
 @Component({
   selector: 'app-create-congviec-advance',
@@ -23,7 +25,7 @@ import { MultiSelectComponent } from 'app/common/components/multi-select/multi-s
     FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatFormFieldModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule, SearchableSelectComponent, MultiSelectComponent],
+    MatNativeDateModule, SearchableSelectComponent, MultiSelectComponent, UserSelectorComponent],
   templateUrl: './create-congviec-advance.component.html',
 })
 export class CreateCongviecAdvanceComponent {
@@ -33,6 +35,15 @@ export class CreateCongviecAdvanceComponent {
   tagCongViecOptions = [];
 
   selectedTags: any = [];
+  listGiaoViecOptions: any[] = [];
+  selectedGiaoViec: any[] = [];
+
+  listNguoiThucHienOptions: any[] = [];
+  selectedNguoiThucHien: any[] = [];
+
+  listNguoiPhoiHopOptions: any[] = [];
+  selectedNguoiPhoiHop: any[] = [];
+
   /**
    *
    */
@@ -40,20 +51,21 @@ export class CreateCongviecAdvanceComponent {
     private _TagCongViecService: TagCongViecService,
     private _snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<CreateTagsCongViecComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private _CongViec: CongViecService,
   ) {
     this.addDataForm = this._formBuilder.group({
       tenCongViec: [''],
-      moTaCongViec: [''],
+      moTa: [''],
       nhomCongViecId: [''],
       loaiCongViecId: [''],
-      giaoChoId: [''],
+      nguoiDuocGiaoId: [''],
       nguoiPhoiHopIds: [''],
       nguoiThucHienIds: [''],
       tagCongViecIds: [''],
       mucDoUuTien: [''],
-      ngayBatDau: [''],
-      hanHoanThanh: [''],
+      ngayBatDau: [new Date(), Validators.required],
+      ngayKetThuc: [''],
       thoiGianHoanThanhDuKien: [''],
     });
   }
@@ -80,6 +92,10 @@ export class CreateCongviecAdvanceComponent {
         value: item.tenTag
       }
     });
+
+    this.listGiaoViecOptions = this.data.thanhVienDuAn;
+    this.listNguoiThucHienOptions = this.data.thanhVienDuAn;
+    this.listNguoiPhoiHopOptions = this.data.thanhVienDuAn;
   }
 
   // clear form when close drawer
@@ -96,7 +112,12 @@ export class CreateCongviecAdvanceComponent {
   // save data
   save(): void {
     this.addDataForm.value.duAnNvChuyenMonId = this.data.id;
-    this._TagCongViecService.create(this.addDataForm.value).subscribe(res => {
+    this.addDataForm.value.nguoiDuocGiaoId = this.selectedGiaoViec[0].id;
+    this.addDataForm.value.nguoiThucHienIds = this.selectedNguoiThucHien.map(item => item.id);
+    this.addDataForm.value.nguoiPhoiHopIds = this.selectedNguoiPhoiHop.map(item => item.id);
+    // this.addDataForm.value.tagCongViecIds = this.selectedTags.map(item => item.id);
+
+    this._CongViec.create(this.addDataForm.value).subscribe(res => {
       if (res.isSucceeded) {
         this.openSnackBar('Thao tác thành công', 'Đóng');
         this.dialogRef.close();
@@ -130,4 +151,13 @@ export class CreateCongviecAdvanceComponent {
   setTagCongViec($event) {
     this.addDataForm.get('tagCongViecIds')!.setValue($event);
   }
+
+  onSelectionChange(event: { action: string, items: any[] }) {
+    if (event.action === 'add') {
+      console.log('Item Added:', event.items);
+    } else if (event.action === 'remove') {
+      console.log('Item Removed:', event.items);
+    }
+  }
+
 }
