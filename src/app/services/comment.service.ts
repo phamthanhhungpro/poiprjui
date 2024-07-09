@@ -12,7 +12,7 @@ const baseUrl = environment.prjApiUrl + 'Comment';
 export class CommentService {
   constructor(private http: HttpClient) { }
 
-  getNoPagingByDuAn(query: any): Observable<any[]> {
+  getNoPagingByCongViecId(query: any): Observable<any[]> {
     const queryString = objectToQueryString(query);
     return this.http.get<any[]>(`${baseUrl}?${queryString}`);
   }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -16,51 +16,22 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TagUserInputComponent } from 'app/common/components/tag-user-input/tag-user-input.component';
 import { CommentService } from 'app/services/comment.service';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-edit-congviec',
   standalone: true,
   imports: [CommonModule, MatDividerModule, MatIconModule, MatButtonModule, ReactiveFormsModule, UserSelectorComponent, SearchableSelectComponent,
-    MatSelectModule, MatTabsModule, TagUserInputComponent
+    MatSelectModule, MatTabsModule, TagUserInputComponent, MatExpansionModule
   ],
   templateUrl: './edit-congviec.component.html',
 })
 export class EditCongviecComponent {
+  @ViewChild(TagUserInputComponent) tagUserInputComponent!: TagUserInputComponent;
   @Output() onClosed = new EventEmitter<any>();
 
   taskForm: UntypedFormGroup;
-  assignedTo = 'Lê Đình Dũng';
-  executedBy = 'Lê Đình Dũng';
-  exchanges = [
-    { time: '08:42 01/06/2024', user: '@Lê Đình Dũng', content: 'Nội dung trao đổi 1', tag: '#Tag1', color: 'bg-yellow-500' },
-    { time: '08:42 01/06/2024', user: '@Phạm Thanh Hùng', content: 'Nội dung trao đổi 2', tag: '', color: 'bg-pink-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-    { time: '08:42 01/06/2024', user: '', content: 'Tiến hành công việc ngay', tag: '#Chỉ đạo', color: 'bg-blue-500' },
-
-  ];
-
-  congviec:any = {};
+  congviec: any = {};
   listGiaoViecOptions: any[] = [];
   selectedGiaoViec: any[] = [];
 
@@ -73,17 +44,10 @@ export class EditCongviecComponent {
   trangThaiOptions: any[] = [];
   selectedTrangThai: any;
 
-  tags = [
-    { key: 'tag1-key', value: 'Tag1' },
-    { key: 'Tag2', value: 'Tag2' },
-    { key: 'Tag3', value: 'Tag3' }
-  ];
-  persons = [
-    { key: 'Person1', value: 'Person1' },
-    { key: 'Person2', value: 'Person2' },
-    { key: 'Person3', value: 'Person3' }
-  ];
+  tags = [];
+  persons = [];
   commentValue: string = '';
+  listComment = [];
   /**
    *
    */
@@ -126,10 +90,6 @@ export class EditCongviecComponent {
     console.log(this.data);
   }
 
-  setOptionsTagUserInput() {
-    this.tags = this.listGiaoViecOptions.map(x => ({ key: x.id, value: x.hoTen }));
-    this.persons = this.listGiaoViecOptions.map(x => ({ key: x.id, value: x.hoTen }));
-  }
   onInputValueChange(value: string): void {
     this.commentValue = value;
   }
@@ -153,27 +113,38 @@ export class EditCongviecComponent {
 
       this.tags = res.duAnNvChuyenMon?.tagComment?.map(x => ({ key: x.maTag, value: x.maTag }));
       this.persons = res.duAnNvChuyenMon?.thanhVienDuAn?.map(x => ({ key: x.userName, value: x.userName }));
+
+      // get comment by id conviec
+      this.commentService.getNoPagingByCongViecId({ congViecId: this.congviec.id }).subscribe(res => {
+        this.listComment = res;
+      });
     });
   }
 
   setTrangThai(value) {
     this.taskForm.get('trangThai')!.setValue(value);
+    this.selectedTrangThai = value;
   }
 
   sendComment() {
-    console.log(this.commentValue);
     let data = {
       noiDung: this.commentValue,
       congViecId: this.congviec.id,
       duAnId: this.congviec.duAnNvChuyenMonId,
     }
     this.commentService.create(data).subscribe(res => {
-      if(res.isSucceeded) {
+      if (res.isSucceeded) {
         this.openSnackBar('Gửi trao đổi thành công', 'Đóng');
+        this.commentService.getNoPagingByCongViecId({ congViecId: this.congviec.id }).subscribe(res => {
+          this.listComment = res;
+        });
       }
     });
+    // clear input box
+    this.tagUserInputComponent.clearInputValue();
+
   }
-  
+
   // close drawer and reset form
   cancelAdd(): void {
     this.dialogRef.close();
@@ -187,7 +158,23 @@ export class EditCongviecComponent {
 
   // save data
   save(): void {
+    let data = {
+      ngayKetThuc: this.congviec.ngayKetThuc,
+      trangThai: this.selectedTrangThai,
+      nguoiDuocGiaoId: this.selectedGiaoViec[0].id,
+      nguoiPhoiHopIds: this.selectedNguoiPhoiHop.map(x => x.id),
+      nguoiThucHienIds: this.selectedNguoiThucHien.map(x => x.id),
+    };
 
+    this.congViecService.update(this.congviec.id, data).subscribe(res =>
+    {
+      if(res.isSucceeded) {
+        this.openSnackBar("Thao tác thành công !", "Đóng");
+        this.dialogRef.close();
+        this.clearForm();
+      }
+    }
+    )
   }
 
   // snackbar

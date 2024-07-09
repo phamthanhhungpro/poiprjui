@@ -81,4 +81,8 @@ export class TagUserInputComponent {
       inputElement.focus();
     }, 0);
   }
+
+  clearInputValue(): void {
+    this.inputControl.setValue(null);
+  }
 }
