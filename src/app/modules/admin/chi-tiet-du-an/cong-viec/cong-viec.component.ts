@@ -113,7 +113,7 @@ export class CongViecComponent {
   }
 
   getTableData(): void {
-    this._congviecService.getCongViecGrid({duAnId: this.id}).subscribe(res => {
+    this._congviecService.getCongViecGrid({ duAnId: this.id }).subscribe(res => {
       this.congViecGroupData = res;
     });
   }
@@ -128,10 +128,11 @@ export class CongViecComponent {
   viewDetail(task): void {
     this.dialogService.openDialog(EditCongviecComponent,
       task,
-      { width: '1200px', height: 'auto'},
+      { width: '1200px', height: 'auto' },
       this.getTableData.bind(this)
-     )
-     .subscribe(result => {
+    )
+      .subscribe(result => {
 
-     });  }
+      });
+  }
 }

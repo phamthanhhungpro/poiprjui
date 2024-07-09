@@ -11,7 +11,7 @@
       <span class="text-gray-500">{{ list.listCongViec.length }}</span>
     </div>
     <div class="flex-1 space-y-4 overflow-y-auto" style="height: 700px;max-height: 700px;">
-      <div *ngFor="let task of list.listCongViec" class="bg-white p-4 rounded-lg shadow" cdkDrag>
+      <div *ngFor="let task of list.listCongViec" class="bg-white p-4 rounded-lg shadow" cdkDrag (click)="viewDetail(task)">
         <h4 class="font-medium">{{ task.tenCongViec }}</h4>
         <p class="text-gray-500 text-sm">Người được giao: {{ task.nguoiDuocGiao?.fullName }}</p>
         <p class="text-gray-500 text-sm">{{ task.moTa }}</p>

@@ -16,13 +16,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TagUserInputComponent } from 'app/common/components/tag-user-input/tag-user-input.component';
 import { CommentService } from 'app/services/comment.service';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { DialogService } from 'app/common/dialog.service';
+import { GiaHanFormComponent } from '../gia-han-form/gia-han-form.component';
 
 @Component({
   selector: 'app-edit-congviec',
   standalone: true,
   imports: [CommonModule, MatDividerModule, MatIconModule, MatButtonModule, ReactiveFormsModule, UserSelectorComponent, SearchableSelectComponent,
-    MatSelectModule, MatTabsModule, TagUserInputComponent, MatExpansionModule
+    MatSelectModule, MatTabsModule, TagUserInputComponent, MatExpansionModule, GiaHanFormComponent
   ],
   templateUrl: './edit-congviec.component.html',
 })
@@ -52,7 +54,7 @@ export class EditCongviecComponent {
    *
    */
   constructor(private _formBuilder: UntypedFormBuilder,
-    private _LoaiCongViecService: LoaiCongViecService,
+    private dialogService: DialogService,
     private _snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<EditLoaiCongViecComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -60,22 +62,6 @@ export class EditCongviecComponent {
     private commentService: CommentService
   ) {
     this.taskForm = this._formBuilder.group({
-      project: [{ value: 'Dự án/Nhiệm vụ', disabled: true }],
-      createdBy: [{ value: 'Lê Đình Dũng', disabled: true }],
-      description: [''],
-      group: [{ value: 'Nhóm công việc', disabled: true }],
-      type: [{ value: 'Loại công việc', disabled: true }],
-      status: [{ value: 'Đang thực hiện', disabled: true }],
-      priority: [{ value: 'Không ưu tiên', disabled: true }],
-      completionTime: [{ value: 'Đơn giản', disabled: true }],
-      assignedTo: [{ value: 'Lê Đình Dũng', disabled: true }],
-      executedBy: [{ value: 'Lê Đình Dũng', disabled: true }],
-      collaborators: ['Nguyễn Văn Đạt, Phạm Thanh Hùng'],
-      startTime: [{ value: '20/6/2024', disabled: true }],
-      endTime: [{ value: '30/6/2024', disabled: true }],
-      quality: [{ value: 'Chưa đảm bảo', disabled: true }],
-      progress: [{ value: 'Chậm', disabled: true }],
-      compliance: [{ value: 'Không chấp hành', disabled: true }],
       trangThai: [''],
       chatLuongHieuQua: [''],
       tienDo: [''],
@@ -86,7 +72,7 @@ export class EditCongviecComponent {
   }
 
   ngOnInit() {
-    this.getCongViecById(this.data.id);
+    this.getCongViecById();
     console.log(this.data);
   }
 
@@ -94,8 +80,8 @@ export class EditCongviecComponent {
     this.commentValue = value;
   }
 
-  getCongViecById(id: string) {
-    this.congViecService.get(id).subscribe(res => {
+  getCongViecById() {
+    this.congViecService.get(this.data.id).subscribe(res => {
       this.congviec = res;
 
       this.listGiaoViecOptions = res.duAnNvChuyenMon.thanhVienDuAn;
@@ -142,7 +128,15 @@ export class EditCongviecComponent {
     });
     // clear input box
     this.tagUserInputComponent.clearInputValue();
+  }
 
+  giaHan() {
+    this.dialogService.openDialog(GiaHanFormComponent,
+      this.congviec,
+      { width: '500px', height: 'auto' })
+      .subscribe(result => {
+
+      });
   }
 
   // close drawer and reset form
@@ -166,9 +160,8 @@ export class EditCongviecComponent {
       nguoiThucHienIds: this.selectedNguoiThucHien.map(x => x.id),
     };
 
-    this.congViecService.update(this.congviec.id, data).subscribe(res =>
-    {
-      if(res.isSucceeded) {
+    this.congViecService.update(this.congviec.id, data).subscribe(res => {
+      if (res.isSucceeded) {
         this.openSnackBar("Thao tác thành công !", "Đóng");
         this.dialogRef.close();
         this.clearForm();

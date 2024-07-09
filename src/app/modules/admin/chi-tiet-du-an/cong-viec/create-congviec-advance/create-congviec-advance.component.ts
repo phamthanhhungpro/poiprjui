@@ -66,7 +66,7 @@ export class CreateCongviecAdvanceComponent {
       mucDoUuTien: [''],
       ngayBatDau: [new Date(), Validators.required],
       ngayKetThuc: [''],
-      thoiGianHoanThanhDuKien: [''],
+      thoiGianDuKien: [''],
     });
   }
 

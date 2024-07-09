@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { CongViecService } from 'app/services/congviec.service';
 import { ActivatedRoute } from '@angular/router';
+import { EditCongviecComponent } from '../cong-viec/edit-congviec/edit-congviec.component';
+import { DialogService } from 'app/common/dialog.service';
 
 @Component({
   selector: 'app-kanban',
@@ -18,7 +20,8 @@ export class KanbanComponent implements OnInit {
   constructor(
     private _congViecService: CongViecService,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private dialogService: DialogService,
   ) { }
 
   ngOnInit(): void {
@@ -63,5 +66,16 @@ export class KanbanComponent implements OnInit {
         console.error('Error updating item status', err);
       }
     );
+  }
+
+  viewDetail(task): void {
+    this.dialogService.openDialog(EditCongviecComponent,
+      task,
+      { width: '1200px', height: 'auto' },
+      this.getCongViecKanban.bind(this)
+    )
+      .subscribe(result => {
+
+      });
   }
 }
