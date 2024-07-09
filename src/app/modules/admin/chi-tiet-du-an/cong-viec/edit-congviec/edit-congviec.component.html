@@ -75,41 +75,65 @@
                         [selectedItems]="selectedNguoiPhoiHop">
                     </app-user-selector>
                 </div>
-                <div class="mt-4">
-                    <label class="block text-gray-700">Trao đổi</label>
-                    <div class="border-t border-gray-200 pt-4">
-                        <div *ngFor="let exchange of exchanges" class="flex items-start space-x-2 mb-2">
-                            <span class="text-gray-500">{{ exchange.time }}</span>
-                            <span>{{ exchange.user }}: {{ exchange.content }}</span>
-                            <span class="text-blue-500">{{ exchange.tag }}</span>
-                        </div>
-                        <div class="flex items-center mt-2">
-                            <input class="flex-grow form-input" placeholder="#để gắn tag, @ để gắn người">
-                            <button mat-button color="primary" class="ml-2">Gửi</button>
-                        </div>
-                    </div>
+                <div class="mt-2">
+                    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+                        <mat-tab label="Trao đổi">
+                            <div class="flex items-center mt-2">
+                                <!-- <input type="text" id="first_name"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="#để gắn tag, @ để gắn người" /> -->
+                                    <app-tag-user-input [listTag]="tags" 
+                                    [listPerson]="persons" 
+                                    (inputValueChange)="onInputValueChange($event)"></app-tag-user-input>
+                                <button mat-flat-button [color]="'primary'" class="ml-2" (click)="sendComment()">Gửi</button>
+                            </div>
+                            <div class="scrollable-container">
+                                <div class="timeline">
+                                  <div *ngFor="let exchange of exchanges" class="timeline-item">
+                                    <div class="timeline-time">{{ exchange.time }}</div>
+                                    <div class="timeline-circle" [ngClass]="exchange.color"></div>
+                                    <div class="timeline-content">
+                                      <span>{{ exchange.user }}: {{ exchange.content }}</span>
+                                      <span [ngClass]="{'text-blue-500': exchange.tag === '#Tag1', 'text-red-500': exchange.tag === '#Chỉ đạo'}">{{ exchange.tag }}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>                              
+
+                        </mat-tab>
+                        <mat-tab label="Hoạt động">
+                        </mat-tab>
+                    </mat-tab-group>
                 </div>
             </div>
 
             <!-- Right side with sections -->
             <div class="lg:col-span-1 grid grid-cols-1 md:grid-cols-1 gap-4">
+                <div class="rounded-lg" *ngIf="trangThaiOptions.length > 0">
+                    <app-searchable-select [selectedValue]="selectedTrangThai" [options]="trangThaiOptions"
+                        [label]="'Chuyển trạng thái'" placeholder="Chọn trạng thái"
+                        (selectionChange)="setTrangThai($event)">
+                    </app-searchable-select>
+                </div>
                 <div class="bg-green-100 p-4 rounded-lg">
                     <h3 class="font-bold text-green-700">Thời gian</h3>
                     <div>
-                        <label class="block text-gray-700">Bắt đầu:</label>
-                        <span>20/6/2024</span>
+                        <label class="text-gray-700">Bắt đầu: </label>
+                        <span>{{congviec.ngayBatDau | date:'dd/MM/yyyy'}}</span>
                     </div>
                     <div>
-                        <label class="block text-gray-700">Hạn hoàn thành:</label>
-                        <span>30/6/2024</span>
+                        <label class="text-gray-700">Hạn hoàn thành: </label>
+                        <span>{{congviec.ngayKetThuc | date:'dd/MM/yyyy'}}</span>
                     </div>
-                    <button class="mt-2 bg-green-500 text-white px-4 py-2 rounded">Gia hạn</button>
+                    <div class="flex justify-end">
+                        <button class="mt-2 bg-green-500 text-white px-4 py-2 rounded">Gia hạn</button>
+                    </div>
                 </div>
                 <div class="bg-yellow-100 p-4 rounded-lg">
                     <h3 class="font-bold text-yellow-700">Tags/Nhãn</h3>
                     <div class="flex flex-wrap gap-2 mt-2">
-                        <span class="bg-blue-500 text-white px-2 py-1 rounded">#Phát sinh</span>
-                        <span class="bg-red-500 text-white px-2 py-1 rounded">#Khẩn cấp</span>
+                        <span *ngFor="let tag of congviec.tagCongViec" class="text-white px-2 py-1 rounded"
+                            [style.background-color]="tag.mauSac">#{{ tag.tenTag }}</span>
                     </div>
                 </div>
                 <div class="bg-blue-100 p-4 rounded-lg">
@@ -118,23 +142,57 @@
                         <li><a href="#" class="text-blue-500">1. Mo_ta_nghiep_vu.docx</a></li>
                         <li><a href="#" class="text-blue-500">2. Phan_ra_tien_do.xlsx</a></li>
                     </ul>
-                    <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Thêm file</button>
+                    <div class="flex justify-end">
+                        <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Thêm file</button>
+                    </div>
                 </div>
                 <div class="bg-gray-100 p-4 rounded-lg">
                     <h3 class="font-bold text-gray-700">Báo cáo/Đánh giá</h3>
                     <div>
-                        <label class="block text-gray-700">Chất lượng/Hiệu quả:</label>
-                        <span>Chưa đảm bảo</span>
+                        <mat-form-field class="w-full">
+                            <mat-label>Chất lượng/Hiệu quả</mat-label>
+                            <mat-select formControlName="chatLuongHieuQua">
+                                <mat-option value="chua-dam-bao">Chưa đảm bảo</mat-option>
+                                <mat-option value="thap">Thấp</mat-option>
+                                <mat-option value="dat">Đạt</mat-option>
+                                <mat-option value="cao">Cao</mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
+
                     <div>
-                        <label class="block text-gray-700">Tiến độ:</label>
-                        <span>Chậm</span>
+                        <mat-form-field class="w-full">
+                            <mat-label>Tiến độ</mat-label>
+                            <mat-select formControlName="tienDo">
+                                <mat-option value="cham">Chậm</mat-option>
+                                <mat-option value="dung">Đúng</mat-option>
+                                <mat-option value="vuot">Vượt</mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
+
                     <div>
-                        <label class="block text-gray-700">Chấp hành chế độ thông tin/Báo cáo:</label>
-                        <span>Không chấp hành</span>
+                        <mat-form-field class="w-full">
+                            <mat-label>Chấp hành chế độ thông tin/Báo cáo</mat-label>
+                            <mat-select formControlName="chapHanhCheDo">
+                                <mat-option value="chap-hanh">Chấp hành</mat-option>
+                                <mat-option value="khong-chap-hanh">Không chấp hành</mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
-                    <button class="mt-2 bg-gray-500 text-white px-4 py-2 rounded">Xác nhận đánh giá</button>
+
+                    <div>
+                        <mat-form-field class="w-full">
+                            <mat-label>Chấp hành điều động làm thêm giờ</mat-label>
+                            <mat-select formControlName="chapHanhLamThem">
+                                <mat-option value="chap-hanh">Chấp hành</mat-option>
+                                <mat-option value="khong-chap-hanh">Không chấp hành</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="flex justify-end">
+                        <button class="mt-2 bg-gray-500 text-white px-4 py-2 rounded">Xác nhận đánh giá</button>
+                    </div>
                 </div>
             </div>
         </form>

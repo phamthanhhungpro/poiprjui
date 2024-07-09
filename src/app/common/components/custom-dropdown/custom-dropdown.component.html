@@ -1,0 +1,8 @@
+<div class="dropdown" *ngIf="filteredOptions.length">
+    <ul class="dropdown-list">
+      <li *ngFor="let option of filteredOptions" (click)="selectOption(option)">
+        {{ option.value }}
+      </li>
+    </ul>
+  </div>
+  

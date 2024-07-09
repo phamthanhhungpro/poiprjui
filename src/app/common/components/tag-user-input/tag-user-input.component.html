@@ -1,0 +1,7 @@
+<div style="position: relative; width: 600px;">
+    <input type="text" id="first_name" [formControl]="inputControl" id="input-field" (input)="onInput($event)"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="#để gắn tag, @ để gắn người" />
+    <app-custom-dropdown [filteredOptions]="filteredOptions"
+        (optionSelected)="onOptionSelected($event)"></app-custom-dropdown>
+</div>
