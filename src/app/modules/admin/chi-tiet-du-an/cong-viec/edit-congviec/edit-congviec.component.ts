@@ -80,6 +80,14 @@ export class EditCongviecComponent {
   }
 
   ngAfterViewInit() {
+    this.getCongViecById();
+  }
+
+  onInputValueChange(value: string): void {
+    this.commentValue = value;
+  }
+
+  getCongViecById() {
     this.congViecService.get(this.data.id).subscribe(res => {
       this.congviec = res;
 
@@ -107,45 +115,13 @@ export class EditCongviecComponent {
     });
   }
 
-  onInputValueChange(value: string): void {
-    this.commentValue = value;
-  }
-
-  getCongViecById() {
-    this.congViecService.get(this.data.id).subscribe(res => {
-      this.congviec = res;
-
-      this.listGiaoViecOptions = res.duAnNvChuyenMon.thanhVienDuAn;
-      this.selectedGiaoViec.push(res.nguoiDuocGiao);
-
-      this.listNguoiThucHienOptions = res.duAnNvChuyenMon.thanhVienDuAn;
-      this.selectedNguoiThucHien = res.nguoiThucHien;
-
-      this.listNguoiPhoiHopOptions = res.duAnNvChuyenMon.thanhVienDuAn;
-      this.selectedNguoiPhoiHop = res.nguoiPhoiHop;
-
-      let trangThaiSeting = res.duAnNvChuyenMon?.duAnSetting.find(x => x.key == 'trangThaiSetting');
-      this.trangThaiOptions = JSON.parse(trangThaiSeting.jsonValue);
-      this.selectedTrangThai = res.trangThai;
-
-      this.tags = res.duAnNvChuyenMon?.tagComment?.map(x => ({ key: x.maTag, value: x.maTag }));
-      this.persons = res.duAnNvChuyenMon?.thanhVienDuAn?.map(x => ({ key: x.userName, value: x.userName }));
-
-      // // get comment by id conviec
-      // this.commentService.getNoPagingByCongViecId({ congViecId: this.congviec.id }).subscribe(res => {
-      //   this.listComment = res;
-      // });
-
-    });
-  }
-
   setTrangThai(value) {
     this.taskForm.get('trangThai')!.setValue(value);
     this.selectedTrangThai = value;
   }
 
   sendComment() {
-    if(this.commentValue.trim() == '') return;
+    if (this.commentValue.trim() == '') return;
     let data = {
       noiDung: this.commentValue,
       congViecId: this.congviec.id,
@@ -216,7 +192,13 @@ export class EditCongviecComponent {
 
 
   highlightUsernames(noiDung: string): string {
-    const usernameRegex = /@(\w+)/g;
+    // const usernameRegex = /@(\w+)/g;
+    // return noiDung.replace(usernameRegex, (match, username) => {
+    //   const fullName = this.convertUserNameToFullName(username);
+    //   return `<span class="text-blue-500" title="${fullName}">${match}</span>`;
+    // });
+
+    const usernameRegex = /@(\S+)/g;
     return noiDung.replace(usernameRegex, (match, username) => {
       const fullName = this.convertUserNameToFullName(username);
       return `<span class="text-blue-500" title="${fullName}">${match}</span>`;
