@@ -49,7 +49,20 @@ export class GiaHanFormComponent {
 
   // save data
   save(): void {
-    console.log(this.addDataForm.value);
+    if(this.addDataForm.valid) {
+      this.addDataForm.value.id = this.data.id;
+      this._CongViec.giaHanCongViec(this.addDataForm.value).subscribe((res) => {
+        if(res.isSucceeded === true) {
+          this.openSnackBar('Gia hạn công việc thành công', 'Đóng');
+          this.dialogRef.close();
+          this.clearForm();
+        } else {
+          this.openSnackBar(res.message, 'Đóng');
+        }
+      }, (err) => {
+        this.openSnackBar('Gia hạn công việc thất bại', 'Đóng');
+      });
+    }
   }
 
   // snackbar

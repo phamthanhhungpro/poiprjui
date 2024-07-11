@@ -5,6 +5,7 @@ import { CongViecService } from 'app/services/congviec.service';
 import { ActivatedRoute } from '@angular/router';
 import { EditCongviecComponent } from '../cong-viec/edit-congviec/edit-congviec.component';
 import { DialogService } from 'app/common/dialog.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-kanban',
@@ -22,6 +23,7 @@ export class KanbanComponent implements OnInit {
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
     private dialogService: DialogService,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -58,9 +60,12 @@ export class KanbanComponent implements OnInit {
 
   updateItemStatus(item: any, kanbanId): void {
     // Assuming you have an API endpoint to update the item status
-    this._congViecService.updateKanbanStatus({idCongViec: item.id, idKanban: kanbanId}).subscribe(
+    this._congViecService.updateKanbanStatus({ idCongViec: item.id, idKanban: kanbanId }).subscribe(
       res => {
-        console.log('Item status updated successfully');
+        if(res.isSucceeded === true) {
+          this.openSnackBar(res.message, 'Đóng');
+          this.getCongViecKanban();
+        }
       },
       err => {
         console.error('Error updating item status', err);
@@ -77,5 +82,10 @@ export class KanbanComponent implements OnInit {
       .subscribe(result => {
 
       });
+  }
+
+  // snackbar
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, { duration: 2000 });
   }
 }

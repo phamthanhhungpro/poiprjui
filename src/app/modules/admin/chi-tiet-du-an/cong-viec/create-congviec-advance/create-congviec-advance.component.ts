@@ -71,7 +71,6 @@ export class CreateCongviecAdvanceComponent {
   }
 
   ngOnInit(): void {
-    console.log(this.data);
     this.nhomCongViecOptions = this.data.nhomCongViec.map(item => {
       return {
         key: item.id,
@@ -152,11 +151,14 @@ export class CreateCongviecAdvanceComponent {
     this.addDataForm.get('tagCongViecIds')!.setValue($event);
   }
 
-  onSelectionChange(event: { action: string, items: any[] }) {
+  selectNguoiDuocGiao(event: { action: string, items: any[] }) {
     if (event.action === 'add') {
-      console.log('Item Added:', event.items);
+      const selectedNguoiThucHienIds = this.selectedNguoiThucHien.map(item => item.id);
+      const newNguoiThucHienId = event.items[0].id;
+      if (!selectedNguoiThucHienIds.includes(newNguoiThucHienId)) {
+        this.selectedNguoiThucHien.push(event.items[0]);
+      }
     } else if (event.action === 'remove') {
-      console.log('Item Removed:', event.items);
     }
   }
 

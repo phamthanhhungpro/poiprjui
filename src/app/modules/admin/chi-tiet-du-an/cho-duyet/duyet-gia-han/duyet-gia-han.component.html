@@ -1,0 +1,44 @@
+<div class="flex flex-col flex-auto sm:mb-4">
+    <div class="sticky top-0 z-9999 bg-white flex justify-end pb-4">
+        <button mat-flat-button color="primary" (click)="giaHanCongViec()">
+            <mat-icon class="icon-size-4" svgIcon="mat_outline:done_all"></mat-icon>
+            <span class="ml-2 z-9999">Duyệt hết</span>
+        </button>
+    </div>
+
+    <div class="bg-white rounded-lg shadow flex flex-col" style="height: 600px;">
+        <div class="sticky top-16 z-10 bg-gray-100">
+            <div class="grid grid-cols-12 px-4 py-5">
+                <span class="col-span-1">
+                    <input type="checkbox" [checked]="allSelected" (change)="toggleAll()">
+                </span>
+                <h3 class="text-lg font-medium text-gray-900 col-span-3">TÊN VIỆC</h3>
+                <span class="text-lg font-medium text-gray-900 text-left col-span-2 hidden md:block">Hạn cũ</span>
+                <span class="text-lg font-medium text-gray-900 text-left col-span-2 hidden md:block">Hạn mới</span>
+                <span class="text-lg font-medium text-gray-900 text-left col-span-3 hidden md:block">Người được giao</span>
+            </div>
+        </div>
+
+        <div class="border-t border-gray-200 flex-1 overflow-y-auto">
+            <ng-container *ngFor="let group of congViecGroupData">
+                <div class="bg-gray-50 px-4 py-5">
+                    <h4 class="text-md font-medium text-gray-800">{{ group.tenNhomCongViec.toUpperCase() }}</h4>
+                </div>
+                <div *ngFor="let task of group.listCongViec" class="grid grid-cols-12 px-4 py-5 items-left">
+                    <div class="col-span-1">
+                        <input type="checkbox" [(ngModel)]="task.selected" (change)="updateSelectedTasks()">
+                    </div>
+                    <div class="col-span-3">
+                        <h5 class="text-md font-medium text-gray-800">{{ task.tenCongViec }}</h5>
+                        <p class="text-sm text-gray-500">Tạo bởi: {{ task.nguoiGiaoViec?.fullName }} {{'@' + task.nguoiGiaoViec?.userName }} lúc: {{ task.createdAt }}</p>
+                    </div>
+                    <div class="col-span-2 text-left hidden md:block">{{ task.ngayKetThuc | date:'dd/MM/yyyy' }}</div>
+                    <div class="col-span-2 text-left hidden md:block">{{ task.ngayGiaHan | date:'dd/MM/yyyy' }}</div>
+                    <div class="col-span-3 text-left hidden md:block">
+                        <span class="rounded bg-gray-200 px-2 py-1 text-sm">{{ task.nguoiDuocGiao?.fullName }}</span>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

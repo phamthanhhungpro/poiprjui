@@ -28,7 +28,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-4">
                     <div class="font-semibold">
                         <label class="text-gray-700">Mô tả: </label>
-                        <span>Nội dung mô tả công việc ABC điền ở đây</span>
+                        <span>{{congviec.moTa}}</span>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-4">
@@ -88,12 +88,15 @@
                             <div class="scrollable-container mt-2">
                                 <div class="timeline">
                                     <div *ngFor="let comment of listComment" class="timeline-item mt-2">
-                                        <div class="timeline-time">{{ comment.thoiGian }}</div>
+                                        <div *ngIf="comment.nguoiComment" class="timeline-time">
+                                            <span title="{{comment.nguoiCommentFullName}}" class="text-blue-500">{{'@' + comment.nguoiComment}} </span>{{ comment.thoiGian }}</div>
+                                        <div *ngIf="!comment.nguoiComment" class="timeline-time">{{ comment.thoiGian }}</div>
+
                                         <div class="timeline-circle"
                                             [style.background-color]="comment.tagComments.length > 0 ? comment.tagComments[0].mauSac : '#4787ed'">
                                         </div>
                                         <div class="timeline-content">
-                                            <span>{{ comment.noiDung }}</span>
+                                            <span [innerHTML]="highlightUsernames(comment.noiDung)"></span>
                                             @for(tag of comment.tagComments; track tag) {
                                             <span class="text-white px-2 py-1 rounded"
                                                 [style.background-color]="tag.mauSac">#{{ tag.maTag }}</span>

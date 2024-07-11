@@ -50,4 +50,21 @@ export class CongViecService {
   updateKanbanStatus(data: any): Observable<any> {
     return this.http.put(`${baseUrl}/UpdateKanbanStatus`, data);
   }
+
+  giaHanCongViec(data: any): Observable<any> {
+    return this.http.put(`${baseUrl}/GiaHanCongViec`, data);
+  }
+
+  getCongViecGridByTrangThai(query: any): Observable<any[]> {
+    const queryString = objectToQueryString(query);
+    return this.http.get<any[]>(`${baseUrl}/GetCongViecGridByTrangThai?${queryString}`);
+  }
+
+  approveGiaHan(data: any): Observable<any> {
+    return this.http.put(`${baseUrl}/ApproveGiaHanCongViec`, data);
+  }
+
+  approveTrangThai(data: any): Observable<any> {
+    return this.http.put(`${baseUrl}/ApproveTrangThaiCongViec`, data);
+  }
 }

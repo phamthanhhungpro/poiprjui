@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -19,18 +19,21 @@ import { CommentService } from 'app/services/comment.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DialogService } from 'app/common/dialog.service';
 import { GiaHanFormComponent } from '../gia-han-form/gia-han-form.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { HighlightUsernamesPipe } from 'app/common/user-name.pipe';
 
 @Component({
   selector: 'app-edit-congviec',
   standalone: true,
   imports: [CommonModule, MatDividerModule, MatIconModule, MatButtonModule, ReactiveFormsModule, UserSelectorComponent, SearchableSelectComponent,
-    MatSelectModule, MatTabsModule, TagUserInputComponent, MatExpansionModule, GiaHanFormComponent
+    MatSelectModule, MatTabsModule, TagUserInputComponent, MatExpansionModule, GiaHanFormComponent, MatTooltipModule
   ],
   templateUrl: './edit-congviec.component.html',
 })
 export class EditCongviecComponent {
   @ViewChild(TagUserInputComponent) tagUserInputComponent!: TagUserInputComponent;
   @Output() onClosed = new EventEmitter<any>();
+  @ViewChildren('commentContent') commentContentElements: QueryList<ElementRef>;
 
   taskForm: UntypedFormGroup;
   congviec: any = {};
@@ -59,7 +62,8 @@ export class EditCongviecComponent {
     public dialogRef: MatDialogRef<EditLoaiCongViecComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private congViecService: CongViecService,
-    private commentService: CommentService
+    private commentService: CommentService,
+    private el: ElementRef, private renderer: Renderer2
   ) {
     this.taskForm = this._formBuilder.group({
       trangThai: [''],
@@ -72,8 +76,35 @@ export class EditCongviecComponent {
   }
 
   ngOnInit() {
-    this.getCongViecById();
-    console.log(this.data);
+    // this.getCongViecById();
+  }
+
+  ngAfterViewInit() {
+    this.congViecService.get(this.data.id).subscribe(res => {
+      this.congviec = res;
+
+      this.listGiaoViecOptions = res.duAnNvChuyenMon.thanhVienDuAn;
+      this.selectedGiaoViec.push(res.nguoiDuocGiao);
+
+      this.listNguoiThucHienOptions = res.duAnNvChuyenMon.thanhVienDuAn;
+      this.selectedNguoiThucHien = res.nguoiThucHien;
+
+      this.listNguoiPhoiHopOptions = res.duAnNvChuyenMon.thanhVienDuAn;
+      this.selectedNguoiPhoiHop = res.nguoiPhoiHop;
+
+      let trangThaiSeting = res.duAnNvChuyenMon?.duAnSetting.find(x => x.key == 'trangThaiSetting');
+      this.trangThaiOptions = JSON.parse(trangThaiSeting.jsonValue);
+      this.selectedTrangThai = res.trangThai;
+
+      this.tags = res.duAnNvChuyenMon?.tagComment?.map(x => ({ key: x.maTag, value: x.maTag }));
+      this.persons = res.duAnNvChuyenMon?.thanhVienDuAn?.map(x => ({ key: x.userName, value: x.userName }));
+
+      // get comment by id conviec
+      this.commentService.getNoPagingByCongViecId({ congViecId: this.congviec.id }).subscribe(res => {
+        this.listComment = res;
+      });
+
+    });
   }
 
   onInputValueChange(value: string): void {
@@ -100,10 +131,11 @@ export class EditCongviecComponent {
       this.tags = res.duAnNvChuyenMon?.tagComment?.map(x => ({ key: x.maTag, value: x.maTag }));
       this.persons = res.duAnNvChuyenMon?.thanhVienDuAn?.map(x => ({ key: x.userName, value: x.userName }));
 
-      // get comment by id conviec
-      this.commentService.getNoPagingByCongViecId({ congViecId: this.congviec.id }).subscribe(res => {
-        this.listComment = res;
-      });
+      // // get comment by id conviec
+      // this.commentService.getNoPagingByCongViecId({ congViecId: this.congviec.id }).subscribe(res => {
+      //   this.listComment = res;
+      // });
+
     });
   }
 
@@ -113,6 +145,7 @@ export class EditCongviecComponent {
   }
 
   sendComment() {
+    if(this.commentValue.trim() == '') return;
     let data = {
       noiDung: this.commentValue,
       congViecId: this.congviec.id,
@@ -128,6 +161,7 @@ export class EditCongviecComponent {
     });
     // clear input box
     this.tagUserInputComponent.clearInputValue();
+    this.commentValue = "";
   }
 
   giaHan() {
@@ -170,6 +204,24 @@ export class EditCongviecComponent {
     )
   }
 
+  convertUserIdToUserName(id, data: any) {
+    let user = data.find(x => x.id == id);
+    return user.userName;
+  }
+
+  convertUserNameToFullName(userName) {
+    let user = this.congviec.duAnNvChuyenMon.thanhVienDuAn.find(x => x.userName == userName);
+    return user?.fullName;
+  };
+
+
+  highlightUsernames(noiDung: string): string {
+    const usernameRegex = /@(\w+)/g;
+    return noiDung.replace(usernameRegex, (match, username) => {
+      const fullName = this.convertUserNameToFullName(username);
+      return `<span class="text-blue-500" title="${fullName}">${match}</span>`;
+    });
+  }
   // snackbar
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, { duration: 2000 });

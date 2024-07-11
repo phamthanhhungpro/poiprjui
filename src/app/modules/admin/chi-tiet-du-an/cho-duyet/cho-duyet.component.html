@@ -1,0 +1,59 @@
+<mat-drawer-container class="flex-auto" style="height: 800px;">
+
+    <!-- Drawer -->
+    <mat-drawer class="sm:w-60 dark:bg-gray-900" [autoFocus]="false" [mode]="drawerMode" [opened]="drawerOpened"
+        #drawer>
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+            <!-- Close button -->
+            <div class="lg:hidden">
+                <button mat-icon-button (click)="drawer.close()">
+                    <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+                </button>
+            </div>
+        </div>
+        <!-- Panel links -->
+        <div class="flex flex-col divide-y border-t border-b" *ngIf="panels as data">
+            <ng-container *ngFor="let panel of data; trackBy: trackByFn">
+                <div class="flex px-8 py-5 cursor-pointer" [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedPanel || selectedPanel !== panel.id,
+                                'bg-primary-50 dark:bg-hover': selectedPanel && selectedPanel === panel.id}"
+                    (click)="goToPanel(panel)">
+
+                    <div>
+                        <div class="font-medium leading-4"
+                            [ngClass]="{'text-primary dark:text-primary-500': selectedPanel && selectedPanel === panel.id}">
+                            {{panel.title}}
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </mat-drawer>
+
+    <!-- Drawer content -->
+    <mat-drawer-content class="flex flex-col bg-card">
+        <!-- Panel header -->
+        <div class="flex items-center">
+            <!-- Drawer toggle -->
+            <button class="lg:hidden -ml-2" mat-icon-button (click)="drawer.toggle()">
+                <mat-icon [svgIcon]="'heroicons_outline:bars-3'"></mat-icon>
+            </button>
+        </div>
+        <!-- Main -->
+        <div class="flex-auto px-5 pb-5">
+            <div class="mt-2">
+                <ng-container *ngIf="code === 'cong-viec-de-xuat'">
+                    <app-duyet-congviec-de-xuat></app-duyet-congviec-de-xuat>
+                </ng-container>
+                <ng-container *ngIf="code === 'viec-cho-hoan-thanh'">
+                    <app-duyet-congviec-hoanthanh></app-duyet-congviec-hoanthanh>
+                </ng-container>
+                <ng-container *ngIf="code === 'duyet-gia-han'">
+                    <app-duyet-gia-han></app-duyet-gia-han>
+                </ng-container>
+            </div>
+        </div>
+
+    </mat-drawer-content>
+
+</mat-drawer-container>
