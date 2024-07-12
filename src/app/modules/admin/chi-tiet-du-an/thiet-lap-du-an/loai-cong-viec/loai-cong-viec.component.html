@@ -34,7 +34,7 @@
                         </div>
 
                         <div class="">
-                            <button mat-icon-button (click)="openEditItemDialog(model)">
+                            <button mat-icon-button (click)="openEditItemDialog(model)" [disabled]="model.maLoaiCongViec == 'CHUAXACDINH'">
                                 <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
                             </button>
 
@@ -42,7 +42,7 @@
                                 <mat-icon class="icon-size-5" [svgIcon]="'mat_solid:more_vert'"></mat-icon>
                             </button>
                             <mat-menu #menu="matMenu">
-                                <button (click)="delData(model)" mat-menu-item>
+                                <button (click)="delData(model)" mat-menu-item [disabled]="model.maLoaiCongViec == 'CHUAXACDINH'">
                                     <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
                                     <span>Xóa</span>
                                 </button>
