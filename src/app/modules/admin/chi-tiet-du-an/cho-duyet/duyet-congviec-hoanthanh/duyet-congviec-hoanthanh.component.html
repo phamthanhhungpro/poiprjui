@@ -12,7 +12,7 @@
                 <span class="col-span-1">
                     <input type="checkbox" [checked]="allSelected" (change)="toggleAll()">
                 </span>
-                <h3 class="text-lg font-medium text-gray-900 col-span-3">TÊN VIỆC</h3>
+                <h3 class="text-lg font-medium text-gray-900 col-span-5">TÊN VIỆC</h3>
                 <span class="text-lg font-medium text-gray-900 text-left col-span-2 hidden md:block">Ngày hoàn thành</span>
                 <span class="text-lg font-medium text-gray-900 text-left col-span-3 hidden md:block">Người được giao</span>
             </div>
@@ -27,7 +27,7 @@
                     <div class="col-span-1">
                         <input type="checkbox" [(ngModel)]="task.selected" (change)="updateSelectedTasks()">
                     </div>
-                    <div class="col-span-3">
+                    <div class="col-span-5">
                         <h5 class="text-md font-medium text-gray-800">{{ task.tenCongViec }}</h5>
                         <p class="text-sm text-gray-500">Tạo bởi: {{ task.nguoiGiaoViec?.fullName }} {{'@' + task.nguoiGiaoViec?.userName }} lúc: {{ task.createdAt }}</p>
                     </div>

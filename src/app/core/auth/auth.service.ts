@@ -7,6 +7,7 @@ import { environment } from 'environments/environment';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 import { user as userData } from 'app/mock-api/common/user/data';
 import { cloneDeep } from 'lodash-es';
+import { TokenExpiredService } from 'app/services/tokenexpired.service';
 
 const authUrl = environment.idApiUrl + 'auth';
 
@@ -16,6 +17,7 @@ export class AuthService {
     private _httpClient = inject(HttpClient);
     private _userService = inject(UserService);
     private _userApiService = inject(UserApiService)
+    private _tokenService = inject(TokenExpiredService)
 
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors

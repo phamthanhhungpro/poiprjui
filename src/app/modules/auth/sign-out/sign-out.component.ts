@@ -20,7 +20,7 @@ export class AuthSignOutComponent implements OnInit, OnDestroy
         'other': '# seconds',
     };
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-    signInHrl = environment.signInUrl;
+    signInHrl = environment.idFrontEndUrl + 'sign-out';
     signInUrlWithRedirect = `${this.signInHrl}?redirectURL=${environment.prjFeUrl}`;
     /**
      * Constructor
@@ -43,19 +43,7 @@ export class AuthSignOutComponent implements OnInit, OnDestroy
     {
         // Sign out
         this._authService.signOut();
-
-        // Redirect after the countdown
-        timer(1000, 1000)
-            .pipe(
-                finalize(() =>
-                {
-                    location.href = this.signInUrlWithRedirect;
-                }),
-                takeWhile(() => this.countdown > 0),
-                takeUntil(this._unsubscribeAll),
-                tap(() => this.countdown--),
-            )
-            .subscribe();
+        window.location.href = environment.idFrontEndUrl + 'sign-out';
     }
 
     /**

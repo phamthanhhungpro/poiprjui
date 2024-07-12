@@ -67,4 +67,8 @@ export class CongViecService {
   approveTrangThai(data: any): Observable<any> {
     return this.http.put(`${baseUrl}/ApproveTrangThaiCongViec`, data);
   }
+
+  duyetDeXuat(data: any): Observable<any> {
+    return this.http.put(`${baseUrl}/ApproveDeXuatCongViec`, data);
+  }
 }

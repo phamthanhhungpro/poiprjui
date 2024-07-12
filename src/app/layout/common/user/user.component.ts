@@ -6,8 +6,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { Router } from '@angular/router';
+import { en } from '@fullcalendar/core/internal-common';
 import { UserService } from 'app/core/user/user.service';
 import { User } from 'app/core/user/user.types';
+import { environment } from 'environments/environment.development';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
