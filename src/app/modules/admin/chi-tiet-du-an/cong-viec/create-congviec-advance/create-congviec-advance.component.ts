@@ -106,15 +106,21 @@ export class CreateCongviecAdvanceComponent {
     const createCongViecForm = localStorage.getItem('createCongViecForm');
     if (createCongViecForm) {
       const model = JSON.parse(createCongViecForm);
+      
       this.addDataForm.patchValue(model);
 
       // lấy thông tin người được giao
-      const nguoiDuocGiao = this.listGiaoViecOptions.find(item => item.id == model.nguoiDuocGiaoId);
-      this.selectedGiaoViec.push(nguoiDuocGiao);
+      if(model.nguoiDuocGiaoId) {
+        const nguoiDuocGiao = this.listGiaoViecOptions.find(item => item.id == model.nguoiDuocGiaoId);
+        this.selectedGiaoViec.push(nguoiDuocGiao);
+      }
 
       // lấy thông tin người thực hiện
-      const nguoiThucHien = this.listNguoiThucHienOptions.filter(item => model.nguoiThucHienIds.includes(item.id));
-      this.selectedNguoiThucHien = nguoiThucHien;
+      if(model.nguoiThucHienIds.length > 0) {
+        const nguoiThucHien = this.listNguoiThucHienOptions.filter(item => model.nguoiThucHienIds.includes(item.id));
+        this.selectedNguoiThucHien = nguoiThucHien;
+      }
+
       this.setNhomCongViec(model.nhomCongViecId);
     }
 
