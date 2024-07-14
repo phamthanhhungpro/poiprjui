@@ -55,7 +55,7 @@ export class CreateCongviecComponent {
     this.addDataForm = this._formBuilder.group({
       tenCongViec: ['', Validators.required],
       moTa: [''],
-      nhomCongViecId: ['', Validators.required],
+      nhomCongViecId: [null],
       nguoiDuocGiaoId: ['', Validators.required],
       ngayBatDau: [new Date(), Validators.required],
       ngayKetThuc: [''],
@@ -71,6 +71,8 @@ export class CreateCongviecComponent {
           }}
         );
         
+        let defaultNhomCongViec = this.data.nhomCongViec.find(item => item.maNhomCongViec == 'CHUAXACDINH');
+        this.addDataForm.get('nhomCongViecId')!.setValue(defaultNhomCongViec.id);
         this.allManagers = this.data.thanhVienDuAn;
         this.filteredOptions = this.addDataForm.get('searchUserName')?.valueChanges.pipe(
           startWith(null),
@@ -94,6 +96,8 @@ export class CreateCongviecComponent {
     save(): void {
       this.addDataForm.value.duAnNvChuyenMonId = this.data.id;
       this.addDataForm.value.nguoiDuocGiaoId = this.listGiaoViec[0].id;
+      this.addDataForm.value.nguoiThucHienIds = this.listGiaoViec.map(item => item.id);
+
       this._CongViec.create(this.addDataForm.value).subscribe(res => {
         if (res.isSucceeded) {
           this.openSnackBar('Thao tác thành công', 'Đóng');

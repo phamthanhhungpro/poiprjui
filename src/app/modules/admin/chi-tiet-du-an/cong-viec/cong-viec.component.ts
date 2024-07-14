@@ -14,6 +14,7 @@ import { DuAnNvChuyenMonService } from 'app/services/duan-nvchuyenmon.service';
 import { CongViecService } from 'app/services/congviec.service';
 import { EditCongviecComponent } from './edit-congviec/edit-congviec.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { GiaHanFormComponent } from './gia-han-form/gia-han-form.component';
 
 @Component({
   selector: 'app-cong-viec',
@@ -129,6 +130,15 @@ export class CongViecComponent {
       { width: '1200px', height: 'auto' },
       this.getTableData.bind(this)
     )
+      .subscribe(result => {
+
+      });
+  }
+
+  giaHan(task) {
+    this.dialogService.openDialog(GiaHanFormComponent,
+      task,
+      { width: '500px', height: 'auto' })
       .subscribe(result => {
 
       });

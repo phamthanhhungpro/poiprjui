@@ -192,12 +192,6 @@ export class EditCongviecComponent {
 
 
   highlightUsernames(noiDung: string): string {
-    // const usernameRegex = /@(\w+)/g;
-    // return noiDung.replace(usernameRegex, (match, username) => {
-    //   const fullName = this.convertUserNameToFullName(username);
-    //   return `<span class="text-blue-500" title="${fullName}">${match}</span>`;
-    // });
-
     const usernameRegex = /@(\S+)/g;
     return noiDung.replace(usernameRegex, (match, username) => {
       const fullName = this.convertUserNameToFullName(username);

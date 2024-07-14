@@ -9,6 +9,7 @@ import { DuAnSettingService } from 'app/services/duanSetting.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { generateCodeFromName } from 'app/common/helper';
 
 @Component({
   selector: 'app-cai-dat-khac',
@@ -102,6 +103,12 @@ export class CaiDatKhacComponent {
       value: [''],
       yeuCauXacNhan: [false]
     });
+
+    // Subscribe to valueChanges of 'value' form control
+    trangThaiFormGroup.get('value')?.valueChanges.subscribe(val => {
+      const generatedKey = generateCodeFromName(val);
+      trangThaiFormGroup.get('key')?.setValue(generatedKey);
+    });
     this.trangThaiSettings.push(trangThaiFormGroup);
   }
 
@@ -110,7 +117,7 @@ export class CaiDatKhacComponent {
   }
 
   checkTrangThai(item: any): boolean {
-    if(item.value.key === 'chua-xac-dinh') {
+    if (item.value.key === 'chua-xac-dinh') {
       return true;
     }
 

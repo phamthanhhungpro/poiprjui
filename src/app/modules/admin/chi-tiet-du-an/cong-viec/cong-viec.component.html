@@ -11,7 +11,7 @@
             <div class="grid grid-cols-1 md:grid-cols-6 px-4 py-5">
                 <h3 class="text-lg font-medium text-gray-900 col-span-2">TÊN VIỆC</h3>
                 <span class="text-lg font-medium text-gray-900 text-left hidden md:block">Hạn hoàn thành</span>
-                <span class="text-lg font-medium text-gray-900 text-left hidden md:block">Người được giao</span>
+                <span class="text-lg font-medium text-gray-900 text-left hidden md:block">Người thực hiện</span>
                 <span class="text-lg font-medium text-gray-900 text-left hidden md:block">Trạng thái</span>
                 <span class="col-span-1 md:col-span-1"></span> <!-- Empty span to balance the grid -->
             </div>
@@ -20,7 +20,7 @@
         <div class="border-t border-gray-200 flex-1 overflow-y-auto">
             <ng-container *ngFor="let group of congViecGroupData">
                 <div class="bg-gray-50 px-4 py-5">
-                    <h4 class="text-md font-medium text-gray-800">{{ group.tenNhomCongViec.toUpperCase() }}</h4>
+                    <h4 class="text-md font-medium text-gray-800">{{ group.tenNhomCongViec?.toUpperCase() }}</h4>
                 </div>
                 <div *ngFor="let task of group.listCongViec"
                     class="grid grid-cols-1 md:grid-cols-6 px-4 py-5 items-left">
@@ -53,7 +53,7 @@
                                 <span>Xóa</span>
                             </button>
 
-                            <button (click)="viewDetail(task)" mat-menu-item>
+                            <button (click)="giaHan(task)" mat-menu-item>
                                 <span>Gia hạn</span>
                             </button>
                         </mat-menu>
