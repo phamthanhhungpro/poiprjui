@@ -70,6 +70,7 @@ export class CongViecComponent {
     }
   ];
 
+  trangThaiSetting: any;
   constructor(private _fuseConfirmationService: FuseConfirmationService,
     private _formBuilder: UntypedFormBuilder,
     private _duAnSettingService: DuAnSettingService,
@@ -99,7 +100,9 @@ export class CongViecComponent {
               this.duAn,
               { width: '900px', height: 'auto' },
               this.getTableData.bind(this)
-            )
+            ).subscribe(result => {
+              localStorage.removeItem('createCongViecForm');
+             });
           };
         });
     };
@@ -121,6 +124,8 @@ export class CongViecComponent {
     this._duAnService.get(this.id).subscribe(res => {
       this.duAn = res;
       this.duAnSetting = res.duAnSetting;
+      this.trangThaiSetting = JSON.parse(this.duAnSetting.find(x => x.key == "trangThaiSetting")?.jsonValue);
+      console.log(this.trangThaiSetting);
     });
   }
 
@@ -142,5 +147,46 @@ export class CongViecComponent {
       .subscribe(result => {
 
       });
+  }
+
+  deleteTask(task): void {
+    var configForm = this._formBuilder.group({
+      title: 'Xóa dữ liệu',
+      message: 'Xóa dữ liệu này khỏi hệ thống? <span class="font-medium">Thao tác này không thể hoàn tác!</span>',
+      icon: this._formBuilder.group({
+        show: true,
+        name: 'heroicons_outline:exclamation-triangle',
+        color: 'warn',
+      }),
+      actions: this._formBuilder.group({
+        confirm: this._formBuilder.group({
+          show: true,
+          label: 'Remove',
+          color: 'warn',
+        }),
+        cancel: this._formBuilder.group({
+          show: true,
+          label: 'Cancel',
+        }),
+      }),
+      dismissible: true,
+    });
+
+    const dialogRef = this._fuseConfirmationService.open(configForm.value);
+
+    // Subscribe to afterClosed from the dialog reference
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'confirmed') {
+        this._congviecService.delete(task.id).subscribe(() => {
+          this.getTableData();
+        });
+      }
+    });
+
+  }
+
+  keyToValue(key: string): string {
+    if(!this.trangThaiSetting) return '';
+    return this.trangThaiSetting.find(x => x.key == key)?.value;
   }
 }

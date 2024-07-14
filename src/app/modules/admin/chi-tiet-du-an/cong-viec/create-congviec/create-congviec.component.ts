@@ -62,115 +62,123 @@ export class CreateCongviecComponent {
       searchUserName: [''],
     });
   }
-  
-    ngOnInit(): void {
-      this.nhomCongViecOptions = this.data.nhomCongViec.map(item => {
-        return {
-          key: item.id,
-          value: item.tenNhomCongViec
-          }}
-        );
-        
-        let defaultNhomCongViec = this.data.nhomCongViec.find(item => item.maNhomCongViec == 'CHUAXACDINH');
-        this.addDataForm.get('nhomCongViecId')!.setValue(defaultNhomCongViec.id);
-        this.allManagers = this.data.thanhVienDuAn;
-        this.filteredOptions = this.addDataForm.get('searchUserName')?.valueChanges.pipe(
-          startWith(null),
-          map((item: any | null) => (item ? this._filter(item) : this.allManagers.slice())),
-          map(tvien => tvien.filter(m => !this.listGiaoViec.some(i => i.userName === m.userName)))
 
-        );
-    }
-    // clear form when close drawer
-    clearForm(): void {
-      this.addDataForm.reset();
-    }
-  
-    // close drawer and reset form
-    cancelAdd(): void {
-      this.dialogRef.close();
-      this.clearForm();
-    }
-  
-    // save data
-    save(): void {
-      this.addDataForm.value.duAnNvChuyenMonId = this.data.id;
-      this.addDataForm.value.nguoiDuocGiaoId = this.listGiaoViec[0].id;
-      this.addDataForm.value.nguoiThucHienIds = this.listGiaoViec.map(item => item.id);
-
-      this._CongViec.create(this.addDataForm.value).subscribe(res => {
-        if (res.isSucceeded) {
-          this.openSnackBar('Thao tác thành công', 'Đóng');
-          this.dialogRef.close();
-          this.clearForm();
-        } else {
-          this.openSnackBar(`Thao tác thất bại: ${res.message}`, 'Đóng');
-        }
-      });
-    }
-  
-    // snackbar
-    openSnackBar(message: string, action: string) {
-      this._snackBar.open(message, action, { duration: 2000 });
-    }
-
-    onFileSelected(event: any): void {
-      const file: File = event.target.files[0];
-      if (file) {
-        console.log(file);
+  ngOnInit(): void {
+    this.nhomCongViecOptions = this.data.nhomCongViec.map(item => {
+      return {
+        key: item.id,
+        value: item.tenNhomCongViec
       }
     }
+    );
 
-    onExpand(): void {
-      this.dialogRef.close('expand');
-      this.clearForm();    
-    }
+    let defaultNhomCongViec = this.data.nhomCongViec.find(item => item.maNhomCongViec == 'CHUAXACDINH');
+    this.addDataForm.get('nhomCongViecId')!.setValue(defaultNhomCongViec?.id);
+    this.allManagers = this.data.thanhVienDuAn;
+    this.filteredOptions = this.addDataForm.get('searchUserName')?.valueChanges.pipe(
+      startWith(null),
+      map((item: any | null) => (item ? this._filter(item) : this.allManagers.slice())),
+      map(tvien => tvien.filter(m => !this.listGiaoViec.some(i => i.userName === m.userName)))
 
-    setNhomCongViec(value)  {
-      this.addDataForm.get('nhomCongViecId')!.setValue(value);
-    }
+    );
+  }
+  // clear form when close drawer
+  clearForm(): void {
+    this.addDataForm.reset();
+  }
 
-    removeGiaoViec(item: any): void {
-      const index = this.listGiaoViec.indexOf(item);
-  
-      if (index >= 0) {
-        this.listGiaoViec.splice(index, 1);
-        this._changeDetectorRef.markForCheck();
-        this.addDataForm.get('searchUserName')!.setValue(null);
+  // close drawer and reset form
+  cancelAdd(): void {
+    this.dialogRef.close();
+    this.clearForm();
+  }
+
+  // save data
+  save(): void {
+    this.addDataForm.value.duAnNvChuyenMonId = this.data.id;
+    this.addDataForm.value.nguoiDuocGiaoId = this.listGiaoViec[0].id;
+    this.addDataForm.value.nguoiThucHienIds = this.listGiaoViec.map(item => item.id);
+
+    this._CongViec.create(this.addDataForm.value).subscribe(res => {
+      if (res.isSucceeded) {
+        this.openSnackBar('Thao tác thành công', 'Đóng');
+        this.dialogRef.close();
+        this.clearForm();
+      } else {
+        this.openSnackBar(`Thao tác thất bại: ${res.message}`, 'Đóng');
       }
-    }
-  
-    selectedGiaoViec(event: MatAutocompleteSelectedEvent): void {
-      if(this.listGiaoViec.length > 0) {
-        this.openSnackBar('Vui lòng chỉ chọn 1 người được giao', 'Đóng');
-        this.managerInput.nativeElement.value = '';
-        this.addDataForm.get('searchUserName')!.setValue(null);
-        return;
-      };
-      let selectedMember = event.option.value;
-      this.listGiaoViec.push(selectedMember);
-      this.addDataForm.get('nguoiDuocGiaoId')!.setValue(selectedMember.id);
+    });
+  }
 
-      this.managerInput.nativeElement.value = '';
+  // snackbar
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, { duration: 2000 });
+  }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      console.log(file);
+    }
+  }
+
+  onExpand(): void {
+    this.addDataForm.value.duAnNvChuyenMonId = this.data.id;
+    this.addDataForm.value.nguoiDuocGiaoId = this.listGiaoViec[0].id;
+    this.addDataForm.value.nguoiThucHienIds = this.listGiaoViec.map(item => item.id);
+    // save data form to local storage 
+    localStorage.setItem('createCongViecForm', JSON.stringify(this.addDataForm.value));
+    
+    this.dialogRef.close('expand');
+
+    this.clearForm();
+  }
+
+  setNhomCongViec(value) {
+    this.addDataForm.get('nhomCongViecId')!.setValue(value);
+  }
+
+  removeGiaoViec(item: any): void {
+    const index = this.listGiaoViec.indexOf(item);
+
+    if (index >= 0) {
+      this.listGiaoViec.splice(index, 1);
+      this._changeDetectorRef.markForCheck();
       this.addDataForm.get('searchUserName')!.setValue(null);
     }
-  
-    private _filter(value: any): any[] {
-      
-      if (typeof (value) === 'object') {
-        let res = this.allManagers.filter(item => (item.fullName.toLowerCase().includes(value.fullName.toLowerCase())
-          || item.userName.toLowerCase().includes(value.userName.toLowerCase())));
-        return res;
-      }
-  
-      if (value && value.startsWith('@')) {
-        // delete @
-        value = value.slice(1);
-      }
-  
-      const filterValue = value.toLowerCase();
-  
-      return this.allManagers.filter(item => (item.fullName.toLowerCase().includes(filterValue)
-        || item.userName.toLowerCase().includes(filterValue)));
+  }
+
+  selectedGiaoViec(event: MatAutocompleteSelectedEvent): void {
+    if (this.listGiaoViec.length > 0) {
+      this.openSnackBar('Vui lòng chỉ chọn 1 người được giao', 'Đóng');
+      this.managerInput.nativeElement.value = '';
+      this.addDataForm.get('searchUserName')!.setValue(null);
+      return;
+    };
+    let selectedMember = event.option.value;
+    this.listGiaoViec.push(selectedMember);
+    this.addDataForm.get('nguoiDuocGiaoId')!.setValue(selectedMember.id);
+
+    this.managerInput.nativeElement.value = '';
+    this.addDataForm.get('searchUserName')!.setValue(null);
+  }
+
+  private _filter(value: any): any[] {
+
+    if (typeof (value) === 'object') {
+      let res = this.allManagers.filter(item => (item.fullName.toLowerCase().includes(value.fullName.toLowerCase())
+        || item.userName.toLowerCase().includes(value.userName.toLowerCase())));
+      return res;
     }
+
+    if (value && value.startsWith('@')) {
+      // delete @
+      value = value.slice(1);
+    }
+
+    const filterValue = value.toLowerCase();
+
+    return this.allManagers.filter(item => (item.fullName.toLowerCase().includes(filterValue)
+      || item.userName.toLowerCase().includes(filterValue)));
+  }
 }

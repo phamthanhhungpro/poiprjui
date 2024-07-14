@@ -36,7 +36,7 @@ import { DuAnSettingService } from 'app/services/duanSetting.service';
             }
 
             @screen lg {
-                grid-template-columns: 20px 250px 150px auto 200px 120px;
+                grid-template-columns: 20px 250px 150px auto 200px 80px;
             }
         }
     `,

@@ -21,7 +21,7 @@
         <div *ngIf="congViecGroupData.length > 0; else nodata" class="border-t border-gray-200 flex-1 overflow-y-auto">
             <ng-container *ngFor="let group of congViecGroupData" >
                 <div class="bg-gray-50 px-4 py-5">
-                    <h4 class="text-md font-medium text-gray-800">{{ group.tenNhomCongViec.toUpperCase() }}</h4>
+                    <h4 class="text-md font-medium text-gray-800">{{ group.tenNhomCongViec?.toUpperCase() }}</h4>
                 </div>
                 <div *ngFor="let task of group.listCongViec" class="grid grid-cols-12 px-4 py-5 items-left">
                     <div class="col-span-1">

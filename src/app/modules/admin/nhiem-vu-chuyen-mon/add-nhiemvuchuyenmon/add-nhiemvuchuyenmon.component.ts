@@ -17,13 +17,15 @@ import { LinhVucService } from 'app/services/linhvuc.service';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { map, startWith } from 'rxjs';
 import { DuAnNvChuyenMonService } from 'app/services/duan-nvchuyenmon.service';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { SearchableSelectComponent } from 'app/common/components/select-search/searchable-select.component';
 
 @Component({
   selector: 'app-add-nhiemvuchuyenmon',
   standalone: true,
   imports: [CommonModule, MatButtonModule, MatIconModule, NgIf, NgFor, MatDividerModule,
     FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatFormFieldModule, MatSelectModule,
-    MatDatepickerModule, MatAutocompleteModule, MatChipsModule, MatSelectModule
+    MatDatepickerModule, MatAutocompleteModule, MatChipsModule, MatSelectModule, MatSlideToggleModule, SearchableSelectComponent
   ],
   templateUrl: './add-nhiemvuchuyenmon.component.html',
 })
@@ -44,6 +46,8 @@ export class AddNhiemvuchuyenmonComponent {
   listManager = [];
   filteredOptionManager: any;
   allManager: any;
+
+  listDuAnCanCopy = [];
   /**
    *
    */
@@ -66,12 +70,15 @@ export class AddNhiemvuchuyenmonComponent {
       isNhiemVuChuyenMon: [true],
       searchThanhVien: [''],
       searchManager: [''],
+      isSaoChepThietLap: [false],
+      duAnCanSaoChepId: [null]
     });
   }
 
   ngOnInit(): void {
     this.getListBoPhan();
     this.getListLinhVuc();
+    this.getListDuAnCanCopy();
   }
 
   // clear form when close drawer
@@ -225,5 +232,15 @@ export class AddNhiemvuchuyenmonComponent {
 
     this.managerInput.nativeElement.value = '';
     this.addDataForm.get('searchManager')!.setValue(null);
+  }
+
+  setDuAnCanCopy(event) {
+    this.addDataForm.get('duAnCanSaoChepId')!.setValue(event);
+  }
+
+  getListDuAnCanCopy() {
+    this._duanNvChuyenMonService.getAllNoPaging().subscribe(res => {
+      this.listDuAnCanCopy = res.map(item => ({ key: item.id, value: item.tenDuAn }));
+    });
   }
 }

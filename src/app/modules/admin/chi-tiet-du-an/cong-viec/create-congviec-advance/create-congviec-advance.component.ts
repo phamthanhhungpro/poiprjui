@@ -44,6 +44,7 @@ export class CreateCongviecAdvanceComponent {
   listNguoiPhoiHopOptions: any[] = [];
   selectedNguoiPhoiHop: any[] = [];
 
+  selectedNhomCongViec: any;
   /**
    *
    */
@@ -77,6 +78,8 @@ export class CreateCongviecAdvanceComponent {
         value: item.tenNhomCongViec
       }
     });
+    let defaultNhomCongViec = this.data.nhomCongViec.find(item => item.maNhomCongViec == 'CHUAXACDINH');
+    this.addDataForm.get('nhomCongViecId')!.setValue(defaultNhomCongViec?.id);
 
     this.loaiCongViecOptions = this.data.loaiCongViec.map(item => {
       return {
@@ -84,6 +87,9 @@ export class CreateCongviecAdvanceComponent {
         value: item.tenLoaiCongViec
       }
     });
+
+    let defaultLoaiongViec = this.data.loaiCongViec.find(item => item.maLoaiCongViec == 'CHUAXACDINH');
+    this.addDataForm.get('loaiCongViecId')!.setValue(defaultLoaiongViec?.id);
 
     this.tagCongViecOptions = this.data.tagCongViec.map(item => {
       return {
@@ -95,6 +101,23 @@ export class CreateCongviecAdvanceComponent {
     this.listGiaoViecOptions = this.data.thanhVienDuAn;
     this.listNguoiThucHienOptions = this.data.thanhVienDuAn;
     this.listNguoiPhoiHopOptions = this.data.thanhVienDuAn;
+
+    // get data createCongViecForm from local storage
+    const createCongViecForm = localStorage.getItem('createCongViecForm');
+    if (createCongViecForm) {
+      const model = JSON.parse(createCongViecForm);
+      this.addDataForm.patchValue(model);
+
+      // lấy thông tin người được giao
+      const nguoiDuocGiao = this.listGiaoViecOptions.find(item => item.id == model.nguoiDuocGiaoId);
+      this.selectedGiaoViec.push(nguoiDuocGiao);
+
+      // lấy thông tin người thực hiện
+      const nguoiThucHien = this.listNguoiThucHienOptions.filter(item => model.nguoiThucHienIds.includes(item.id));
+      this.selectedNguoiThucHien = nguoiThucHien;
+      this.setNhomCongViec(model.nhomCongViecId);
+    }
+
   }
 
   // clear form when close drawer
@@ -141,6 +164,7 @@ export class CreateCongviecAdvanceComponent {
 
   setNhomCongViec(value) {
     this.addDataForm.get('nhomCongViecId')!.setValue(value);
+    this.selectedNhomCongViec = value;
   }
 
   setLoaiCongViec(value) {

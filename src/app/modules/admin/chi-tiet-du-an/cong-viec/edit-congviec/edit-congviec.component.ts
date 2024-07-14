@@ -202,4 +202,28 @@ export class EditCongviecComponent {
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, { duration: 2000 });
   }
+
+  keyToValue(key: string): string {
+    if(!this.trangThaiOptions) return '';
+    return this.trangThaiOptions.find(x => x.key == key)?.value;
+  }
+
+  keyToValueMucDoUuTien(key: string): string {
+    const data = [
+      {
+        key: 'cao',
+        value: 'Cao'
+      },
+      {
+        key: 'trung-binh',
+        value: 'Trung Bình'
+      },
+      {
+        key: 'thap',
+        value: 'Thấp'
+      }
+    ]
+
+    return data.find(x => x.key == key)?.value;
+  }
 }

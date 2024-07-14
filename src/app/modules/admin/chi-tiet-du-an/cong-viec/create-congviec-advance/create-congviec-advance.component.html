@@ -29,7 +29,7 @@
                 <textarea matInput formControlName="moTa"></textarea>
             </mat-form-field>
 
-            <app-searchable-select [options]="nhomCongViecOptions" [label]="'Nhóm công việc'"
+            <app-searchable-select [options]="nhomCongViecOptions" [label]="'Nhóm công việc'" [selectedValue]="selectedNhomCongViec"
                 placeholder="Chọn nhóm công việc" (selectionChange)="setNhomCongViec($event)">
             </app-searchable-select>
 
