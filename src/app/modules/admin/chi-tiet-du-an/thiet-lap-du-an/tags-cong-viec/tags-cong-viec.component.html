@@ -15,7 +15,9 @@
                     <div class="hidden lg:block">STT</div>
 
                     <div>Nhãn tag</div>
+                    <div>Mã tag</div>
                     <div class="hidden lg:block">Mô tả</div>
+                    <div class="hidden lg:block">Màu sắc</div>
 
                     <div>Thao tác</div>
                 </div>
@@ -29,9 +31,20 @@
                             {{model.tenTag}}
                         </div>
 
-                        <div class="hidden lg:block">
+                        <div>
                             {{model.maTag}}
                         </div>
+                        <div class="hidden lg:block">
+                            {{model.moTa}}
+                        </div>
+
+                        <div class="hidden lg:block">
+                            <div class="flex items-center">
+                                <div class="w-4 h-4 rounded-full mr-2" [style.background]="model.mauSac"></div>
+                                <span>{{model.mauSac}}</span>
+                            </div>
+                        </div>
+
 
                         <div class="">
                             <button mat-icon-button (click)="openEditItemDialog(model)">

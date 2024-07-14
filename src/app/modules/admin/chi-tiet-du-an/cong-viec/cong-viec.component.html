@@ -40,12 +40,20 @@
                         <button mat-icon-button (click)="viewDetail(task)">
                             <mat-icon>visibility</mat-icon>
                         </button>
-                        <button mat-icon-button>
-                            <mat-icon>delete</mat-icon>
+                        <button mat-icon-button (click)="viewDetail(task)">
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
                         </button>
-                        <button mat-icon-button>
-                            <mat-icon>more_vert</mat-icon>
+
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon class="icon-size-5" [svgIcon]="'mat_solid:more_vert'"></mat-icon>
                         </button>
+                        <mat-menu #menu="matMenu">
+                            <button (click)="viewDetail(task)" mat-menu-item>
+                                <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                                <span>Xóa</span>
+                            </button>
+
+                        </mat-menu>
                     </div>
                 </div>
             </ng-container>

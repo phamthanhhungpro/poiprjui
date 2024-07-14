@@ -12,10 +12,9 @@
 }
 
 .scrollable-container {
-    height: 400px;
+    max-height: 400px;
     /* Set the desired height for the scrollable container */
     overflow-y: auto;
-    /* Optional: Add a border for better visualization */
     padding: 1rem;
     position: relative;
 }
@@ -40,9 +39,10 @@
 .timeline-item {
     display: flex;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     position: relative;
     padding-left: 120px;
+    min-height: 60px;
 }
 
 .timeline-time {

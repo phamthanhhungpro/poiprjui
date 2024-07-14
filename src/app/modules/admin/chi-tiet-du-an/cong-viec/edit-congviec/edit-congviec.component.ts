@@ -201,7 +201,7 @@ export class EditCongviecComponent {
     const usernameRegex = /@(\S+)/g;
     return noiDung.replace(usernameRegex, (match, username) => {
       const fullName = this.convertUserNameToFullName(username);
-      return `<span class="text-blue-500" title="${fullName}">${match}</span>`;
+      return `<span class="text-blue-500 break-all" title="${fullName}">${match}</span>`;
     });
   }
   // snackbar

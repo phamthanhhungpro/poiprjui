@@ -24,18 +24,18 @@ import { TagCommentService } from 'app/services/tagcomment.service';
     /* language=SCSS */
     `
         .vitri-grid {
-            grid-template-columns: 200px 96px;
+            grid-template-columns: 80px 80px 80px;
 
             @screen sm {
-                grid-template-columns:  250px 96px;
+                grid-template-columns:  150px auto 80px;
             }
 
             @screen md {
-                grid-template-columns: 250px 96px;
+                grid-template-columns: 150px auto 80px;
             }
 
             @screen lg {
-                grid-template-columns: 20px 250px auto 120px;
+                grid-template-columns: 20px 150px 100px 200px auto 120px;
             }
         }
     `,

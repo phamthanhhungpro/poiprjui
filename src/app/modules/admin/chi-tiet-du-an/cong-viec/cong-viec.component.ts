@@ -6,21 +6,19 @@ import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { DialogService } from 'app/common/dialog.service';
-import { TagCongViecService } from 'app/services/tagcongviec.service';
-import { CreateTagsCongViecComponent } from '../thiet-lap-du-an/tags-cong-viec/create-tagscongviec/create-tagscongviec.component';
 import { CreateCongviecComponent } from './create-congviec/create-congviec.component';
 import { DuAnSettingService } from 'app/services/duanSetting.service';
 import { SettingConstants } from 'app/mock-api/common/constants';
 import { CreateCongviecAdvanceComponent } from './create-congviec-advance/create-congviec-advance.component';
-import { co } from '@fullcalendar/core/internal-common';
 import { DuAnNvChuyenMonService } from 'app/services/duan-nvchuyenmon.service';
 import { CongViecService } from 'app/services/congviec.service';
 import { EditCongviecComponent } from './edit-congviec/edit-congviec.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-cong-viec',
   standalone: true,
-  imports: [CommonModule, CommonModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, CommonModule, MatIconModule, MatButtonModule, MatMenuModule],
   templateUrl: './cong-viec.component.html',
 })
 export class CongViecComponent {

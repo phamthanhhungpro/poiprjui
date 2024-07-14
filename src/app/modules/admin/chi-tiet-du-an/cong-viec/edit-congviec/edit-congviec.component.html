@@ -4,8 +4,9 @@
         <div class="flex items-center justify-between">
             <div class="text-xl font-semibold">{{congviec.tenCongViec}}</div>
             <div class="flex items-center">
-                <button  mat-button (click)="cancelAdd()">Đóng</button>
-                <button class="ml-3" mat-flat-button [color]="'primary'" (click)="save()" [disabled]="taskForm.invalid">Lưu</button>
+                <button mat-button (click)="cancelAdd()">Đóng</button>
+                <button class="ml-3" mat-flat-button [color]="'primary'" (click)="save()"
+                    [disabled]="taskForm.invalid">Lưu</button>
             </div>
         </div>
         <div class="text-sm text-gray-600">
@@ -22,7 +23,8 @@
                     <div class="font-semibold">
                         <label class="text-gray-700 ">Tạo bởi: </label>
                         <span>{{ congviec.nguoiGiaoViec?.fullName }} {{'@' +
-                            congviec.nguoiGiaoViec?.userName }} lúc: {{ congviec.createdAt | date:'dd/MM/yyyy hh:mm'}}</span>
+                            congviec.nguoiGiaoViec?.userName }} lúc: {{ congviec.createdAt | date:'dd/MM/yyyy
+                            hh:mm'}}</span>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-4">
@@ -87,19 +89,25 @@
                             </div>
                             <div class="scrollable-container mt-2">
                                 <div class="timeline">
-                                    <div *ngFor="let comment of listComment" class="timeline-item mt-2">
+                                    <div *ngFor="let comment of listComment" class="timeline-item">
                                         <div *ngIf="comment.nguoiComment" class="timeline-time">
-                                            <span title="{{comment.nguoiCommentFullName}}" class="text-blue-500">{{'@' + comment.nguoiComment}} </span>{{ comment.thoiGian }}</div>
-                                        <div *ngIf="!comment.nguoiComment" class="timeline-time">{{ comment.thoiGian }}</div>
+                                            <span title="{{comment.nguoiCommentFullName}}" class="text-blue-500">{{'@' +
+                                                comment.nguoiComment}} </span>{{ comment.thoiGian }}
+                                        </div>
+                                        <div *ngIf="!comment.nguoiComment" class="timeline-time">{{ comment.thoiGian }}
+                                        </div>
 
                                         <div class="timeline-circle"
                                             [style.background-color]="comment.tagComments.length > 0 ? comment.tagComments[0].mauSac : '#4787ed'">
                                         </div>
-                                        <div class="timeline-content">
+                                        <div class="timeline-content break-all">
                                             <span [innerHTML]="highlightUsernames(comment.noiDung)"></span>
+                                        </div>
+                                        <div class="ml-2">
                                             @for(tag of comment.tagComments; track tag) {
-                                            <span class="text-white px-2 py-1 rounded"
-                                                [style.background-color]="tag.mauSac ? tag.mauSac : '#4787ed'">#{{ tag.maTag }}</span>
+                                            <span class="text-white px-1 rounded"
+                                                [style.background-color]="tag.mauSac ? tag.mauSac : '#4787ed'"> #{{
+                                                tag.maTag }}</span>
                                             }
                                         </div>
                                     </div>
@@ -136,7 +144,8 @@
                                 <span>{{congviec.ngayKetThuc | date:'dd/MM/yyyy'}}</span>
                             </div>
                             <div class="flex justify-end">
-                                <button class="mt-2 bg-green-500 text-white px-4 py-2 rounded" (click)="giaHan()">Gia hạn</button>
+                                <button class="mt-2 bg-green-500 text-white px-4 py-2 rounded" (click)="giaHan()">Gia
+                                    hạn</button>
                             </div>
                         </div>
                     </mat-expansion-panel>
