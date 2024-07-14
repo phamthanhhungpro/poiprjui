@@ -124,7 +124,7 @@ export class CreateCongviecComponent {
 
   onExpand(): void {
     this.addDataForm.value.duAnNvChuyenMonId = this.data.id;
-    this.addDataForm.value.nguoiDuocGiaoId = this.listGiaoViec[0].id;
+    this.addDataForm.value.nguoiDuocGiaoId = this.listGiaoViec[0]?.id;
     this.addDataForm.value.nguoiThucHienIds = this.listGiaoViec.map(item => item.id);
     // save data form to local storage 
     localStorage.setItem('createCongViecForm', JSON.stringify(this.addDataForm.value));
