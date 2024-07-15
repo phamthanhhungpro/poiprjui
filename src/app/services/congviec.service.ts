@@ -71,4 +71,16 @@ export class CongViecService {
   duyetDeXuat(data: any): Observable<any> {
     return this.http.put(`${baseUrl}/ApproveDeXuatCongViec`, data);
   }
+
+  rejectDeXuat(data: any): Observable<any> {
+    return this.http.put(`${baseUrl}/RejectDeXuatCongViec`, data);
+  }
+
+  rejectTrangThai(data: any): Observable<any> {
+    return this.http.put(`${baseUrl}/RejectTrangThaiCongViec`, data);
+  }
+
+  rejectGiaHan(data: any): Observable<any> {
+    return this.http.put(`${baseUrl}/RejectGiaHanCongViec`, data);
+  }
 }

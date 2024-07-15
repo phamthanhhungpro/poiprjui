@@ -80,7 +80,7 @@ export class DuyetCongviecDeXuatComponent {
     this.cdf.detectChanges();
   }
 
-  duyetDeXuat() {
+  approve() {
     const selectedIds: any[] = [];
     this.congViecGroupData.forEach(group => {
       group.listCongViec.forEach(task => {
@@ -101,6 +101,34 @@ export class DuyetCongviecDeXuatComponent {
     this._congviecService.duyetDeXuat(data).subscribe(res => {
       if (res.isSucceeded === true) {
         this.openSnackBar('Duyệt đề xuất công việc thành công', 'Đóng');
+        this.getTableData();
+      } else {
+        this.openSnackBar(res.message, 'Đóng');
+      }
+    });
+  }
+
+  reject() {
+    const selectedIds: any[] = [];
+    this.congViecGroupData.forEach(group => {
+      group.listCongViec.forEach(task => {
+        if (task.selected) {
+          selectedIds.push(task.id);
+        }
+      });
+    });
+    if(selectedIds.length === 0) {
+      this.openSnackBar('Chưa chọn công việc nào', 'Đóng');
+      return;
+    };
+    
+    let data = {
+      duanId: this.id,
+      congViecIds: selectedIds
+    }
+    this._congviecService.rejectDeXuat(data).subscribe(res => {
+      if (res.isSucceeded === true) {
+        this.openSnackBar('Từ chối đề xuất công việc thành công', 'Đóng');
         this.getTableData();
       } else {
         this.openSnackBar(res.message, 'Đóng');

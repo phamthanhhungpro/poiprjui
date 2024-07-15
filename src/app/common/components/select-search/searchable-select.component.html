@@ -2,7 +2,7 @@
     <mat-form-field class="w-full">
         <mat-label>{{ label }}</mat-label>
 
-        <mat-select [formControl]="selectFormControl" [placeholder]="placeholder"
+        <mat-select [disabled]="disabled" [formControl]="selectFormControl" [placeholder]="placeholder"
             (selectionChange)="onSelectionChange($event)" [multiple]="multiple">
         <mat-option>
             <ngx-mat-select-search [formControl]="searchControl" placeholderLabel="Search..."

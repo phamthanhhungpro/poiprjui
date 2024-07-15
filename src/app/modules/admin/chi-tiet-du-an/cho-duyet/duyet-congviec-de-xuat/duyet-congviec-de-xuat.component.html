@@ -1,8 +1,12 @@
 <div class="flex flex-col flex-auto sm:mb-4">
     <div class="sticky top-0 z-9999 bg-white flex justify-end pb-4">
-        <button mat-flat-button color="primary" (click)="duyetDeXuat()">
+        <button mat-flat-button color="warn" (click)="reject()">
+            <mat-icon class="icon-size-4" svgIcon="mat_outline:close"></mat-icon>
+            <span class="z-9999">Từ chối</span>
+        </button>
+        <button mat-flat-button color="primary" (click)="approve()" class="ml-2 ">
             <mat-icon class="icon-size-4" svgIcon="mat_outline:done_all"></mat-icon>
-            <span class="ml-2 z-9999">Duyệt hết</span>
+            <span class="z-9999">Duyệt hết</span>
         </button>
     </div>
 

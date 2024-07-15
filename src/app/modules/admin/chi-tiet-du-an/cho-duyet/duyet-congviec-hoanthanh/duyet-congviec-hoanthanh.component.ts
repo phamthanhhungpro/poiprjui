@@ -83,7 +83,7 @@ export class DuyetCongviecHoanthanhComponent {
     this.cdf.detectChanges();
   }
 
-  giaHanCongViec() {
+  approve() {
     const selectedIds: any[] = [];
     this.congViecGroupData.forEach(group => {
       group.listCongViec.forEach(task => {
@@ -101,7 +101,35 @@ export class DuyetCongviecHoanthanhComponent {
       duanId: this.id,
       congViecIds: selectedIds
     }
-    this._congviecService.approveGiaHan(data).subscribe(res => {
+    this._congviecService.approveTrangThai(data).subscribe(res => {
+      if (res.isSucceeded === true) {
+        this.openSnackBar('Duyệt gia hạn công việc thành công', 'Đóng');
+        this.getTableData();
+      } else {
+        this.openSnackBar(res.message, 'Đóng');
+      }
+    });
+  }
+
+  reject() {
+    const selectedIds: any[] = [];
+    this.congViecGroupData.forEach(group => {
+      group.listCongViec.forEach(task => {
+        if (task.selected) {
+          selectedIds.push(task.id);
+        }
+      });
+    });
+    if(selectedIds.length === 0) {
+      this.openSnackBar('Chưa chọn công việc nào', 'Đóng');
+      return;
+    };
+    
+    let data = {
+      duanId: this.id,
+      congViecIds: selectedIds
+    }
+    this._congviecService.rejectTrangThai(data).subscribe(res => {
       if (res.isSucceeded === true) {
         this.openSnackBar('Duyệt gia hạn công việc thành công', 'Đóng');
         this.getTableData();
