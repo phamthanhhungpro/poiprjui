@@ -10,9 +10,9 @@
         <div class="sticky top-16 z-10 bg-gray-100">
             <div class="grid grid-cols-1 md:grid-cols-6 px-4 py-5">
                 <h3 class="text-lg font-medium text-gray-900 col-span-2">TÊN VIỆC</h3>
-                <span class="text-lg font-medium text-gray-900 text-left hidden md:block">Hạn hoàn thành</span>
-                <span class="text-lg font-medium text-gray-900 text-left hidden md:block">Người thực hiện</span>
-                <span class="text-lg font-medium text-gray-900 text-left hidden md:block">Trạng thái</span>
+                <span class="text-lg font-medium text-gray-900 text-left hidden md:block">HẠN HOÀN THÀNH</span>
+                <span class="text-lg font-medium text-gray-900 text-left hidden md:block">NGƯỜi THỰc HIỆn</span>
+                <span class="text-lg font-medium text-gray-900 text-left hidden md:block">TRẠNG THÁI</span>
                 <span class="col-span-1 md:col-span-1"></span> <!-- Empty span to balance the grid -->
             </div>
         </div>
@@ -25,7 +25,7 @@
                 <div *ngFor="let task of group.listCongViec"
                     class="grid grid-cols-1 md:grid-cols-6 px-4 py-5 items-left">
                     <div class="col-span-2">
-                        <h5 class="text-md font-medium text-gray-800">{{ task.tenCongViec }}</h5>
+                        <h5 class="text-lg font-medium text-gray-800">{{ task.tenCongViec }}</h5>
                         <p class="text-sm text-gray-500">Tạo bởi: {{ task.nguoiGiaoViec?.fullName }} {{'@' +
                             task.nguoiGiaoViec?.userName }} lúc: {{ task.createdAt }}</p>
                     </div>
