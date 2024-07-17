@@ -63,28 +63,69 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon: 'mat_outline:arrow_drop_down',
         children: [
             {
-                id: 'function',
-                title: 'Chức năng',
+                id: 'function1',
+                title: 'API endpoints',
                 type: 'basic',
-                icon: 'mat_solid:functions',
-                link: '/function',
+                icon: '',
+                link: '/endpoints',
                 hidden(item) {
-                    // always hide this item if role is not SSA, OWNER
-                    if (localStorage.getItem('role') !== Constants.ROLE_SSA && localStorage.getItem('role') !== Constants.ROLE_OWNER) {
+                    // always hide this item if role is not SSA
+                    if (localStorage.getItem('role') !== Constants.ROLE_SSA) {
                         return true;
                     }
                     return false;
                 },
             },
             {
-                id: 'function',
+                id: 'function2',
+                title: 'Chức năng',
+                type: 'basic',
+                icon: '',
+                link: '/functions',
+                hidden(item) {
+                    // always hide this item if role is not SSA
+                    if (localStorage.getItem('role') !== Constants.ROLE_SSA) {
+                        return true;
+                    }
+                    return false;
+                },
+            },
+            {
+                id: 'function3',
                 title: 'Nhóm chức năng',
                 type: 'basic',
-                icon: 'mat_solid:functions',
-                link: '/nhom-chuc-nang',
+                icon: '',
+                link: '/group-functions',
                 hidden(item) {
-                    // always hide this item if role is not SSA OWNER
-                    if (localStorage.getItem('role') !== Constants.ROLE_SSA && localStorage.getItem('role') !== Constants.ROLE_OWNER) {
+                    // always hide this item if role is not SSA
+                    if (localStorage.getItem('role') !== Constants.ROLE_SSA) {
+                        return true;
+                    }
+                    return false;
+                },
+            },
+            {
+                id: 'function4',
+                title: 'Phạm vi chức năng',
+                type: 'basic',
+                icon: '',
+                link: '/scopes',
+                hidden(item) {
+                    // always hide this item if role is not SSA
+                    if (localStorage.getItem('role') !== Constants.ROLE_SSA) {
+                        return true;
+                    }
+                    return false;
+                },
+            },
+            {
+                id: 'system-role',
+                title: 'Vai trò hệ thống',
+                type: 'basic',
+                icon: 'mat_solid:verified_user',
+                link: '/system-role',
+                hidden(item) {
+                    if (!isAllowSetPermission(localStorage.getItem('role'))) {
                         return true;
                     }
                     return false;
@@ -96,6 +137,19 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type: 'basic',
                 icon: 'mat_solid:verified_user',
                 link: '/permission',
+                hidden(item) {
+                    if (!isAllowSetPermission(localStorage.getItem('role'))) {
+                        return true;
+                    }
+                    return false;
+                },
+            },
+            {
+                id: 'user-role',
+                title: 'Gán vai trò cho người dùng',
+                type: 'basic',
+                icon: 'mat_solid:verified_user',
+                link: '/user-role',
                 hidden(item) {
                     if (!isAllowSetPermission(localStorage.getItem('role'))) {
                         return true;
