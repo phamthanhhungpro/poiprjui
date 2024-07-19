@@ -90,34 +90,34 @@ export const defaultNavigation: FuseNavigationItem[] = [
                     return false;
                 },
             },
-            {
-                id: 'function3',
-                title: 'Nhóm chức năng',
-                type: 'basic',
-                icon: '',
-                link: '/group-functions',
-                hidden(item) {
-                    // always hide this item if role is not SSA
-                    if (localStorage.getItem('role') !== Constants.ROLE_SSA) {
-                        return true;
-                    }
-                    return false;
-                },
-            },
-            {
-                id: 'function4',
-                title: 'Phạm vi chức năng',
-                type: 'basic',
-                icon: '',
-                link: '/scopes',
-                hidden(item) {
-                    // always hide this item if role is not SSA
-                    if (localStorage.getItem('role') !== Constants.ROLE_SSA) {
-                        return true;
-                    }
-                    return false;
-                },
-            },
+            // {
+            //     id: 'function3',
+            //     title: 'Nhóm chức năng',
+            //     type: 'basic',
+            //     icon: '',
+            //     link: '/group-functions',
+            //     hidden(item) {
+            //         // always hide this item if role is not SSA
+            //         if (localStorage.getItem('role') !== Constants.ROLE_SSA) {
+            //             return true;
+            //         }
+            //         return false;
+            //     },
+            // },
+            // {
+            //     id: 'function4',
+            //     title: 'Phạm vi chức năng',
+            //     type: 'basic',
+            //     icon: '',
+            //     link: '/scopes',
+            //     hidden(item) {
+            //         // always hide this item if role is not SSA
+            //         if (localStorage.getItem('role') !== Constants.ROLE_SSA) {
+            //             return true;
+            //         }
+            //         return false;
+            //     },
+            // },
             {
                 id: 'system-role',
                 title: 'Vai trò hệ thống',

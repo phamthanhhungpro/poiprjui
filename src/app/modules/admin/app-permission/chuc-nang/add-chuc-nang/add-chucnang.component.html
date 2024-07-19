@@ -1,0 +1,44 @@
+<div class="flex flex-col flex-auto h-full overflow-hidden bg-card dark:bg-default">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-18 -mb-px px-6 bg-gray-50 dark:bg-transparent">
+
+        <div class="ml-2 text-2xl font-semibold">Thêm mới chức năng</div>
+
+        <div class="flex items-center">
+            <!-- More menu -->
+            <button mat-flat-button [color]="'primary'" (click)="save()">
+                Lưu
+            </button>
+            <button class="px-6 ml-3" mat-button (click)="cancelAdd()">
+                Hủy
+            </button>
+        </div>
+
+    </div>
+    <mat-divider class="mb-4"></mat-divider>
+    <div class="flex flex-col gt-xs:flex-row gt-xs:items-start p-6">
+        <form [formGroup]="addFunctionForm">
+            <div class="flex-auto min-w-64">
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Tên chức năng</mat-label>
+                        <input matInput [placeholder]="'Tên chức năng'" [formControlName]="'name'">
+                    </mat-form-field>
+                </div>
+
+                <app-searchable-select *ngIf="listNhomChucNang?.length > 0" [options]="listNhomChucNang" [label]="'Chọn nhóm chức năng'"
+                    (selectionChange)="setNhomChucNang($event)">
+                </app-searchable-select>
+
+                <div class="flex">
+                    <mat-slide-toggle
+                     class="flex-auto mb-4 mt-1"
+                     [color]="'primary'"
+                     labelPosition="before"
+                     [formControlName]="'isPublic'"><span class="font-medium">Là chức năng public</span></mat-slide-toggle>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

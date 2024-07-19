@@ -11,6 +11,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ChucNangService } from 'app/services/chucnang.service';
+import { EndpointService } from 'app/services/app-permission/endpoint.service';
 
 @Component({
   selector: 'app-create-endpoint',
@@ -30,14 +31,14 @@ export class CreateEndpointComponent {
    *
    */
   constructor(private _formBuilder: UntypedFormBuilder,
-    private _functionService: ChucNangService,
+    private _endpointService: EndpointService,
     private _snackBar: MatSnackBar,
   ) {
     this.addFunctionForm = this._formBuilder.group({
-      tenChucNang: ['', Validators.required],
+      name: ['', Validators.required],
       method: ['', Validators.required],
       path: [''],
-      isPublic: [false],
+      isPublic: [false]
     });
   }
 
@@ -57,7 +58,7 @@ export class CreateEndpointComponent {
 
   // save data
   save(): void {
-    this._functionService.create(this.addFunctionForm.value).subscribe(res => {
+    this._endpointService.create(this.addFunctionForm.value).subscribe(res => {
       if (res.isSucceeded) {
         this.openSnackBar('Thao tác thành công', 'Đóng');
         this.onClosed.emit();

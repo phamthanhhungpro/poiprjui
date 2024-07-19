@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './scope.component.html',
-  styleUrl: './scope.component.scss'
 })
 export class ScopeComponent {
 

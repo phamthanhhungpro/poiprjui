@@ -1,54 +1,51 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ChucNangService } from 'app/services/chucnang.service';
-import { EndpointService } from 'app/services/app-permission/endpoint.service';
+import { CoquandonviService } from 'app/services/coquandonvi.service';
+import { VaiTroService } from 'app/services/vaitro.service';
+import { PerRoleService } from 'app/services/app-permission/role.service';
 
 @Component({
-  selector: 'app-edit-endpoint',
+  selector: 'app-edit-vaitro-hethong',
   standalone: true,
   imports: [MatButtonModule, MatIconModule, NgIf, NgFor, MatDividerModule,
     FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatFormFieldModule,
-    MatSelectModule, MatSlideToggleModule
-  ],  templateUrl: './edit-endpoint.component.html',
+  ],
+  templateUrl: './edit-vaitro-hethong.component.html'
 })
-export class EditEndpointComponent {
+export class EditVaitroHeThongComponent {
   @Input() drawer: MatDrawer;
   @Output() onClosed = new EventEmitter<any>();
-  @Input() data: any;
-  addFunctionForm: UntypedFormGroup;
+  @Input() data: any = {};
+  editDataForm: UntypedFormGroup;
 
   /**
    *
    */
   constructor(private _formBuilder: UntypedFormBuilder,
-    private _endpointService: EndpointService,
+    private _perRoleService: PerRoleService,
     private _snackBar: MatSnackBar,
   ) {
-    this.addFunctionForm = this._formBuilder.group({
+    this.editDataForm = this._formBuilder.group({
       name: ['', Validators.required],
-      method: ['', Validators.required],
-      path: [''],
-      isPublic: [false]
+      description: ['']
     });
   }
 
   ngOnInit(): void {
-    this.addFunctionForm.patchValue(this.data);
+    this.editDataForm.patchValue(this.data);
   }
 
   // clear form when close drawer
   clearForm(): void {
-    this.addFunctionForm.reset();
+    this.editDataForm.reset();
   }
 
   // close drawer and reset form
@@ -59,7 +56,7 @@ export class EditEndpointComponent {
 
   // save data
   save(): void {
-    this._endpointService.update(this.data.id, this.addFunctionForm.value).subscribe(res => {
+    this._perRoleService.update(this.data.id, this.editDataForm.value).subscribe(res => {
       if (res.isSucceeded) {
         this.openSnackBar('Thao tác thành công', 'Đóng');
         this.onClosed.emit();

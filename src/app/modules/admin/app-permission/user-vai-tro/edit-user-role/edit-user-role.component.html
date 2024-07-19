@@ -1,0 +1,37 @@
+<div class="flex flex-col flex-auto h-full overflow-hidden bg-card dark:bg-default">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-18 -mb-px px-6 bg-gray-50 dark:bg-transparent">
+
+        <div class="ml-2 text-2xl font-semibold">Thay đổi vai trò - {{data?.fullName}}</div>
+
+        <div class="flex items-center">
+            <!-- More menu -->
+            <button mat-flat-button [color]="'primary'" (click)="save()">
+                Lưu
+            </button>
+            <button class="px-6 ml-3" mat-button (click)="cancelEdit()">
+                Hủy
+            </button>
+        </div>
+
+    </div>
+    <mat-divider class="mb-4"></mat-divider>
+    <div class="flex flex-col gt-xs:flex-row gt-xs:items-start overflow-y-auto p-6 h-180 min-h-180 max-h-180" cdkScrollable>
+        <form [formGroup]="editUserForm">
+            <div class="flex-auto min-w-64">
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Vai trò</mat-label>
+                        <mat-select [formControlName]="'perRoleId'">
+                            @for (role of roles; track role) {
+                              <mat-option [value]="role.id">{{role.name}}</mat-option>
+                            }
+                          </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>

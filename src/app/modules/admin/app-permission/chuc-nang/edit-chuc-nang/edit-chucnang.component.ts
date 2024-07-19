@@ -1,49 +1,55 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule, NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDrawer } from '@angular/material/sidenav';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormGroup, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ChucNangService } from 'app/services/chucnang.service';
-import { EndpointService } from 'app/services/app-permission/endpoint.service';
+import { MatSelectModule } from '@angular/material/select';
+import { PerFunctiontService } from 'app/services/app-permission/chucnang.service';
+import { PerGroupFunctionService } from 'app/services/app-permission/nhomchucnang.service';
+import { SearchableSelectComponent } from 'app/common/components/select-search/searchable-select.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
-  selector: 'app-edit-endpoint',
+  selector: 'app-edit-chucnang',
   standalone: true,
   imports: [MatButtonModule, MatIconModule, NgIf, NgFor, MatDividerModule,
     FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatFormFieldModule,
-    MatSelectModule, MatSlideToggleModule
-  ],  templateUrl: './edit-endpoint.component.html',
+    MatSelectModule, SearchableSelectComponent, MatSlideToggleModule
+  ],
+  templateUrl: './edit-chucnang.component.html'
 })
-export class EditEndpointComponent {
+export class EditChucNangComponent {
   @Input() drawer: MatDrawer;
   @Output() onClosed = new EventEmitter<any>();
   @Input() data: any;
   addFunctionForm: UntypedFormGroup;
-
+  listNhomChucNang;
+  selectedNhomChucNang;
   /**
    *
    */
   constructor(private _formBuilder: UntypedFormBuilder,
-    private _endpointService: EndpointService,
+    private _perFunctionService: PerFunctiontService,
+    private _perGroupFunctionService: PerGroupFunctionService,
     private _snackBar: MatSnackBar,
   ) {
     this.addFunctionForm = this._formBuilder.group({
       name: ['', Validators.required],
-      method: ['', Validators.required],
-      path: [''],
+      groupFunctionId: [null],
       isPublic: [false]
     });
   }
 
   ngOnInit(): void {
+    this.getNhomChucNang();
+
     this.addFunctionForm.patchValue(this.data);
+    this.selectedNhomChucNang = this.data.groupFunctionId;
   }
 
   // clear form when close drawer
@@ -59,7 +65,7 @@ export class EditEndpointComponent {
 
   // save data
   save(): void {
-    this._endpointService.update(this.data.id, this.addFunctionForm.value).subscribe(res => {
+    this._perFunctionService.update(this.data.id, this.addFunctionForm.value).subscribe(res => {
       if (res.isSucceeded) {
         this.openSnackBar('Thao tác thành công', 'Đóng');
         this.onClosed.emit();
@@ -68,6 +74,16 @@ export class EditEndpointComponent {
       } else {
         this.openSnackBar('Thao tác thất bại', 'Đóng');
       }
+    });
+  }
+
+  setNhomChucNang(nhomChucNangId: number): void {
+    this.addFunctionForm.patchValue({ groupFunctionId: nhomChucNangId });
+  }
+
+  getNhomChucNang(): void {
+    this._perGroupFunctionService.getAllNoPaging().subscribe(res => {
+      this.listNhomChucNang = res.map(item => ({ key: item.id, value: item.name }));
     });
   }
 

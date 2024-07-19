@@ -1,0 +1,39 @@
+<div class="w-full max-w-3xl">
+
+    <!-- Form -->
+    <!-- Section -->
+  
+    <div *ngIf="listItem.length > 0; else loading">
+      <div *ngFor="let group of listItem">
+        <h2 class="font-semibold mb-4">{{ group.groupName?.toUpperCase() }}</h2>
+        <div *ngFor="let func of group.listFunction">
+          <div class="flex items-center mb-2">
+            <input type="checkbox" id="func-{{ func.id }}" class="mr-2" [(ngModel)]="func.isSelected">
+            <label for="func-{{ func.id }}" class="font-semibold">{{ func.name }}</label>
+          </div>
+          <div class="ml-6 flex flex-col space-y-2" *ngIf="func.isSelected">
+            <div *ngFor="let scope of func.scopes" class="flex items-center">
+              <input type="radio" name="scope-{{ func.id }}" id="scope-{{ scope.id }}" class="mr-2" [(ngModel)]="func.selectedScope" [value]="scope">
+              <label for="scope-{{ scope.id }}">{{ scope.name }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <ng-template #loading>
+      <div>Loading...</div>
+    </ng-template>
+  
+    <!-- Divider -->
+    <div class="my-10 border-t"></div>
+  
+    <!-- Actions -->
+    <div class="flex items-center justify-end">
+      <button class="ml-4" mat-flat-button type="button" color="primary" (click)="save()">
+        Lưu
+      </button>
+    </div>
+  
+  </div>
+  
