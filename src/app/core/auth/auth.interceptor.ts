@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { AuthUtils } from 'app/core/auth/auth.utils';
+import { Constants } from 'app/mock-api/common/constants';
 import { catchError, Observable, throwError } from 'rxjs';
 
 /**
@@ -35,7 +36,7 @@ export const authInterceptor = (req: HttpRequest<unknown>, next: HttpHandlerFn):
                 .set('TenantId', localStorage.getItem('tenantId'))
                 .set('UserId', localStorage.getItem('userId'))
                 .set('role', localStorage.getItem('role'))
-                .set('AppCode', 'PRJ')
+                .set('AppCode', Constants.APP_CODE)
         });
     }
 

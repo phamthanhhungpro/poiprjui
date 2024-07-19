@@ -19,6 +19,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from 'environments/environment';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { EditUserRoleComponent } from './edit-user-role/edit-user-role.component';
+import { Constants } from 'app/mock-api/common/constants';
 
 @Component({
   selector: 'app-user-vai-tro',
@@ -170,8 +171,8 @@ export class UserVaiTroComponent {
         const users: any[] = data.items.map((user, index: number) => ({
           ...user,
           stt: index + 1,
-          perRole: user.perRoles?.find(role => role.appCode === 'PRJ')?.name,
-          perRoleId: user.perRoles?.find(role => role.appCode === 'PRJ')?.id,
+          perRole: user.perRoles?.find(role => role.appCode === Constants.APP_CODE)?.name,
+          perRoleId: user.perRoles?.find(role => role.appCode === Constants.APP_CODE)?.id,
         }));
         this.totalItems = data.count;
         return { users };
