@@ -52,13 +52,11 @@ export class QuanLyPhamViComponent {
 
   // clear form when close drawer
   clearForm(): void {
-    this.addFunctionForm.reset();
   }
 
   // close drawer and reset form
   cancelAdd(): void {
     this.drawer.close();
-    this.clearForm();
   }
 
   // save data
@@ -73,7 +71,6 @@ export class QuanLyPhamViComponent {
         this.openSnackBar('Thao tác thành công', 'Đóng');
         this.onClosed.emit();
         this.drawer.close();
-        this.clearForm();
       } else {
         this.openSnackBar('Thao tác thất bại', 'Đóng');
       }

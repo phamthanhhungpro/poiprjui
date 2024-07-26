@@ -44,4 +44,8 @@ export class DuAnNvChuyenMonService {
   getAllDuAn(): Observable<any[]> {
     return this.http.get<any[]>(`${baseUrl}/duan-nopaging`);
   }
+
+  getViecCaNhan(): Observable<any> {
+    return this.http.get<any[]>(`${baseUrl}/canhan`);
+  }
 }

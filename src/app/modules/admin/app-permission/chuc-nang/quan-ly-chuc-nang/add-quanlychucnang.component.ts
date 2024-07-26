@@ -15,13 +15,14 @@ import { Observable, catchError, map, of } from 'rxjs';
 import { ChucNangService } from 'app/services/chucnang.service';
 import { EndpointService } from 'app/services/app-permission/endpoint.service';
 import { PerFunctiontService } from 'app/services/app-permission/chucnang.service';
+import { MatRadioModule } from '@angular/material/radio';
 
 @Component({
   selector: 'app-quanlychucnang',
   standalone: true,
   imports: [MatButtonModule, MatIconModule, NgIf, NgFor, MatDividerModule,
     FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatFormFieldModule,
-    MatSelectModule, MatSlideToggleModule, AsyncPipe
+    MatSelectModule, MatSlideToggleModule, AsyncPipe, MatRadioModule
   ],
   templateUrl: './add-quanlychucnang.component.html'
 })
@@ -33,7 +34,7 @@ export class QuanLyChucNangComponent {
   addFunctionForm: UntypedFormGroup;
   items: Observable<any[]>;
   checkedItems: any[] = [];
-
+  mainItem: any = {};
   /**
    *
    */
@@ -49,22 +50,17 @@ export class QuanLyChucNangComponent {
     this.getFunctions();
   }
 
-  // clear form when close drawer
-  clearForm(): void {
-    this.addFunctionForm.reset();
-  }
-
   // close drawer and reset form
   cancelAdd(): void {
     this.drawer.close();
-    this.clearForm();
   }
 
   // save data
   save(): void {
     let data = {
       functionId: this.data.id,
-      endPointIds: this.checkedItems
+      endPointIds: this.checkedItems,
+      mainEndPointId: this.mainItem?.id
     };
 
     this._perFunctionService.assginApi(data).subscribe(res => {
@@ -72,7 +68,6 @@ export class QuanLyChucNangComponent {
         this.openSnackBar('Thao tác thành công', 'Đóng');
         this.onClosed.emit();
         this.drawer.close();
-        this.clearForm();
       } else {
         this.openSnackBar('Thao tác thất bại', 'Đóng');
       }
@@ -104,7 +99,8 @@ export class QuanLyChucNangComponent {
             return of([]);
           })
         );
-  
+        
+        this.mainItem = res.mainEndPoint ?? {};
         // Manually trigger change detection
         this.changeDetector.detectChanges();
       },
@@ -124,5 +120,9 @@ export class QuanLyChucNangComponent {
         this.checkedItems.splice(index, 1);
       }
     }
+  }
+
+  toggleMainChecked(item) {
+    this.mainItem = item;
   }
 }
