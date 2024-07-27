@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { CongViecService } from 'app/services/congviec.service';
 import { ActivatedRoute } from '@angular/router';
-import { EditCongviecComponent } from '../cong-viec/edit-congviec/edit-congviec.component';
+import { EditCongviecComponent } from '../cong-viec/detail-congviec/edit-congviec.component';
 import { DialogService } from 'app/common/dialog.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 

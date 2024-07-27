@@ -12,9 +12,10 @@ import { SettingConstants } from 'app/mock-api/common/constants';
 import { CreateCongviecAdvanceComponent } from './create-congviec-advance/create-congviec-advance.component';
 import { DuAnNvChuyenMonService } from 'app/services/duan-nvchuyenmon.service';
 import { CongViecService } from 'app/services/congviec.service';
-import { EditCongviecComponent } from './edit-congviec/edit-congviec.component';
+import { EditCongviecComponent } from './detail-congviec/edit-congviec.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { GiaHanFormComponent } from './gia-han-form/gia-han-form.component';
+import { EditCongviecAdvanceComponent } from './edit-congviec-advance/edit-congviec-advance.component';
 
 @Component({
   selector: 'app-cong-viec',
@@ -188,5 +189,18 @@ export class CongViecComponent {
   keyToValue(key: string): string {
     if(!this.trangThaiSetting) return '';
     return this.trangThaiSetting.find(x => x.key == key)?.value;
+  }
+
+  edit(task): void {
+    let data = this.duAn;
+    data.task = task;
+    this.dialogService.openDialog(EditCongviecAdvanceComponent,
+      data,
+      { width: '900px', height: 'auto' },
+      this.getTableData.bind(this)
+    )
+      .subscribe(result => {
+
+      });
   }
 }

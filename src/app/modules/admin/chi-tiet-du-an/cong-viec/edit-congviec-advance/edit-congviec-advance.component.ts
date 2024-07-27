@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,16 +19,16 @@ import { UserSelectorComponent } from 'app/common/components/user-selector/user-
 import { CongViecService } from 'app/services/congviec.service';
 
 @Component({
-  selector: 'app-create-congviec-advance',
+  selector: 'app-edit-congviec-advance',
   standalone: true,
   imports: [MatButtonModule, MatIconModule, NgIf, NgFor, MatDividerModule,
     FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatFormFieldModule,
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule, SearchableSelectComponent, MultiSelectComponent, UserSelectorComponent],
-  templateUrl: './create-congviec-advance.component.html',
+  templateUrl: './edit-congviec-advance.component.html',
 })
-export class CreateCongviecAdvanceComponent {
+export class EditCongviecAdvanceComponent {
   addDataForm: UntypedFormGroup;
   nhomCongViecOptions = [];
   loaiCongViecOptions = [];
@@ -45,6 +45,7 @@ export class CreateCongviecAdvanceComponent {
   selectedNguoiPhoiHop: any[] = [];
 
   selectedNhomCongViec: any;
+  selectedLoaiCongViec: any;
   /**
    *
    */
@@ -54,6 +55,7 @@ export class CreateCongviecAdvanceComponent {
     public dialogRef: MatDialogRef<CreateTagsCongViecComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _CongViec: CongViecService,
+    private _cdk: ChangeDetectorRef
   ) {
     this.addDataForm = this._formBuilder.group({
       tenCongViec: [''],
@@ -61,8 +63,8 @@ export class CreateCongviecAdvanceComponent {
       nhomCongViecId: [''],
       loaiCongViecId: [''],
       nguoiDuocGiaoId: [''],
-      nguoiPhoiHopIds: [null],
-      nguoiThucHienIds: [null],
+      nguoiPhoiHopIds: [''],
+      nguoiThucHienIds: [''],
       tagCongViecIds: [null],
       mucDoUuTien: [''],
       ngayBatDau: [new Date(), Validators.required],
@@ -78,8 +80,6 @@ export class CreateCongviecAdvanceComponent {
         value: item.tenNhomCongViec
       }
     });
-    let defaultNhomCongViec = this.data.nhomCongViec.find(item => item.maNhomCongViec == 'CHUAXACDINH');
-    this.addDataForm.get('nhomCongViecId')!.setValue(defaultNhomCongViec?.id);
 
     this.loaiCongViecOptions = this.data.loaiCongViec.map(item => {
       return {
@@ -87,9 +87,6 @@ export class CreateCongviecAdvanceComponent {
         value: item.tenLoaiCongViec
       }
     });
-
-    let defaultLoaiongViec = this.data.loaiCongViec.find(item => item.maLoaiCongViec == 'CHUAXACDINH');
-    this.addDataForm.get('loaiCongViecId')!.setValue(defaultLoaiongViec?.id);
 
     this.tagCongViecOptions = this.data.tagCongViec.map(item => {
       return {
@@ -102,28 +99,26 @@ export class CreateCongviecAdvanceComponent {
     this.listNguoiThucHienOptions = this.data.thanhVienDuAn;
     this.listNguoiPhoiHopOptions = this.data.thanhVienDuAn;
 
-    // get data createCongViecForm from local storage
-    const createCongViecForm = localStorage.getItem('createCongViecForm');
-    if (createCongViecForm) {
-      const model = JSON.parse(createCongViecForm);
-      
-      this.addDataForm.patchValue(model);
+    // get congviec detail by id
+    if (this.data.task) {
+      this._CongViec.get(this.data.task.id).subscribe(res => {
+        this.addDataForm.patchValue(res);
+        this.setNhomCongViec(res.nhomCongViecId);
+        this.setLoaiCongViec(res.loaiCongViecId);
+        this.selectedTags = res.tagCongViec.map(item => item.id);
+        this.selectedGiaoViec.push(res.nguoiDuocGiao);
 
-      // lấy thông tin người được giao
-      if(model.nguoiDuocGiaoId) {
-        const nguoiDuocGiao = this.listGiaoViecOptions.find(item => item.id == model.nguoiDuocGiaoId);
-        this.selectedGiaoViec.push(nguoiDuocGiao);
-      }
+        if(res.nguoiPhoiHop && res.nguoiPhoiHop.length > 0) {
+          this.selectedNguoiPhoiHop = res.nguoiPhoiHop;
+        }
+        if(res.nguoiThucHien && res.nguoiThucHien.length > 0) {
+          this.selectedNguoiThucHien = res.nguoiThucHien;
+        }
+        
+        this._cdk.detectChanges();
+      });
 
-      // lấy thông tin người thực hiện
-      if(model.nguoiThucHienIds.length > 0) {
-        const nguoiThucHien = this.listNguoiThucHienOptions.filter(item => model.nguoiThucHienIds.includes(item.id));
-        this.selectedNguoiThucHien = nguoiThucHien;
-      }
-
-      this.setNhomCongViec(model.nhomCongViecId);
     }
-
   }
 
   // clear form when close drawer
@@ -145,7 +140,7 @@ export class CreateCongviecAdvanceComponent {
     this.addDataForm.value.nguoiPhoiHopIds = this.selectedNguoiPhoiHop.map(item => item.id);
     // this.addDataForm.value.tagCongViecIds = this.selectedTags.map(item => item.id);
 
-    this._CongViec.create(this.addDataForm.value).subscribe(res => {
+    this._CongViec.update(this.data.task.id, this.addDataForm.value).subscribe(res => {
       if (res.isSucceeded) {
         this.openSnackBar('Thao tác thành công', 'Đóng');
         this.dialogRef.close();
@@ -175,6 +170,7 @@ export class CreateCongviecAdvanceComponent {
 
   setLoaiCongViec(value) {
     this.addDataForm.get('loaiCongViecId')!.setValue(value);
+    this.selectedLoaiCongViec = value;
   }
 
   setTagCongViec($event) {

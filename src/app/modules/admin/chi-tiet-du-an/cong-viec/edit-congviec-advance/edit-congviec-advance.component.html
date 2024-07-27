@@ -1,0 +1,89 @@
+<div class="flex flex-col flex-auto h-full overflow-hidden bg-card dark:bg-default">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-18 -mb-px px-6 bg-gray-50 dark:bg-transparent">
+
+        <div class="ml-2 text-xl font-semibold">Sửa công việc - {{data.task?.tenCongViec}}</div>
+
+        <div class="flex items-center">
+            <!-- More menu -->
+            <button mat-flat-button [color]="'primary'" (click)="save()" [disabled]="addDataForm.invalid">
+                Lưu
+            </button>
+            <button class="px-6 ml-3" mat-button (click)="cancelAdd()">
+                Hủy
+            </button>
+        </div>
+
+    </div>
+    <mat-divider class="mb-4"></mat-divider>
+    <div class="flex flex-col gt-xs:flex-row gt-xs:items-start p-6">
+        <form [formGroup]="addDataForm" class="grid grid-cols-2 gap-x-6">
+            <mat-form-field appearance="fill" class="col-span-2">
+                <mat-label>Tên Công việc</mat-label>
+                <input matInput formControlName="tenCongViec" required />
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="col-span-2">
+                <mat-label>Mô tả công việc</mat-label>
+                <textarea matInput formControlName="moTa"></textarea>
+            </mat-form-field>
+
+            <app-searchable-select [options]="nhomCongViecOptions" [label]="'Nhóm công việc'" [selectedValue]="selectedNhomCongViec"
+                placeholder="Chọn nhóm công việc" (selectionChange)="setNhomCongViec($event)">
+            </app-searchable-select>
+
+            <app-searchable-select [options]="loaiCongViecOptions" [label]="'Loại công việc'" [selectedValue]="selectedLoaiCongViec"
+                placeholder="Chọn loại công việc" (selectionChange)="setLoaiCongViec($event)">
+            </app-searchable-select>
+
+            <app-user-selector label="Giao cho" [options]="listGiaoViecOptions" [selectedItems]="selectedGiaoViec"
+                length="1" (selectionChange)="selectNguoiDuocGiao($event)">
+            </app-user-selector>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Thời gian hoàn thành dự kiến (giờ)/điểm/độ phức tạp</mat-label>
+                <input matInput formControlName="thoiGianDuKien" />
+            </mat-form-field>
+
+            <app-user-selector label="Người thực hiện" [options]="listNguoiThucHienOptions" [selectedItems]="selectedNguoiThucHien">
+            </app-user-selector>
+
+            <app-user-selector label="Người phối hợp" [options]="listNguoiPhoiHopOptions" [selectedItems]="selectedNguoiPhoiHop">
+            </app-user-selector>
+
+            <app-searchable-select [options]="tagCongViecOptions" [label]="'Tags'" placeholder="Chọn tag"
+                (selectionChange)="setTagCongViec($event)" [multiple]="true" [selectedValue]="selectedTags">
+            </app-searchable-select>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Mức độ ưu tiên</mat-label>
+                <mat-select formControlName="mucDoUuTien">
+                    <mat-option value="cao">Cao</mat-option>
+                    <mat-option value="trung-binh">Trung bình</mat-option>
+                    <mat-option value="thap">Thấp</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Ngày bắt đầu</mat-label>
+                <input matInput [matDatepicker]="startDatePicker" formControlName="ngayBatDau" />
+                <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #startDatePicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Hạn hoàn thành</mat-label>
+                <input matInput [matDatepicker]="endDatePicker" formControlName="ngayKetThuc" />
+                <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #endDatePicker></mat-datepicker>
+            </mat-form-field>
+
+            <!-- <mat-form-field appearance="fill" class="col-span-2">
+                <mat-label>File đính kèm</mat-label>
+                <input type="file" (change)="onFileSelected($event)" />
+            </mat-form-field> -->
+        </form>
+
+    </div>
+</div>
