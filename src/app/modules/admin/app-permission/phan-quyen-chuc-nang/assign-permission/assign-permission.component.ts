@@ -59,6 +59,7 @@ export class AssignPermissionComponent {
 
         this._perFunctionService.getAllGrouping().subscribe(res => {
           this.listItem = res;
+          console.log(this.listItem);
           this.listItem.forEach(group => {
             group.listFunction.forEach(func => {
               if (this.role.some(role => role.perFunctionId === func.id)) {
