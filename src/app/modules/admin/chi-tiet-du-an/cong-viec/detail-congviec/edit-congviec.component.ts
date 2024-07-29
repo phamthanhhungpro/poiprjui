@@ -162,15 +162,13 @@ export class EditCongviecComponent {
 
   // save data
   save(): void {
-    let data = {
-      ngayKetThuc: this.congviec.ngayKetThuc,
-      trangThai: this.selectedTrangThai,
-      nguoiDuocGiaoId: this.selectedGiaoViec[0].id,
-      nguoiPhoiHopIds: this.selectedNguoiPhoiHop.map(x => x.id),
-      nguoiThucHienIds: this.selectedNguoiThucHien.map(x => x.id),
-    };
 
-    this.congViecService.update(this.congviec.id, data).subscribe(res => {
+    this.congviec.trangThai = this.selectedTrangThai;
+    this.congviec.nguoiDuocGiaoId = this.selectedGiaoViec[0].id,
+    this.congviec.nguoiPhoiHopIds = this.selectedNguoiPhoiHop.map(x => x.id),
+    this.congviec.nguoiThucHienIds = this.selectedNguoiThucHien.map(x => x.id),
+
+    this.congViecService.update(this.congviec.id, this.congviec).subscribe(res => {
       if (res.isSucceeded) {
         this.openSnackBar("Thao tác thành công !", "Đóng");
         this.dialogRef.close();
