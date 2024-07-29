@@ -83,4 +83,9 @@ export class CongViecService {
   rejectGiaHan(data: any): Observable<any> {
     return this.http.put(`${baseUrl}/RejectGiaHanCongViec`, data);
   }
+
+  getHoatDong(query: any): Observable<any[]> {
+    const queryString = objectToQueryString(query);
+    return this.http.get<any[]>(`${baseUrl}/GetCongViecHoatDong?${queryString}`);
+  }
 }

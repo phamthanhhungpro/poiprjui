@@ -1,5 +1,33 @@
 <div class="flex flex-col flex-auto sm:mb-4">
-    <div class="sticky top-0 z-9999 bg-white flex justify-end pb-4">
+    <div class="sticky top-0 z-9999 bg-white flex justify-between pb-4">
+        <div class="flex items-center space-x-2 w-2/3">
+            <mat-form-field class="fuse-mat-dense w-1/2">
+                <mat-label>Tên việc</mat-label>
+                <input matInput placeholder="Tên việc" [(ngModel)]="filterTaskName">
+            </mat-form-field>
+
+            <mat-form-field class="fuse-mat-dense w-full">
+                <mat-label>Hạn hoàn thành</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                    <input matStartDate placeholder="Từ">
+                    <input matEndDate placeholder="đến">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+
+            <app-searchable-select *ngIf="thanhVienOptions.length > 0" class="w-2/3" customClass="fuse-mat-dense" [options]="thanhVienOptions" [label]="'Người thực hiện'" placeholder="Chọn người thực hiện"
+                (selectionChange)="setFilterNguoiThucHien($event)" [multiple]="true">
+            </app-searchable-select>
+
+            <app-searchable-select *ngIf="trangThaiOptions.length > 0" customClass="fuse-mat-dense w-full" [options]="trangThaiOptions" [label]="'Trạng thái'" placeholder="Chọn trạng thái"
+                (selectionChange)="setFilterTrangThai($event)" [multiple]="true">
+            </app-searchable-select>
+
+            <button mat-flat-button color="primary" (click)="applyFilter()">
+                <span class="ml-2 z-9999">Lọc</span>
+            </button>
+        </div>
         <button mat-flat-button color="primary" (click)="openCreateItemDialog()">
             <mat-icon class="icon-size-4" svgIcon="mat_outline:add"></mat-icon>
             <span class="ml-2 z-9999">Thêm mới</span>
@@ -34,13 +62,14 @@
                         <span class="rounded bg-gray-200 px-2 py-1 text-sm">{{ task.nguoiDuocGiao?.fullName }}</span>
                     </div>
                     <div class="text-left hidden md:block text-sm">
-                        <span class="bg-blue-100 text-blue-800 rounded px-2 py-1">{{ keyToValue(task.trangThai) }}</span>
+                        <span class="bg-blue-100 text-blue-800 rounded px-2 py-1">{{ keyToValue(task.trangThai)
+                            }}</span>
                     </div>
                     <div class="col-span-1 md:col-span-1 flex justify-end">
                         <button mat-icon-button (click)="viewDetail(task)">
                             <mat-icon>visibility</mat-icon>
                         </button>
-                        
+
                         <button mat-icon-button (click)="edit(task)">
                             <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
                         </button>

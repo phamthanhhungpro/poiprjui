@@ -116,6 +116,28 @@
 
                         </mat-tab>
                         <mat-tab label="Hoạt động">
+                            <div class="scrollable-container">
+                                <div class="timeline">
+                                    <div *ngFor="let hoatDong of listHoatDong" class="timeline-item">
+                                        <div *ngIf="hoatDong.userName" class="timeline-time">
+                                            <span title="{{hoatDong.userFullName}}" class="text-blue-500 whitespace-normal">{{'@' +
+                                                hoatDong.userName}} </span>{{ hoatDong.thoiGian }}
+                                        </div>
+                                        <div *ngIf="!hoatDong.userName" class="timeline-time">{{ hoatDong.thoiGian }}
+                                        </div>
+
+                                        <div class="timeline-circle"
+                                            [style.background-color]="'#96e3aa'">
+                                        </div>
+                                        <div class="timeline-content break-all">
+                                            <span [innerHTML]="highlightUsernames(hoatDong.noiDung)"></span>
+                                            <span class="text-gray-500 bg-yellow-100">{{ hoatDong.moreInfo }}</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
                         </mat-tab>
                     </mat-tab-group>
                 </div>

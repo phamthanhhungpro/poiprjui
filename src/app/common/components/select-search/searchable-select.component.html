@@ -1,5 +1,5 @@
 <div class="w-full">
-    <mat-form-field class="w-full">
+    <mat-form-field [ngClass]="customClass" class="w-full" >
         <mat-label>{{ label }}</mat-label>
 
         <mat-select [formControl]="selectFormControl" [placeholder]="placeholder"

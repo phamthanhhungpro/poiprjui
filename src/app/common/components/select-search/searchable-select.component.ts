@@ -35,7 +35,7 @@ export class SearchableSelectComponent implements OnInit {
   @Input() noEntriesFoundLabel: string = 'Không tìm thấy kết quả';
   @Output() selectionChange = new EventEmitter<string>();
   @Input() selectedValue: any; // This will hold the value passed from the parent component
-
+  @Input() customClass: string = '';
   selectFormControl = new FormControl();
 
   searchControl = new FormControl();

@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormsModule, UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { DialogService } from 'app/common/dialog.service';
@@ -16,68 +16,36 @@ import { EditCongviecComponent } from './detail-congviec/edit-congviec.component
 import { MatMenuModule } from '@angular/material/menu';
 import { GiaHanFormComponent } from './gia-han-form/gia-han-form.component';
 import { EditCongviecAdvanceComponent } from './edit-congviec-advance/edit-congviec-advance.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { SearchableSelectComponent } from 'app/common/components/select-search/searchable-select.component';
 
 @Component({
   selector: 'app-cong-viec',
   standalone: true,
-  imports: [CommonModule, CommonModule, MatIconModule, MatButtonModule, MatMenuModule],
+  imports: [CommonModule, MatInputModule, CommonModule, MatIconModule, MatButtonModule, MatMenuModule, FormsModule,
+     MatFormFieldModule, MatDatepickerModule, SearchableSelectComponent],
   templateUrl: './cong-viec.component.html',
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class CongViecComponent {
   id: string;
   duAnSetting: any;
   duAn: any;
   congViecGroupData = [];
-  congViecGroup = [
-    {
-      name: 'NHÓM VIỆC 1',
-      tasks: [
-        {
-          title: 'Việc 1',
-          description: 'Mô tả việc 1',
-          creator: 'Lê Đình Dũng',
-          creatorHandle: 'dzungld',
-          creationTime: '16:20:00 - 15/6/2024',
-          dueDate: new Date('2024-06-20'),
-          assignee: 'Lê Đình Dũng',
-          status: 'Đang thực hiện'
-        }
-      ]
-    },
-    {
-      name: 'NHÓM VIỆC 2',
-      tasks: [
-        {
-          title: 'Việc 1',
-          description: 'Mô tả việc 1',
-          creator: 'Lê Đình Dũng',
-          creatorHandle: 'dzungld',
-          creationTime: '16:20:00 - 15/6/2024',
-          dueDate: new Date('2024-06-20'),
-          assignee: 'Lê Đình Dũng',
-          status: 'Hoàn thành'
-        },
-        {
-          title: 'Việc 2',
-          description: 'Mô tả việc 2',
-          creator: 'Lê Đình Dũng',
-          creatorHandle: 'dzungld',
-          creationTime: '16:20:00 - 15/6/2024',
-          dueDate: new Date('2024-06-20'),
-          assignee: 'Lê Đình Dũng',
-          status: 'Đang thực hiện'
-        }
-      ]
-    }
-  ];
+  filterTaskName: string = '';
 
   trangThaiSetting: any;
+  thanhVienOptions= [];
+  trangThaiOptions = [];
+
   constructor(private _fuseConfirmationService: FuseConfirmationService,
     private _formBuilder: UntypedFormBuilder,
-    private _duAnSettingService: DuAnSettingService,
     private route: ActivatedRoute,
     private dialogService: DialogService,
     private _duAnService: DuAnNvChuyenMonService,
+    private cdk: ChangeDetectorRef,
     private _congviecService: CongViecService) { }
 
   ngOnInit(): void {
@@ -85,6 +53,10 @@ export class CongViecComponent {
     this.getThongTinDuAn();
     this.getTableData();
   }
+
+  ngAfterViewInit() {
+  }
+
 
   openCreateItemDialog(): void {
     var uiDefault = this.duAnSetting.find(x => x.key == SettingConstants.createCongViecUiDefault)?.value;
@@ -126,7 +98,8 @@ export class CongViecComponent {
       this.duAn = res;
       this.duAnSetting = res.duAnSetting;
       this.trangThaiSetting = JSON.parse(this.duAnSetting.find(x => x.key == "trangThaiSetting")?.jsonValue);
-      console.log(this.trangThaiSetting);
+      this.thanhVienOptions = res.thanhVienDuAn.map(x => ({ key: x.id, value: x.fullName }));
+      this.trangThaiOptions = this.trangThaiSetting.map(x => ({ key: x.key, value: x.value }));
     });
   }
 
@@ -202,5 +175,20 @@ export class CongViecComponent {
       .subscribe(result => {
 
       });
+  }
+
+  applyFilter() {
+    // Implement your filtering logic here
+    // For example, filter the congViecGroupData based on the filterTaskName
+  }
+
+  setFilterNguoiThucHien(value: any) {
+    // Implement your filtering logic here
+    // For example, filter the congViecGroupData based on the value
+  }
+
+  setFilterTrangThai(value: any) {
+    // Implement your filtering logic here
+    // For example, filter the congViecGroupData based on the value
   }
 }

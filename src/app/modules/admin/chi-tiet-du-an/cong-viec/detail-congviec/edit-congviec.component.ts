@@ -53,6 +53,7 @@ export class EditCongviecComponent {
   persons = [];
   commentValue: string = '';
   listComment = [];
+  listHoatDong = [];
   /**
    *
    */
@@ -63,7 +64,6 @@ export class EditCongviecComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private congViecService: CongViecService,
     private commentService: CommentService,
-    private el: ElementRef, private renderer: Renderer2
   ) {
     this.taskForm = this._formBuilder.group({
       trangThai: [''],
@@ -110,6 +110,11 @@ export class EditCongviecComponent {
       // get comment by id conviec
       this.commentService.getNoPagingByCongViecId({ congViecId: this.congviec.id }).subscribe(res => {
         this.listComment = res;
+      });
+
+      // get hoat dong by id cong viec
+      this.congViecService.getHoatDong({ congViecId: this.congviec.id }).subscribe(res => {
+        this.listHoatDong = res;
       });
 
     });
