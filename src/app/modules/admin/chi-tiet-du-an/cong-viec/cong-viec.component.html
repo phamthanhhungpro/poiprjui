@@ -1,6 +1,6 @@
 <div class="flex flex-col flex-auto sm:mb-4">
-    <div class="sticky top-0 z-9999 bg-white flex justify-between pb-4">
-        <div class="flex items-center space-x-2 w-2/3">
+    <div class="sticky top-0 z-9999 bg-white flex justify-between pb-0">
+        <div class="flex items-center space-x-2 w-4/5">
             <mat-form-field class="fuse-mat-dense w-1/2">
                 <mat-label>Tên việc</mat-label>
                 <input matInput placeholder="Tên việc" [(ngModel)]="filterTaskName">
@@ -9,23 +9,28 @@
             <mat-form-field class="fuse-mat-dense w-full">
                 <mat-label>Hạn hoàn thành</mat-label>
                 <mat-date-range-input [rangePicker]="picker">
-                    <input matStartDate placeholder="Từ">
-                    <input matEndDate placeholder="đến">
+                    <input [(ngModel)]="dateStart" matStartDate placeholder="Từ">
+                    <input [(ngModel)]="dateEnd" matEndDate placeholder="đến">
                 </mat-date-range-input>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-date-range-picker #picker></mat-date-range-picker>
             </mat-form-field>
 
-            <app-searchable-select *ngIf="thanhVienOptions.length > 0" class="w-2/3" customClass="fuse-mat-dense" [options]="thanhVienOptions" [label]="'Người thực hiện'" placeholder="Chọn người thực hiện"
+            <app-searchable-select *ngIf="thanhVienOptions.length > 0" class="w-2/3" customClass="fuse-mat-dense"
+                [options]="thanhVienOptions" [label]="'Người thực hiện'" placeholder="Chọn người thực hiện"
                 (selectionChange)="setFilterNguoiThucHien($event)" [multiple]="true">
             </app-searchable-select>
 
-            <app-searchable-select *ngIf="trangThaiOptions.length > 0" customClass="fuse-mat-dense w-full" [options]="trangThaiOptions" [label]="'Trạng thái'" placeholder="Chọn trạng thái"
-                (selectionChange)="setFilterTrangThai($event)" [multiple]="true">
+            <app-searchable-select *ngIf="trangThaiOptions.length > 0" class="w-full"
+                customClass="fuse-mat-dense w-full" [options]="trangThaiOptions" [label]="'Trạng thái'"
+                placeholder="Chọn trạng thái" (selectionChange)="setFilterTrangThai($event)" [multiple]="true">
             </app-searchable-select>
 
-            <button mat-flat-button color="primary" (click)="applyFilter()">
-                <span class="ml-2 z-9999">Lọc</span>
+            <button mat-flat-button color="accent" (click)="applyFilter()">
+                <span class="z-9999">Lọc</span>
+            </button>
+            <button mat-flat-button color="warn" (click)="clearFilter()">
+                <span class="z-9999">Clear</span>
             </button>
         </div>
         <button mat-flat-button color="primary" (click)="openCreateItemDialog()">
@@ -34,8 +39,9 @@
         </button>
     </div>
 
-    <div class="bg-white rounded-lg shadow flex flex-col" style="height: 600px;">
-        <div class="sticky top-16 z-10 bg-gray-100">
+    <div #scrollContainer class="bg-white rounded-lg shadow flex flex-col overflow-y-auto" (scroll)="onScroll()"
+        style="height: 530px;">
+        <div class="sticky top-0 z-10 bg-gray-100">
             <div class="grid grid-cols-1 md:grid-cols-6 px-4 py-5">
                 <h3 class="text-lg font-medium text-gray-900 col-span-2">TÊN VIỆC</h3>
                 <span class="text-lg font-medium text-gray-900 text-left hidden md:block">HẠN HOÀN THÀNH</span>
@@ -44,52 +50,52 @@
                 <span class="col-span-1 md:col-span-1"></span> <!-- Empty span to balance the grid -->
             </div>
         </div>
-
-        <div class="border-t border-gray-200 flex-1 overflow-y-auto">
-            <ng-container *ngFor="let group of congViecGroupData">
-                <div class="bg-gray-50 px-4 py-5">
-                    <h4 class="text-md font-medium text-gray-800">{{ group.tenNhomCongViec?.toUpperCase() }}</h4>
+        <div *ngFor="let group of congViecGroupData">
+            <div class="bg-gray-50 px-4 py-4">
+                <h4 class="text-lg font-medium text-black">
+                    <mat-icon class="mr-2" svgIcon="mat_outline:folder"></mat-icon>
+                    {{ group.tenNhomCongViec?.toUpperCase() }}
+                </h4>
+            </div>
+            <div *ngFor="let task of group.listCongViec" class="grid grid-cols-1 md:grid-cols-6 px-4 py-5 items-left">
+                <div class="col-span-2">
+                    <h5 class="text-lg font-medium text-gray-800">{{ task.tenCongViec }}</h5>
+                    <p class="text-sm text-gray-500">Tạo bởi: {{ task.nguoiGiaoViec?.fullName }} {{'@' +
+                        task.nguoiGiaoViec?.userName }} lúc: {{ task.createdAt }}</p>
                 </div>
-                <div *ngFor="let task of group.listCongViec"
-                    class="grid grid-cols-1 md:grid-cols-6 px-4 py-5 items-left">
-                    <div class="col-span-2">
-                        <h5 class="text-lg font-medium text-gray-800">{{ task.tenCongViec }}</h5>
-                        <p class="text-sm text-gray-500">Tạo bởi: {{ task.nguoiGiaoViec?.fullName }} {{'@' +
-                            task.nguoiGiaoViec?.userName }} lúc: {{ task.createdAt }}</p>
-                    </div>
-                    <div class="text-left hidden md:block">{{ task.ngayKetThuc | date:'dd/MM/yyyy' }}</div>
-                    <div class="text-left hidden md:block">
-                        <span class="rounded bg-gray-200 px-2 py-1 text-sm">{{ task.nguoiDuocGiao?.fullName }}</span>
-                    </div>
-                    <div class="text-left hidden md:block text-sm">
-                        <span class="bg-blue-100 text-blue-800 rounded px-2 py-1">{{ keyToValue(task.trangThai)
-                            }}</span>
-                    </div>
-                    <div class="col-span-1 md:col-span-1 flex justify-end">
-                        <button mat-icon-button (click)="viewDetail(task)">
-                            <mat-icon>visibility</mat-icon>
-                        </button>
-
-                        <button mat-icon-button (click)="edit(task)">
-                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
-                        </button>
-
-                        <button mat-icon-button [matMenuTriggerFor]="menu">
-                            <mat-icon class="icon-size-5" [svgIcon]="'mat_solid:more_vert'"></mat-icon>
-                        </button>
-                        <mat-menu #menu="matMenu">
-                            <button (click)="deleteTask(task)" mat-menu-item>
-                                <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
-                                <span>Xóa</span>
-                            </button>
-
-                            <button (click)="giaHan(task)" mat-menu-item>
-                                <span>Gia hạn</span>
-                            </button>
-                        </mat-menu>
-                    </div>
+                <div class="text-left hidden md:block">{{ task.ngayKetThuc | date:'dd/MM/yyyy' }}</div>
+                <div class="text-left hidden md:block">
+                    <span class="rounded bg-gray-200 px-2 py-1 text-sm">{{ task.nguoiDuocGiao?.fullName }}</span>
                 </div>
-            </ng-container>
+                <div class="text-left hidden md:block text-sm">
+                    <span class="bg-blue-100 text-blue-800 rounded px-2 py-1">{{ keyToValue(task.trangThai)}}</span>
+                </div>
+                <div class="col-span-1 md:col-span-1 flex justify-end">
+                    <button mat-icon-button (click)="viewDetail(task)">
+                        <mat-icon>visibility</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="edit(task)">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
+                    </button>
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                        <mat-icon class="icon-size-5" [svgIcon]="'mat_solid:more_vert'"></mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button (click)="deleteTask(task)" mat-menu-item>
+                            <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                            <span>Xóa</span>
+                        </button>
+                        <button (click)="giaHan(task)" mat-menu-item>
+                            <span>Gia hạn</span>
+                        </button>
+                    </mat-menu>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isLoading" class="text-center p-4">
+            <mat-spinner diameter="30"></mat-spinner>
         </div>
     </div>
+
+
 </div>

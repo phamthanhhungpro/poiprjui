@@ -37,9 +37,8 @@ export class CongViecService {
     return this.http.delete(`${baseUrl}/${id}`);
   }
 
-  getCongViecGrid(query: any): Observable<any[]> {
-    const queryString = objectToQueryString(query);
-    return this.http.get<any[]>(`${baseUrl}/GetCongViecGrid?${queryString}`);
+  getCongViecGrid(data: any): Observable<any> {
+    return this.http.post<any>(`${baseUrl}/GetCongViecGrid`, data);
   }
 
   getCongViecKanban(query: any): Observable<any[]> {

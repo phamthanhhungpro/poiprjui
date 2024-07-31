@@ -239,7 +239,7 @@ export class AddNhiemvuchuyenmonComponent {
   }
 
   getListDuAnCanCopy() {
-    this._duanNvChuyenMonService.getAllNoPaging().subscribe(res => {
+    this._duanNvChuyenMonService.getAllNvChuyenMon().subscribe(res => {
       this.listDuAnCanCopy = res.map(item => ({ key: item.id, value: item.tenDuAn }));
     });
   }

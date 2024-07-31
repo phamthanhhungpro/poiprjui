@@ -140,6 +140,13 @@
                         <mat-datepicker #picker2></mat-datepicker>
                     </mat-form-field>
                 </div>
+                <div class="flex">
+                    <mat-slide-toggle class="flex-auto mb-4 mt-1" [color]="'primary'" labelPosition="before"
+                        [formControlName]="'isSaoChepThietLap'"><span class="font-medium">Sao chép thiết lập</span></mat-slide-toggle>
+                </div>
+                <app-searchable-select *ngIf="listDuAnCanCopy?.length > 0 && addDataForm.get('isSaoChepThietLap').value" 
+                    [options]="listDuAnCanCopy" [label]="'Chọn dự án cần sao chép'" (selectionChange)="setDuAnCanCopy($event)">
+                </app-searchable-select>
             </div>
         </form>
     </div>

@@ -1,0 +1,32 @@
+<div class="scrollable-container m-4" style="max-height: 600px!important;">
+    <div *ngFor="let item of listHoatDong.items" class="timeline-date-group">
+        <div class="rounded-full bg-primary px-10 py-2 text-md font-medium leading-5 text-on-primary w-40">
+            {{ item.thoiGian | date: 'dd/MM/yyyy' }}</div>
+        <!-- Group by cong việc -->
+        <div class="ml-5 mb-5">
+            <div *ngFor="let congViec of item.listCongViec" class="">
+                <div class="mt-4 text-black font-medium bg-gray-200 p-2 rounded w-120">
+                    <h4>{{ congViec.tenViec?.toUpperCase() }}</h4>
+                </div>
+                <div class="timeline pt-4">
+                    <div *ngFor="let hoatDong of congViec.listHoatDong" class="timeline-item pt-4">
+                        <div *ngIf="hoatDong.userName" class="timeline-time">
+                            <span title="{{ hoatDong.userFullName }}" class="text-blue-500 whitespace-normal">
+                                {{ '@' + hoatDong.userName }}
+                            </span>
+                            {{ hoatDong.thoiGian }}
+                        </div>
+                        <div *ngIf="!hoatDong.userName" class="timeline-time">{{ hoatDong.thoiGian }}</div>
+
+                        <div class="timeline-circle" style="background-color: #96e3aa;"></div>
+                        <div class="timeline-content break-all cursor-pointer"  (click)="openChiTietCongViec(congViec)">
+                            <span [innerHTML]="highlightUsernames(hoatDong.noiDung)"></span>
+                            <span class="text-gray-500 bg-yellow-100">{{ hoatDong.moreInfo }}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

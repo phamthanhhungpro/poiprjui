@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -24,29 +24,57 @@ import { SearchableSelectComponent } from 'app/common/components/select-search/s
 @Component({
   selector: 'app-cong-viec',
   standalone: true,
-  imports: [CommonModule, MatInputModule, CommonModule, MatIconModule, MatButtonModule, MatMenuModule, FormsModule,
-     MatFormFieldModule, MatDatepickerModule, SearchableSelectComponent],
+  imports: [
+    CommonModule,
+    MatInputModule,
+    CommonModule,
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    SearchableSelectComponent,
+  ],
   templateUrl: './cong-viec.component.html',
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class CongViecComponent {
+  @ViewChild('scrollContainer', { static: false }) scrollContainer: ElementRef;
+
   id: string;
   duAnSetting: any;
   duAn: any;
   congViecGroupData = [];
+
+  // filter
   filterTaskName: string = '';
+  dateRange: { start: Date, end: Date } | null = null;
+  dateStart = null;
+  dateEnd = null;
+  filterNguoiThucHien: any[] = [];
+  filterTrangThai: any[] = [];
+
+  // paging
+  pageIndex: number = 0;
+  pageSize: number = 50; // Number of items per page
+  totalItems: number = 0;
+  totalPage: number = 0;
+  isLoading: boolean = false;
 
   trangThaiSetting: any;
   thanhVienOptions= [];
   trangThaiOptions = [];
 
-  constructor(private _fuseConfirmationService: FuseConfirmationService,
+  constructor(
+    private _fuseConfirmationService: FuseConfirmationService,
     private _formBuilder: UntypedFormBuilder,
     private route: ActivatedRoute,
     private dialogService: DialogService,
     private _duAnService: DuAnNvChuyenMonService,
     private cdk: ChangeDetectorRef,
-    private _congviecService: CongViecService) { }
+    private _congviecService: CongViecService
+  ) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -54,9 +82,7 @@ export class CongViecComponent {
     this.getTableData();
   }
 
-  ngAfterViewInit() {
-  }
-
+  ngAfterViewInit() { }
 
   openCreateItemDialog(): void {
     var uiDefault = this.duAnSetting.find(x => x.key == SettingConstants.createCongViecUiDefault)?.value;
@@ -65,19 +91,18 @@ export class CongViecComponent {
       this.dialogService.openDialog(component,
         this.duAn,
         { width: width, height: 'auto' },
-        this.getTableData.bind(this)
-      )
-        .subscribe(result => {
-          if (result === 'expand') {
-            this.dialogService.openDialog(CreateCongviecAdvanceComponent,
-              this.duAn,
-              { width: '900px', height: 'auto' },
-              this.getTableData.bind(this)
-            ).subscribe(result => {
-              localStorage.removeItem('createCongViecForm');
-             });
-          };
-        });
+        this.applyFilter.bind(this)
+      ).subscribe(result => {
+        if (result === 'expand') {
+          this.dialogService.openDialog(CreateCongviecAdvanceComponent,
+            this.duAn,
+            { width: '900px', height: 'auto' },
+            this.applyFilter.bind(this)
+          ).subscribe(result => {
+            localStorage.removeItem('createCongViecForm');
+          });
+        };
+      });
     };
 
     if (uiDefault == SettingConstants.createCongViecUiDefaultOptions[1].value) {
@@ -88,8 +113,39 @@ export class CongViecComponent {
   }
 
   getTableData(): void {
-    this._congviecService.getCongViecGrid({ duAnId: this.id }).subscribe(res => {
-      this.congViecGroupData = res;
+    if (this.isLoading || (this.totalItems && this.congViecGroupData.length >= this.totalItems)) {
+      return;
+    }
+
+    this.isLoading = true;
+
+    const filterRequest = {
+      DuAnId: this.id,
+      TaskName: this.filterTaskName,
+      StartDate: this.dateStart ? this.dateStart : null,
+      EndDate: this.dateEnd ? this.dateEnd : null,
+      AssignedUserIds: this.filterNguoiThucHien,
+      Status: this.filterTrangThai,
+      PageIndex: this.pageIndex,
+      PageSize: this.pageSize
+    };
+
+    this._congviecService.getCongViecGrid(filterRequest).subscribe(res => {
+      // this.congViecGroupData = [...this.congViecGroupData, ...res.items];
+      res.items.forEach(item => {
+        if (this.congViecGroupData.find(g => g.nhomCongViecId === item.nhomCongViecId)) {
+          this.congViecGroupData.find(g => g.nhomCongViecId === item.nhomCongViecId).listCongViec = this.congViecGroupData.find(g => g.nhomCongViecId === item.nhomCongViecId).listCongViec.concat(item.listCongViec);
+          console.log(item.listCongViec);
+        } else {
+          this.congViecGroupData.push(item);
+        }
+      });
+      this.totalItems = res.count;
+      this.pageIndex++;
+      this.isLoading = false;
+      this.totalPage = Math.ceil(this.totalItems / this.pageSize);
+    }, () => {
+      this.isLoading = false;
     });
   }
 
@@ -107,20 +163,15 @@ export class CongViecComponent {
     this.dialogService.openDialog(EditCongviecComponent,
       task,
       { width: '1200px', height: 'auto' },
-      this.getTableData.bind(this)
-    )
-      .subscribe(result => {
-
-      });
+      this.applyFilter.bind(this)
+    ).subscribe(result => {});
   }
 
   giaHan(task) {
     this.dialogService.openDialog(GiaHanFormComponent,
       task,
-      { width: '500px', height: 'auto' })
-      .subscribe(result => {
-
-      });
+      { width: '500px', height: 'auto' }
+    ).subscribe(result => {});
   }
 
   deleteTask(task): void {
@@ -152,15 +203,14 @@ export class CongViecComponent {
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'confirmed') {
         this._congviecService.delete(task.id).subscribe(() => {
-          this.getTableData();
+          this.applyFilter();
         });
       }
     });
-
   }
 
   keyToValue(key: string): string {
-    if(!this.trangThaiSetting) return '';
+    if (!this.trangThaiSetting) return '';
     return this.trangThaiSetting.find(x => x.key == key)?.value;
   }
 
@@ -171,24 +221,42 @@ export class CongViecComponent {
       data,
       { width: '900px', height: 'auto' },
       this.getTableData.bind(this)
-    )
-      .subscribe(result => {
-
-      });
+    ).subscribe(result => {});
   }
 
   applyFilter() {
-    // Implement your filtering logic here
-    // For example, filter the congViecGroupData based on the filterTaskName
+    this.pageIndex = 0;
+    this.congViecGroupData = [];
+    this.getTableData();
   }
 
   setFilterNguoiThucHien(value: any) {
-    // Implement your filtering logic here
-    // For example, filter the congViecGroupData based on the value
+    this.filterNguoiThucHien = value;
+    this.applyFilter();
   }
 
   setFilterTrangThai(value: any) {
-    // Implement your filtering logic here
-    // For example, filter the congViecGroupData based on the value
+    this.filterTrangThai = value;
+    this.applyFilter();
+  }
+
+  clearFilter() {
+    this.filterTaskName = '';
+    this.dateStart = null;
+    this.dateEnd = null;
+    this.filterNguoiThucHien = [];
+    this.filterTrangThai = [];
+    this.applyFilter();
+  }
+
+  onScroll(): void {
+    if (this.scrollContainer && this.scrollContainer.nativeElement && this.pageIndex < this.totalPage) {
+      const container = this.scrollContainer.nativeElement;
+      const threshold = container.scrollHeight - container.offsetHeight - 100;
+      if (container.scrollTop >= threshold) {
+        console.log('Scroll event fired');
+        this.getTableData();
+      }
+    }
   }
 }

@@ -48,4 +48,18 @@ export class DuAnNvChuyenMonService {
   getViecCaNhan(): Observable<any> {
     return this.http.get<any[]>(`${baseUrl}/canhan`);
   }
+
+  getHoatDongDuan(data: any): Observable<any> {
+    return this.http.post(`${baseUrl}/hoatdongduan`, data);
+  }
+
+  getTongQuanDuAn(query): Observable<any> {
+    const queryString = objectToQueryString(query);
+    return this.http.get<any>(`${baseUrl}/tongquanduan?${queryString}`);
+  }
+
+  getTopHoatDong(query): Observable<any> {
+    const queryString = objectToQueryString(query);
+    return this.http.get<any>(`${baseUrl}/topHoatDong?${queryString}`);
+  }
 }

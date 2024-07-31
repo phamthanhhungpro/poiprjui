@@ -18,13 +18,15 @@ import { map, startWith } from 'rxjs';
 import { DuAnNvChuyenMonService } from 'app/services/duan-nvchuyenmon.service';
 import {MatRadioModule} from '@angular/material/radio';
 import { ToNhomService } from 'app/services/tonhom.service';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { SearchableSelectComponent } from 'app/common/components/select-search/searchable-select.component';
 
 @Component({
   selector: 'app-add-duan',
   standalone: true,
   imports: [CommonModule, MatButtonModule, MatIconModule, NgIf, NgFor, MatDividerModule,
     FormsModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatFormFieldModule, MatSelectModule,
-    MatDatepickerModule, MatAutocompleteModule, MatChipsModule, MatSelectModule, MatRadioModule
+    MatDatepickerModule, MatAutocompleteModule, MatChipsModule, MatSelectModule, MatRadioModule, MatSlideToggleModule, SearchableSelectComponent
   ],
   templateUrl: './add-duan.component.html',
 })
@@ -46,6 +48,8 @@ export class AddDuanComponent {
   listManager = [];
   filteredOptionManager: any;
   allManager: any;
+
+  listDuAnCanCopy = [];
   /**
    *
    */
@@ -69,7 +73,9 @@ export class AddDuanComponent {
       isNhiemVuChuyenMon: [false],
       searchThanhVien: [''],
       searchManager: [''],
-      option: ['1']
+      option: ['1'],
+      isSaoChepThietLap: [false],
+      duAnCanSaoChepId: [null]
     });
 
     this.addDataForm.get('option')?.valueChanges.subscribe(value => {
@@ -93,6 +99,7 @@ export class AddDuanComponent {
     this.getListBoPhan();
     this.getListLinhVuc();
     this.getListToNhom();
+    this.getListDuAnCanCopy();
   }
 
   // clear form when close drawer
@@ -258,5 +265,15 @@ export class AddDuanComponent {
 
     this.managerInput.nativeElement.value = '';
     this.addDataForm.get('searchManager')!.setValue(null);
+  }
+
+  setDuAnCanCopy(event) {
+    this.addDataForm.get('duAnCanSaoChepId')!.setValue(event);
+  }
+
+  getListDuAnCanCopy() {
+    this._duanNvChuyenMonService.getAllDuAn().subscribe(res => {
+      this.listDuAnCanCopy = res.map(item => ({ key: item.id, value: item.tenDuAn }));
+    });
   }
 }

@@ -129,7 +129,7 @@
                         [formControlName]="'isSaoChepThietLap'"><span class="font-medium">Sao chép thiết lập</span></mat-slide-toggle>
                 </div>
                 <app-searchable-select *ngIf="listDuAnCanCopy?.length > 0 && addDataForm.get('isSaoChepThietLap').value" 
-                    [options]="listDuAnCanCopy" [label]="'Chọn dự án/nhiệm vụ cần sao chép'" (selectionChange)="setDuAnCanCopy($event)">
+                    [options]="listDuAnCanCopy" [label]="'Chọn nhiệm vụ cần sao chép'" (selectionChange)="setDuAnCanCopy($event)">
                 </app-searchable-select>
             </div>
         </form>

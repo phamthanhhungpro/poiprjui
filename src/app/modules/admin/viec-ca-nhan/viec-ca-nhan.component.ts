@@ -10,12 +10,13 @@ import { OverviewComponent } from '../chi-tiet-du-an/overview/overview.component
 import { NhomCongViecComponent } from '../chi-tiet-du-an/thiet-lap-du-an/nhom-cong-viec/nhom-cong-viec.component';
 import { ThietLapDuAnComponent } from '../chi-tiet-du-an/thiet-lap-du-an/thiet-lap-du-an.component';
 import { DuAnNvChuyenMonService } from 'app/services/duan-nvchuyenmon.service';
+import { HoatDongDuAnComponent } from '../chi-tiet-du-an/hoat-dong-du-an/hoat-dong-du-an.component';
 
 @Component({
   selector: 'app-viec-ca-nhan',
   standalone: true,
   imports: [CommonModule, MatIconModule, RouterLink, MatTabsModule, NhomCongViecComponent,
-    ThietLapDuAnComponent, CongViecComponent, OverviewComponent, KanbanComponent,
+    ThietLapDuAnComponent, CongViecComponent, OverviewComponent, KanbanComponent, HoatDongDuAnComponent,
     ChoDuyetComponent
 ],
   templateUrl: './viec-ca-nhan.component.html',

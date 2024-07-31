@@ -10,13 +10,14 @@ import { CongViecComponent } from './cong-viec/cong-viec.component';
 import { OverviewComponent } from './overview/overview.component';
 import { KanbanComponent } from './kanban/kanban.component';
 import { ChoDuyetComponent } from './cho-duyet/cho-duyet.component';
+import { HoatDongDuAnComponent } from './hoat-dong-du-an/hoat-dong-du-an.component';
 
 @Component({
   selector: 'app-chi-tiet-du-an',
   standalone: true,
   imports: [CommonModule, MatIconModule, RouterLink, MatTabsModule, NhomCongViecComponent,
             ThietLapDuAnComponent, CongViecComponent, OverviewComponent, KanbanComponent,
-            ChoDuyetComponent
+            ChoDuyetComponent, HoatDongDuAnComponent
   ],
   templateUrl: './chi-tiet-du-an.component.html',
 })
