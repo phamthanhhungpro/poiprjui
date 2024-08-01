@@ -23,6 +23,7 @@ import { UserVaiTroComponent } from './modules/admin/app-permission/user-vai-tro
 import { VaiTroHeThongComponent } from './modules/admin/app-permission/vai-tro-he-thong/vai-tro-he-thong.component';
 import { NhomChucNangHeThongComponent } from './modules/admin/app-permission/nhom-chuc-nang/nhom-chuc-nang.component';
 import { ViecCaNhanComponent } from './modules/admin/viec-ca-nhan/viec-ca-nhan.component';
+import { QuanLyCongViecComponent } from './modules/admin/quan-ly-cong-viec/quan-ly-cong-viec.component';
 
 // @formatter:off
 /* eslint-disable max-len */
@@ -107,7 +108,7 @@ export const appRoutes: Route[] = [
             { path: 'viec-ca-nhan', component: ViecCaNhanComponent },
             { path: 'viec-ca-nhan/:id', component: ViecCaNhanComponent },
 
-            { path: 'quan-ly-cong-viec', component: ExampleComponent },
+            { path: 'quan-ly-cong-viec', component: QuanLyCongViecComponent },
             { path: 'nhiem-vu-chuyen-mon', component: NhiemVuChuyenMonComponent },
             { path: 'du-an', component: DuAnComponent },
             { path: 'nhiem-vu-chuyen-mon/:id', component: ChiTietDuAnComponent },

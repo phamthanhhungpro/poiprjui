@@ -87,4 +87,8 @@ export class CongViecService {
     const queryString = objectToQueryString(query);
     return this.http.get<any[]>(`${baseUrl}/GetCongViecHoatDong?${queryString}`);
   }
+
+  getQuanLyCongViec(data: any): Observable<any> {
+    return this.http.post<any>(`${baseUrl}/GetQuanLyCongViec`, data);
+  }
 }
