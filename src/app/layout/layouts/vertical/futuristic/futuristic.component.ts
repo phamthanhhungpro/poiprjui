@@ -128,4 +128,8 @@ export class FuturisticLayoutComponent implements OnInit, OnDestroy
             navigation.toggle();
         }
     }
+
+    onFabClick(): void {
+
+    }
 }

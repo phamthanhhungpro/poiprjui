@@ -67,6 +67,11 @@
         <!-- *ngIf="true" hack is required here for router-outlet to work correctly.
              Otherwise, layout changes won't be registered and the view won't be updated! -->
         <router-outlet *ngIf="true"></router-outlet>
+        <div class="fab-container z-9999">
+            <button mat-fab color="primary" aria-label="Add" (click)="onFabClick()">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
     </div>
 
     <!-- Footer -->
