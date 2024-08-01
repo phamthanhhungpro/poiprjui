@@ -220,7 +220,7 @@ export class CongViecComponent {
     this.dialogService.openDialog(EditCongviecAdvanceComponent,
       data,
       { width: '900px', height: 'auto' },
-      this.getTableData.bind(this)
+      this.applyFilter.bind(this)
     ).subscribe(result => {});
   }
 
