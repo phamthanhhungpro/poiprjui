@@ -262,7 +262,7 @@ export const firstNavigation: FuseNavigationItem[] = [
         title: 'Hệ thống thông tin nhân sự',
         type: 'basic',
         icon: 'mat_outline:psychology',
-        link: 'https://hrm.poi.vn/',
+        link: 'http://poi.vn:1124/',
         externalLink: true,
         target: "_blank"
     },
@@ -271,7 +271,7 @@ export const firstNavigation: FuseNavigationItem[] = [
         title: 'Hệ thống thông tin công việc',
         type: 'basic',
         icon: 'mat_outline:task',
-        link: 'https://prj.poi.vn/',
+        link: 'http://poi.vn:1123/',
         externalLink: true,
         target: "_blank"
     },

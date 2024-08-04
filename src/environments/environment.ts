@@ -1,6 +1,6 @@
-const apiUrl = 'https://api.poi.vn:1118/';
-const idFrontEndUrl = 'https://id.poi.vn/';
-const prjFrontEndUrl = 'https://prj.poi.vn';
+const apiUrl = 'http://poi.vn:1118/';
+const idFrontEndUrl = 'http://poi.vn:1122/';
+const prjFrontEndUrl = 'http://poi.vn:1123';
 
 export const environment = {
     production: true,
