@@ -62,4 +62,8 @@ export class DuAnNvChuyenMonService {
     const queryString = objectToQueryString(query);
     return this.http.get<any>(`${baseUrl}/topHoatDong?${queryString}`);
   }
+
+  openCloseDuAn(data: any): Observable<any> {
+    return this.http.put(`${baseUrl}/open-close`, data);
+  }
 }

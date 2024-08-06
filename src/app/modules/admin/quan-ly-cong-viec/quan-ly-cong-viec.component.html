@@ -34,13 +34,13 @@
 
     <!-- Main -->
     <div class="flex flex-col flex-auto sm:mb-4 p-6">
-        <div class="sticky top-0 z-9999 bg-white flex justify-between pb-0">
+        <div class="sticky top-0 z-1 bg-white flex justify-between pb-0">
             <div class="flex items-center space-x-2 w-4/5">
                 <mat-form-field class="fuse-mat-dense w-1/2">
                     <mat-label>Tên việc</mat-label>
                     <input matInput placeholder="Tên việc" [(ngModel)]="filterTaskName">
                 </mat-form-field>
-    
+
                 <mat-form-field class="fuse-mat-dense w-full">
                     <mat-label>Hạn hoàn thành</mat-label>
                     <mat-date-range-input [rangePicker]="picker">
@@ -50,17 +50,17 @@
                     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-date-range-picker #picker></mat-date-range-picker>
                 </mat-form-field>
-    
+
                 <app-searchable-select *ngIf="thanhVienOptions.length > 0" class="w-2/3" customClass="fuse-mat-dense"
                     [options]="thanhVienOptions" [label]="'Người thực hiện'" placeholder="Chọn người thực hiện"
                     (selectionChange)="setFilterNguoiThucHien($event)" [multiple]="true">
                 </app-searchable-select>
-    
-                <app-searchable-select *ngIf="trangThaiOptions.length > 0" class="w-full"
-                    customClass="fuse-mat-dense w-full" [options]="trangThaiOptions" [label]="'Trạng thái'"
-                    placeholder="Chọn trạng thái" (selectionChange)="setFilterTrangThai($event)" [multiple]="true">
+
+                <app-searchable-select *ngIf="listDuAnOptions.length > 0" class="w-full"
+                    customClass="fuse-mat-dense w-full" [options]="listDuAnOptions" [label]="'Dự án'"
+                    placeholder="Chọn dự án" (selectionChange)="setFilterDuAn($event)" [multiple]="true">
                 </app-searchable-select>
-    
+
                 <button mat-flat-button color="accent" (click)="applyFilter()">
                     <span class="z-9999">Lọc</span>
                 </button>
@@ -68,12 +68,8 @@
                     <span class="z-9999">Clear</span>
                 </button>
             </div>
-            <button mat-flat-button color="primary" (click)="openCreateItemDialog()">
-                <mat-icon class="icon-size-4" svgIcon="mat_outline:add"></mat-icon>
-                <span class="ml-2 z-9999">Thêm mới</span>
-            </button>
         </div>
-    
+
         <div #scrollContainer class="bg-white rounded-lg shadow flex flex-col overflow-y-auto" (scroll)="onScroll()"
             style="height: 600px;">
             <div class="sticky top-0 z-10 bg-gray-100">
@@ -86,29 +82,24 @@
                     <!-- <span class="col-span-1 md:col-span-1"></span> Empty span to balance the grid -->
                 </div>
             </div>
-            <div *ngFor="let group of congViecGroupData">
-                <div class="bg-gray-50 px-4 py-4 flex items-center">
-                    <mat-icon class="mr-2" svgIcon="mat_outline:folder"></mat-icon>
-                    <h4 class="text-lg font-medium text-black mb-0">
-                      {{ group.tenNhomCongViec?.toUpperCase() }}
-                    </h4>
-                  </div>
-                <div *ngFor="let task of group.listCongViec" class="grid grid-cols-1 md:grid-cols-6 px-4 py-5 items-left">
-                    <div class="col-span-2">
-                        <h5 class="text-lg font-medium text-gray-800">{{ task.tenCongViec }}</h5>
-                        <p class="text-sm text-gray-500">Tạo bởi: {{ task.nguoiGiaoViec?.fullName }} {{'@' +
-                            task.nguoiGiaoViec?.userName }} lúc: {{ task.createdAt }}</p>
-                    </div>
-                    <div class="text-left hidden md:block">{{ task.tenDuAn }}</div>
 
-                    <div class="text-left hidden md:block">{{ task.ngayKetThuc | date:'dd/MM/yyyy' }}</div>
-                    <div class="text-left hidden md:block">
-                        <span class="rounded bg-gray-200 px-2 py-1 text-sm">{{ task.nguoiDuocGiao?.fullName }}</span>
-                    </div>
-                    <div class="text-left hidden md:block text-sm">
-                        <span class="bg-blue-100 text-blue-800 rounded px-2 py-1">{{ task.trangThai }}</span>
-                    </div>
-                    <!-- <div class="col-span-1 md:col-span-1 flex justify-end">
+            <div *ngFor="let task of congViecGroupData"
+                class="grid grid-cols-1 md:grid-cols-6 px-4 py-5 items-left">
+                <div class="col-span-2">
+                    <h5 class="text-lg font-medium text-gray-800">{{ task.tenCongViec }}</h5>
+                    <p class="text-sm text-gray-500">Tạo bởi: {{ task.nguoiGiaoViec?.fullName }} {{'@' +
+                        task.nguoiGiaoViec?.userName }} lúc: {{ task.createdAt }}</p>
+                </div>
+                <div class="text-left hidden md:block">{{ task.tenDuAn }}</div>
+
+                <div class="text-left hidden md:block">{{ task.ngayKetThuc | date:'dd/MM/yyyy' }}</div>
+                <div class="text-left hidden md:block">
+                    <span class="rounded bg-gray-200 px-2 py-1 text-sm">{{ task.nguoiDuocGiao?.fullName }}</span>
+                </div>
+                <div class="text-left hidden md:block text-sm">
+                    <span class="bg-blue-100 text-blue-800 rounded px-2 py-1">{{ task.trangThai }}</span>
+                </div>
+                <!-- <div class="col-span-1 md:col-span-1 flex justify-end">
                         <button mat-icon-button (click)="viewDetail(task)">
                             <mat-icon>visibility</mat-icon>
                         </button>
@@ -128,13 +119,12 @@
                             </button>
                         </mat-menu>
                     </div> -->
-                </div>
             </div>
             <div *ngIf="isLoading" class="text-center p-4">
                 <mat-spinner diameter="30"></mat-spinner>
             </div>
         </div>
-    
-    
+
+
     </div>
 </div>

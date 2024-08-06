@@ -49,6 +49,7 @@ export class QuanLyCongViecComponent {
   dateEnd = null;
   filterNguoiThucHien: any[] = [];
   filterTrangThai: any[] = [];
+  filterDuAn: any[] = [];
 
   // paging
   pageIndex: number = 0;
@@ -62,6 +63,8 @@ export class QuanLyCongViecComponent {
   trangThaiOptions = [];
   scrollContainer: any;
 
+  listDuAnOptions = [];
+
   constructor(
     private _fuseConfirmationService: FuseConfirmationService,
     private _formBuilder: UntypedFormBuilder,
@@ -69,13 +72,14 @@ export class QuanLyCongViecComponent {
     private dialogService: DialogService,
     private _duAnService: DuAnNvChuyenMonService,
     private cdk: ChangeDetectorRef,
-    private _congviecService: CongViecService
+    private _congviecService: CongViecService,
   ) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
     this.getThongTinDuAn();
     this.getTableData();
+    this.getAllDuAn();
   }
 
   ngAfterViewInit() { }
@@ -121,20 +125,14 @@ export class QuanLyCongViecComponent {
       EndDate: this.dateEnd ? this.dateEnd : null,
       AssignedUserIds: this.filterNguoiThucHien,
       Status: this.filterTrangThai,
+      DuAnIds: this.filterDuAn,
       PageIndex: this.pageIndex,
       PageSize: this.pageSize
     };
 
     this._congviecService.getQuanLyCongViec(filterRequest).subscribe(res => {
-      // this.congViecGroupData = [...this.congViecGroupData, ...res.items];
-      res.items.forEach(item => {
-        if (this.congViecGroupData.find(g => g.nhomCongViecId === item.nhomCongViecId)) {
-          this.congViecGroupData.find(g => g.nhomCongViecId === item.nhomCongViecId).listCongViec = this.congViecGroupData.find(g => g.nhomCongViecId === item.nhomCongViecId).listCongViec.concat(item.listCongViec);
-          console.log(item.listCongViec);
-        } else {
-          this.congViecGroupData.push(item);
-        }
-      });
+      this.congViecGroupData = [...this.congViecGroupData, ...res.items];
+
       this.totalItems = res.count;
       this.pageIndex++;
       this.isLoading = false;
@@ -152,6 +150,12 @@ export class QuanLyCongViecComponent {
     //   this.thanhVienOptions = res.thanhVienDuAn.map(x => ({ key: x.id, value: x.fullName }));
     //   this.trangThaiOptions = this.trangThaiSetting.map(x => ({ key: x.key, value: x.value }));
     // });
+  }
+
+  getAllDuAn(): void {
+    this._duAnService.getAllNoPaging().subscribe(res => {
+      this.listDuAnOptions = res.map(x => ({ key: x.id, value: x.tenDuAn }));
+    });
   }
 
   viewDetail(task): void {
@@ -241,6 +245,7 @@ export class QuanLyCongViecComponent {
     this.dateEnd = null;
     this.filterNguoiThucHien = [];
     this.filterTrangThai = [];
+    this.filterDuAn = [];
     this.applyFilter();
   }
 
@@ -253,5 +258,10 @@ export class QuanLyCongViecComponent {
         this.getTableData();
       }
     }
+  }
+
+  setFilterDuAn(value: any) {
+    this.filterDuAn = value;
+    this.applyFilter();
   }
 }

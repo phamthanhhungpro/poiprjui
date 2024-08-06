@@ -41,8 +41,7 @@ export class NhiemVuChuyenMonComponent {
   constructor(private _fuseConfirmationService: FuseConfirmationService,
     private _formBuilder: UntypedFormBuilder,
     private _duAnNvChuyenMonService: DuAnNvChuyenMonService
-  ) 
-  {
+  ) {
   }
 
   ngOnInit(): void {
@@ -120,5 +119,27 @@ export class NhiemVuChuyenMonComponent {
     if (!isOpened) {
       this.drawerComponent = null;
     }
+  }
+
+  openDuan(item) {
+    let data = {
+      duAnId: item.id,
+      isClosed: false
+    }
+
+    this._duAnNvChuyenMonService.openCloseDuAn(data).subscribe(() => {
+      this.getTableData();
+    });
+  }
+
+  closeDuan(item) {
+    let data = {
+      duAnId: item.id,
+      isClosed: true
+    }
+
+    this._duAnNvChuyenMonService.openCloseDuAn(data).subscribe(() => {
+      this.getTableData();
+    });
   }
 }

@@ -70,6 +70,14 @@
                                     <mat-icon class="icon-size-4" [svgIcon]="'mat_solid:more_vert'"></mat-icon>
                                 </button>
                                 <mat-menu #menu="matMenu">
+                                    <button *ngIf="item.isClosed" (click)="openDuan(item); $event.stopPropagation()" mat-menu-item>
+                                        <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:lock-open'"></mat-icon>
+                                        <span>Mở nhiệm vụ</span>
+                                    </button>
+                                    <button *ngIf="!item.isClosed" (click)="closeDuan(item); $event.stopPropagation()" mat-menu-item>
+                                        <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:lock-closed'"></mat-icon>
+                                        <span>Đóng nhiệm vụ</span>
+                                    </button>
                                     <button (click)="delData(item); $event.stopPropagation()" mat-menu-item>
                                         <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
                                         <span>Xóa</span>
