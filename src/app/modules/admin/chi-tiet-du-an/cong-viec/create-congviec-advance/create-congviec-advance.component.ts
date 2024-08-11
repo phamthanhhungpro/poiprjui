@@ -17,6 +17,7 @@ import { SearchableSelectComponent } from 'app/common/components/select-search/s
 import { MultiSelectComponent } from 'app/common/components/multi-select/multi-select.component';
 import { UserSelectorComponent } from 'app/common/components/user-selector/user-selector.component';
 import { CongViecService } from 'app/services/congviec.service';
+import { FileService } from 'app/services/file.service';
 
 @Component({
   selector: 'app-create-congviec-advance',
@@ -45,6 +46,8 @@ export class CreateCongviecAdvanceComponent {
   selectedNguoiPhoiHop: any[] = [];
 
   selectedNhomCongViec: any;
+
+  selectedFiles: File[] = [];
   /**
    *
    */
@@ -54,6 +57,7 @@ export class CreateCongviecAdvanceComponent {
     public dialogRef: MatDialogRef<CreateTagsCongViecComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private _CongViec: CongViecService,
+    private _FileService: FileService
   ) {
     this.addDataForm = this._formBuilder.group({
       tenCongViec: [''],
@@ -106,17 +110,17 @@ export class CreateCongviecAdvanceComponent {
     const createCongViecForm = localStorage.getItem('createCongViecForm');
     if (createCongViecForm) {
       const model = JSON.parse(createCongViecForm);
-      
+
       this.addDataForm.patchValue(model);
 
       // lấy thông tin người được giao
-      if(model.nguoiDuocGiaoId) {
+      if (model.nguoiDuocGiaoId) {
         const nguoiDuocGiao = this.listGiaoViecOptions.find(item => item.id == model.nguoiDuocGiaoId);
         this.selectedGiaoViec.push(nguoiDuocGiao);
       }
 
       // lấy thông tin người thực hiện
-      if(model.nguoiThucHienIds.length > 0) {
+      if (model.nguoiThucHienIds.length > 0) {
         const nguoiThucHien = this.listNguoiThucHienOptions.filter(item => model.nguoiThucHienIds.includes(item.id));
         this.selectedNguoiThucHien = nguoiThucHien;
       }
@@ -139,33 +143,54 @@ export class CreateCongviecAdvanceComponent {
 
   // save data
   save(): void {
+    // Upload file if any
+    if (this.selectedFiles.length > 0) {
+      const formData = new FormData();
+  
+      this.selectedFiles.forEach(file => {
+        formData.append('files', file);
+      });
+  
+      this._FileService.uploadFile(formData).subscribe(
+        res => {
+          this.addDataForm.value.attachments = res.urls.join(';');
+          this.saveFormData();
+        },
+        error => {
+          this.openSnackBar(`File upload failed: ${error.message}`, 'Close');
+        }
+      );
+    } else {
+      this.saveFormData();
+    }
+  }
+  
+  private saveFormData(): void {
     this.addDataForm.value.duAnNvChuyenMonId = this.data.id;
     this.addDataForm.value.nguoiDuocGiaoId = this.selectedGiaoViec[0].id;
     this.addDataForm.value.nguoiThucHienIds = this.selectedNguoiThucHien.map(item => item.id);
     this.addDataForm.value.nguoiPhoiHopIds = this.selectedNguoiPhoiHop.map(item => item.id);
-    // this.addDataForm.value.tagCongViecIds = this.selectedTags.map(item => item.id);
-
-    this._CongViec.create(this.addDataForm.value).subscribe(res => {
-      if (res.isSucceeded) {
-        this.openSnackBar('Thao tác thành công', 'Đóng');
-        this.dialogRef.close();
-        this.clearForm();
-      } else {
-        this.openSnackBar(`Thao tác thất bại: ${res.message}`, 'Đóng');
+    this.addDataForm.value.tagCongViecIds = this.selectedTags.map(item => item.id);
+  
+    this._CongViec.create(this.addDataForm.value).subscribe(
+      res => {
+        if (res.isSucceeded) {
+          this.openSnackBar('Thao tác thành công', 'Close');
+          this.dialogRef.close();
+          this.clearForm();
+        } else {
+          this.openSnackBar(`Thao tác thất bại: ${res.message}`, 'Close');
+        }
+      },
+      error => {
+        this.openSnackBar(`Thao tác thất bại: ${error.message}`, 'Close');
       }
-    });
+    );
   }
 
   // snackbar
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, { duration: 2000 });
-  }
-
-  onFileSelected(event: any): void {
-    const file: File = event.target.files[0];
-    if (file) {
-      console.log(file);
-    }
   }
 
   setNhomCongViec(value) {
@@ -189,6 +214,12 @@ export class CreateCongviecAdvanceComponent {
         this.selectedNguoiThucHien.push(event.items[0]);
       }
     } else if (event.action === 'remove') {
+    }
+  }
+
+  onFilesSelected(event: any): void {
+    if (event.target.files.length > 0) {
+      this.selectedFiles = Array.from(event.target.files);
     }
   }
 

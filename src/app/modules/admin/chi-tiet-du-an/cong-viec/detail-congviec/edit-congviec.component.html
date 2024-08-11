@@ -194,12 +194,27 @@
                             <mat-panel-title class="font-bold text-blue-700"> Files </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            <ul>
-                                <li><a href="#" class="text-blue-500">1. Mo_ta_nghiep_vu.docx</a></li>
-                                <li><a href="#" class="text-blue-500">2. Phan_ra_tien_do.xlsx</a></li>
+                            <ul *ngIf="listFile.length > 0">
+                                <li *ngFor="let file of listFile; let i = index">
+                                    <a href="{{fileBaseUrl + file}}" target="_blank" class="text-blue-500">{{ i + 1 }}. {{ getFileName(file) }}
+                                    </a>
+                                </li>
                             </ul>
                             <div class="flex justify-end">
-                                <button class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Thêm file</button>
+                                <!-- Hidden file input -->
+                                <input type="file" id="fileInput" (change)="uploadFile($event)" multiple class="hidden">
+                                
+                                <!-- Label styled as a button -->
+                                <label for="fileInput" class="bg-blue-500 text-white mt-2 px-4 py-2 rounded cursor-pointer">
+                                    Thêm
+                                </label>
+                            </div>
+                        
+                            <!-- Display selected files -->
+                            <div *ngIf="selectedFiles.length > 0" class="mt-2 text-sm text-gray-600">
+                                <ul>
+                                    <li *ngFor="let file of selectedFiles">{{ file.name }}</li>
+                                </ul>
                             </div>
                         </div>
                     </mat-expansion-panel>

@@ -5,7 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoaiCongViecService } from 'app/services/loaicongviec.service';
 import { EditLoaiCongViecComponent } from '../../thiet-lap-du-an/loai-cong-viec/edit-loaicongviec/edit-loaicongviec.component';
-import { co } from '@fullcalendar/core/internal-common';
+import { co, el, en } from '@fullcalendar/core/internal-common';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,8 @@ import { DialogService } from 'app/common/dialog.service';
 import { GiaHanFormComponent } from '../gia-han-form/gia-han-form.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { HighlightUsernamesPipe } from 'app/common/user-name.pipe';
+import { environment } from 'environments/environment';
+import { FileService } from 'app/services/file.service';
 
 @Component({
   selector: 'app-edit-congviec',
@@ -54,6 +56,10 @@ export class EditCongviecComponent {
   commentValue: string = '';
   listComment = [];
   listHoatDong = [];
+
+  listFile: any[] = [];
+  fileBaseUrl = environment.idApiUrlWithOutEndding;
+  selectedFiles: File[] = [];
   /**
    *
    */
@@ -64,6 +70,7 @@ export class EditCongviecComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private congViecService: CongViecService,
     private commentService: CommentService,
+    private _FileService: FileService
   ) {
     this.taskForm = this._formBuilder.group({
       trangThai: [''],
@@ -106,6 +113,8 @@ export class EditCongviecComponent {
 
       this.tags = res.duAnNvChuyenMon?.tagComment?.map(x => ({ key: x.maTag, value: x.maTag }));
       this.persons = res.duAnNvChuyenMon?.thanhVienDuAn?.map(x => ({ key: x.userName, value: x.userName }));
+
+      this.listFile = res.attachments.split(';').filter(x => x != '');
 
       // get comment by id conviec
       this.commentService.getNoPagingByCongViecId({ congViecId: this.congviec.id }).subscribe(res => {
@@ -167,20 +176,43 @@ export class EditCongviecComponent {
 
   // save data
   save(): void {
+    // Upload file if any
+    if (this.selectedFiles.length > 0) {
+      const formData = new FormData();
 
+      this.selectedFiles.forEach(file => {
+        formData.append('files', file);
+      });
+
+      this._FileService.uploadFile(formData).subscribe(
+        res => {
+          this.congviec.attachments = this.congviec.attachments + ";" + res.urls.join(';');
+          this.saveFormData();
+        },
+        error => {
+          this.openSnackBar(`File upload failed: ${error.message}`, 'Close');
+        }
+      );
+    } else {
+      this.saveFormData();
+    }
+
+  }
+
+  private saveFormData(): void {
     this.congviec.trangThai = this.selectedTrangThai;
     this.congviec.nguoiDuocGiaoId = this.selectedGiaoViec[0].id,
-    this.congviec.nguoiPhoiHopIds = this.selectedNguoiPhoiHop.map(x => x.id),
-    this.congviec.nguoiThucHienIds = this.selectedNguoiThucHien.map(x => x.id),
+      this.congviec.nguoiPhoiHopIds = this.selectedNguoiPhoiHop.map(x => x.id),
+      this.congviec.nguoiThucHienIds = this.selectedNguoiThucHien.map(x => x.id),
 
-    this.congViecService.update(this.congviec.id, this.congviec).subscribe(res => {
-      if (res.isSucceeded) {
-        this.openSnackBar("Thao tác thành công !", "Đóng");
-        this.dialogRef.close();
-        this.clearForm();
+      this.congViecService.update(this.congviec.id, this.congviec).subscribe(res => {
+        if (res.isSucceeded) {
+          this.openSnackBar("Thao tác thành công !", "Đóng");
+          this.dialogRef.close();
+          this.clearForm();
+        }
       }
-    }
-    )
+      );
   }
 
   convertUserIdToUserName(id, data: any) {
@@ -207,7 +239,7 @@ export class EditCongviecComponent {
   }
 
   keyToValue(key: string): string {
-    if(!this.trangThaiOptions) return '';
+    if (!this.trangThaiOptions) return '';
     return this.trangThaiOptions.find(x => x.key == key)?.value;
   }
 
@@ -228,5 +260,18 @@ export class EditCongviecComponent {
     ]
 
     return data.find(x => x.key == key)?.value;
+  }
+
+  getFileName(file: string): string {
+    return file.split('/').pop();
+  }
+
+
+  uploadFile(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      this.selectedFiles = Array.from(input.files);
+    }
   }
 }

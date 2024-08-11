@@ -79,10 +79,10 @@
                 <mat-datepicker #endDatePicker></mat-datepicker>
             </mat-form-field>
 
-            <!-- <mat-form-field appearance="fill" class="col-span-2">
-                <mat-label>File đính kèm</mat-label>
-                <input type="file" (change)="onFileSelected($event)" />
-            </mat-form-field> -->
+            <div class="col-span-2">
+                <label for="file">File đính kèm</label>
+                <input class="ml-2" id="file" type="file" (change)="onFilesSelected($event)" multiple />
+            </div>
         </form>
 
     </div>

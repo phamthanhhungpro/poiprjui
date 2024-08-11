@@ -12,7 +12,7 @@ export const environment = {
     prjFeUrl: prjFrontEndUrl,
     apiUrl: apiUrl,
     idApiUrl: apiUrl + 'id/api/',
-    idApiUrlWithOutEndding: apiUrl + 'id',
+    idApiUrlWithOutEndding: apiUrl + 'id/',
     hrmApiUrl: apiUrl + 'hrm/api/',
     prjApiUrl: apiUrl + 'prj/api/',
     idFrontEndUrl: idFrontEndUrl,
