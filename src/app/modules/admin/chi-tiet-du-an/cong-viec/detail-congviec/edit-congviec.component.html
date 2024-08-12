@@ -194,7 +194,7 @@
                             <mat-panel-title class="font-bold text-blue-700"> Files </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            <ul *ngIf="listFile.length > 0">
+                            <ul *ngIf="listFile && listFile.length > 0">
                                 <li *ngFor="let file of listFile; let i = index">
                                     <a href="{{fileBaseUrl + file}}" target="_blank" class="text-blue-500">{{ i + 1 }}. {{ getFileName(file) }}
                                     </a>
@@ -230,7 +230,7 @@
                             <div>
                                 <mat-form-field class="w-full fuse-mat-dense">
                                     <mat-label>Chất lượng/Hiệu quả</mat-label>
-                                    <mat-select formControlName="chatLuongHieuQua">
+                                    <mat-select formControlName="dGChatLuongHieuQua">
                                         <mat-option value="chua-dam-bao">Chưa đảm bảo</mat-option>
                                         <mat-option value="thap">Thấp</mat-option>
                                         <mat-option value="dat">Đạt</mat-option>
@@ -242,7 +242,7 @@
                             <div>
                                 <mat-form-field class="w-full fuse-mat-dense">
                                     <mat-label>Tiến độ</mat-label>
-                                    <mat-select formControlName="tienDo">
+                                    <mat-select formControlName="dGTienDo">
                                         <mat-option value="cham">Chậm</mat-option>
                                         <mat-option value="dung">Đúng</mat-option>
                                         <mat-option value="vuot">Vượt</mat-option>
@@ -253,7 +253,7 @@
                             <div>
                                 <mat-form-field class="w-full fuse-mat-dense">
                                     <mat-label>Chấp hành chế độ thông tin/Báo cáo</mat-label>
-                                    <mat-select formControlName="chapHanhCheDo">
+                                    <mat-select formControlName="dGChapHanhCheDoThongTinBaoCao">
                                         <mat-option value="chap-hanh">Chấp hành</mat-option>
                                         <mat-option value="khong-chap-hanh">Không chấp hành</mat-option>
                                     </mat-select>
@@ -263,14 +263,14 @@
                             <div>
                                 <mat-form-field class="w-full fuse-mat-dense">
                                     <mat-label>Chấp hành điều động làm thêm giờ</mat-label>
-                                    <mat-select formControlName="chapHanhLamThem">
+                                    <mat-select formControlName="dGChapHanhDieuDongLamThemGio">
                                         <mat-option value="chap-hanh">Chấp hành</mat-option>
                                         <mat-option value="khong-chap-hanh">Không chấp hành</mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
                             <div class="flex justify-end">
-                                <button class="mt-2 bg-gray-500 text-white px-4 py-2 rounded">Xác nhận đánh giá</button>
+                                <button class="mt-2 bg-gray-500 text-white px-4 py-2 rounded" (click)="danhGiaCongViec()">Xác nhận đánh giá</button>
                             </div>
                         </div>
                     </mat-expansion-panel>

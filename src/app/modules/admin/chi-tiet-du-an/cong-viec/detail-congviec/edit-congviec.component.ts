@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Inject, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, Output, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -70,25 +70,27 @@ export class EditCongviecComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private congViecService: CongViecService,
     private commentService: CommentService,
-    private _FileService: FileService
+    private _FileService: FileService,
+    private _cdk: ChangeDetectorRef
   ) {
     this.taskForm = this._formBuilder.group({
       trangThai: [''],
-      chatLuongHieuQua: [''],
-      tienDo: [''],
-      chapHanhCheDo: [''],
-      chapHanhLamThem: [''],
+      dGChatLuongHieuQua: [''],
+      dGTienDo: [''],
+      dGChapHanhCheDoThongTinBaoCao: [''],
+      dGChapHanhDieuDongLamThemGio: [''],
       traoDoi: [''],
     });
   }
 
   ngOnInit() {
-    // this.getCongViecById();
-  }
-
-  ngAfterViewInit() {
     this.getCongViecById();
   }
+
+  // ngAfterViewInit() {
+  //   this.getCongViecById();
+  //   this._cdk.detectChanges();
+  // }
 
   onInputValueChange(value: string): void {
     this.commentValue = value;
@@ -114,7 +116,7 @@ export class EditCongviecComponent {
       this.tags = res.duAnNvChuyenMon?.tagComment?.map(x => ({ key: x.maTag, value: x.maTag }));
       this.persons = res.duAnNvChuyenMon?.thanhVienDuAn?.map(x => ({ key: x.userName, value: x.userName }));
 
-      this.listFile = res.attachments.split(';').filter(x => x != '');
+      this.listFile = res.attachments?.split(';')?.filter(x => x != '');
 
       // get comment by id conviec
       this.commentService.getNoPagingByCongViecId({ congViecId: this.congviec.id }).subscribe(res => {
@@ -126,6 +128,11 @@ export class EditCongviecComponent {
         this.listHoatDong = res;
       });
 
+      this.taskForm.get('dGChatLuongHieuQua')!.setValue(res.dgChatLuongHieuQua);
+      this.taskForm.get('dGTienDo')!.setValue(res.dgTienDo);
+      this.taskForm.get('dGChapHanhCheDoThongTinBaoCao')!.setValue(res.dgChapHanhCheDoThongTinBaoCao);
+      this.taskForm.get('dGChapHanhDieuDongLamThemGio')!.setValue(res.dgChapHanhDieuDongLamThemGio);
+      this._cdk.detectChanges();
     });
   }
 
@@ -186,7 +193,11 @@ export class EditCongviecComponent {
 
       this._FileService.uploadFile(formData).subscribe(
         res => {
-          this.congviec.attachments = this.congviec.attachments + ";" + res.urls.join(';');
+          if (this.congviec.attachments !== null) {
+            this.congviec.attachments = this.congviec.attachments + ";" + res.urls.join(';');
+          } else {
+            this.congviec.attachments = res.urls.join(';');
+          }
           this.saveFormData();
         },
         error => {
@@ -273,5 +284,24 @@ export class EditCongviecComponent {
     if (input.files && input.files.length > 0) {
       this.selectedFiles = Array.from(input.files);
     }
+  }
+
+  danhGiaCongViec() {
+    let model = {
+      congViecId: this.congviec.id,
+      dGChatLuongHieuQua: this.taskForm.get('dGChatLuongHieuQua')?.value,
+      dGTienDo: this.taskForm.get('dGTienDo')?.value,
+      dGChapHanhCheDoThongTinBaoCao: this.taskForm.get('dGChapHanhCheDoThongTinBaoCao')?.value,
+      dGChapHanhDieuDongLamThemGio: this.taskForm.get('dGChapHanhDieuDongLamThemGio')?.value,
+    }
+    this.congViecService.danhGiaCongViec(model).subscribe(res => {
+      if (res.isSucceeded) {
+        this.openSnackBar('Đánh giá công việc thành công', 'Đóng');
+        this.dialogRef.close();
+        this.clearForm();
+      } else {
+        this.openSnackBar(`Đánh giá công việc thất bại: ${res.message}`, 'Đóng');
+      }
+    });
   }
 }

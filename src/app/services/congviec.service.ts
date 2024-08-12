@@ -91,4 +91,8 @@ export class CongViecService {
   getQuanLyCongViec(data: any): Observable<any> {
     return this.http.post<any>(`${baseUrl}/GetQuanLyCongViec`, data);
   }
+
+  danhGiaCongViec(data: any): Observable<any> {
+    return this.http.put(`${baseUrl}/DanhGiaCongViec`, data);
+  }
 }
