@@ -71,7 +71,9 @@ export const authInterceptor = (req: HttpRequest<unknown>, next: HttpHandlerFn):
             // Catch "403" responses
             if (error instanceof HttpErrorResponse && error.status === 403) {
                 // Sign out
-                snackbar.open("Bạn không có quyền thực hiện hành động này!", "Đóng", { duration: 2000 });
+                // snackbar.open("Bạn không có quyền thực hiện hành động này!", "Đóng", { duration: 2000 });
+
+                router.navigate(['/403']);
             }
 
             return throwError(error);

@@ -24,6 +24,7 @@ import { VaiTroHeThongComponent } from './modules/admin/app-permission/vai-tro-h
 import { NhomChucNangHeThongComponent } from './modules/admin/app-permission/nhom-chuc-nang/nhom-chuc-nang.component';
 import { ViecCaNhanComponent } from './modules/admin/viec-ca-nhan/viec-ca-nhan.component';
 import { QuanLyCongViecComponent } from './modules/admin/quan-ly-cong-viec/quan-ly-cong-viec.component';
+import { NoPermissionComponent } from './layout/common/no-permission/no-permission.component';
 
 // @formatter:off
 /* eslint-disable max-len */
@@ -54,7 +55,8 @@ export const appRoutes: Route[] = [
             { path: 'forgot-password', loadChildren: () => import('app/modules/auth/forgot-password/forgot-password.routes') },
             { path: 'reset-password', loadChildren: () => import('app/modules/auth/reset-password/reset-password.routes') },
             { path: 'sign-in', loadChildren: () => import('app/modules/auth/sign-in/sign-in.routes') },
-            { path: 'sign-up', loadChildren: () => import('app/modules/auth/sign-up/sign-up.routes') }
+            { path: 'sign-up', loadChildren: () => import('app/modules/auth/sign-up/sign-up.routes') },
+            {path: '403', component: NoPermissionComponent}
         ]
     },
 
